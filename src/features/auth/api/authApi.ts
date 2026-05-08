@@ -26,6 +26,7 @@ export type SignUpPayload = {
   lastName: string;
   email: string;
   password: string;
+  cityId: number;
 };
 
 async function postJson<TResponse>(path: string, body: object): Promise<TResponse> {

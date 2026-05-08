@@ -3,6 +3,7 @@ import { signIn, signUp } from '@/features/auth/api/authApi';
 import { FixityWordmark } from '@/shared/brand/FixityWordmark';
 import { LockIcon, MailIcon, UserIcon } from '@/shared/icons/AuthIcons';
 import { TextField } from '@/shared/ui/TextField';
+import { CitySelect } from '@/features/auth/components/CitySelect';
 import './AuthPage.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,6 +19,7 @@ type SignUpFormState = {
   lastName: string;
   email: string;
   password: string;
+  cityId: number | null;
 };
 
 const AUTH_STORAGE_KEY = 'fixity.auth';
@@ -30,6 +32,7 @@ export function AuthPage() {
     lastName: '',
     email: '',
     password: '',
+    cityId: null,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -55,6 +58,13 @@ export function AuthPage() {
     setSignUpForm((current) => ({
       ...current,
       [name]: value,
+    }));
+  }
+
+  function handleCityChange(cityId: number | null) {
+    setSignUpForm((current) => ({
+      ...current,
+      cityId: cityId,
     }));
   }
 
@@ -88,8 +98,15 @@ export function AuthPage() {
     setSuccessMessage('');
     setIsSubmitting(true);
 
+    if (!signUpForm.cityId) {
+      setErrorMessage('Please select a city');
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
-      const response = await signUp(signUpForm);
+      const payload = { ...signUpForm, cityId: signUpForm.cityId };
+      const response = await signUp(payload);
       persistAuthSession(response);
       setSuccessMessage(
         `Account created for ${response.user.firstName} ${response.user.lastName}.`
@@ -145,82 +162,91 @@ export function AuthPage() {
 
           {activeTab === 'login' ? (
             <form className="auth-form" onSubmit={handleLoginSubmit}>
-              <TextField
-                id="email"
-                name="email"
-                type="email"
-                label="Email"
-                placeholder="name@email.com"
-                autoComplete="email"
-                icon={<MailIcon />}
-                value={loginForm.email}
-                onChange={handleLoginChange}
-                disabled={isSubmitting}
-              />
-              <TextField
-                id="password"
-                name="password"
-                type="password"
-                label="Password"
-                placeholder="........"
-                autoComplete="current-password"
-                icon={<LockIcon />}
-                value={loginForm.password}
-                onChange={handleLoginChange}
-                disabled={isSubmitting}
-              />
+              <div className="auth-form__fields">
+                <TextField
+                  id="email"
+                  name="email"
+                  type="email"
+                  label="Email"
+                  placeholder="name@email.com"
+                  autoComplete="email"
+                  icon={<MailIcon />}
+                  value={loginForm.email}
+                  onChange={handleLoginChange}
+                  disabled={isSubmitting}
+                />
+                <TextField
+                  id="password"
+                  name="password"
+                  type="password"
+                  label="Password"
+                  placeholder="........"
+                  autoComplete="current-password"
+                  icon={<LockIcon />}
+                  value={loginForm.password}
+                  onChange={handleLoginChange}
+                  disabled={isSubmitting}
+                />
+              </div>
               <button className="auth-form__submit" type="submit" disabled={isSubmitting}>
                 {isSubmitting ? 'Signing In...' : 'Log In'}
               </button>
             </form>
           ) : (
             <form className="auth-form" onSubmit={handleSignUpSubmit}>
-              <div className="auth-form__name-row">
+              <div className="auth-form__fields">
+                <div className="auth-form__name-row">
+                  <TextField
+                    id="first-name"
+                    name="firstName"
+                    label="First Name"
+                    placeholder="Your first name"
+                    icon={<UserIcon />}
+                    value={signUpForm.firstName}
+                    onChange={handleSignUpChange}
+                    disabled={isSubmitting}
+                  />
+                  <TextField
+                    id="last-name"
+                    name="lastName"
+                    label="Last Name"
+                    placeholder="Your last name"
+                    icon={<UserIcon />}
+                    value={signUpForm.lastName}
+                    onChange={handleSignUpChange}
+                    disabled={isSubmitting}
+                  />
+                </div>
                 <TextField
-                  id="first-name"
-                  name="firstName"
-                  label="First Name"
-                  placeholder="Your first name"
-                  icon={<UserIcon />}
-                  value={signUpForm.firstName}
+                  id="new-email"
+                  name="email"
+                  type="email"
+                  label="Email"
+                  placeholder="name@email.com"
+                  autoComplete="email"
+                  icon={<MailIcon />}
+                  value={signUpForm.email}
                   onChange={handleSignUpChange}
                   disabled={isSubmitting}
                 />
                 <TextField
-                  id="last-name"
-                  name="lastName"
-                  label="Last Name"
-                  placeholder="Your last name"
-                  icon={<UserIcon />}
-                  value={signUpForm.lastName}
+                  id="new-password"
+                  name="password"
+                  type="password"
+                  label="Password"
+                  placeholder="Create a password"
+                  autoComplete="new-password"
+                  icon={<LockIcon />}
+                  value={signUpForm.password}
                   onChange={handleSignUpChange}
+                  disabled={isSubmitting}
+                />
+                <CitySelect
+                  value={signUpForm.cityId}
+                  onChange={handleCityChange}
                   disabled={isSubmitting}
                 />
               </div>
-              <TextField
-                id="new-email"
-                name="email"
-                type="email"
-                label="Email"
-                placeholder="name@email.com"
-                autoComplete="email"
-                icon={<MailIcon />}
-                value={signUpForm.email}
-                onChange={handleSignUpChange}
-                disabled={isSubmitting}
-              />
-              <TextField
-                id="new-password"
-                name="password"
-                type="password"
-                label="Password"
-                placeholder="Create a password"
-                autoComplete="new-password"
-                icon={<LockIcon />}
-                value={signUpForm.password}
-                onChange={handleSignUpChange}
-                disabled={isSubmitting}
-              />
               <button className="auth-form__submit" type="submit" disabled={isSubmitting}>
                 {isSubmitting ? 'Creating Account...' : 'Create Account'}
               </button>
