@@ -83,6 +83,24 @@
   box-shadow: inset 0 -3px 0 #1a7382;
 }
 
+.auth-page__status {
+  margin: 1rem 1.25rem 0;
+  padding: 0.8rem 0.95rem;
+  border-radius: 0.85rem;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.auth-page__status.is-error {
+  background: #fde8ea;
+  color: #ad2131;
+}
+
+.auth-page__status.is-success {
+  background: #def4ea;
+  color: #176b49;
+}
+
 /* ── Form ── */
 .auth-form {
   display: flex;
@@ -121,6 +139,11 @@
   font-weight: 800;
   letter-spacing: 0.01em;
   cursor: pointer;
+}
+
+.auth-form__submit:disabled {
+  opacity: 0.75;
+  cursor: wait;
 }
 
 .auth-form__employee {
