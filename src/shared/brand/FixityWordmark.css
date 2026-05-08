@@ -1,0 +1,34 @@
+.fixity-wordmark {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fixity-wordmark__image {
+  display: block;
+  width: min(100%, 27rem);
+  max-height: 4.1rem;
+  height: auto;
+  object-fit: contain;
+}
+
+.fixity-wordmark__fallback {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  color: #0a5361;
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+@media (max-width: 520px) {
+  .fixity-wordmark__image {
+    max-height: 2.95rem;
+  }
+
+  .fixity-wordmark__fallback {
+    font-size: 1.6rem;
+  }
+}
