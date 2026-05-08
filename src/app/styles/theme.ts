@@ -91,25 +91,4 @@ export const theme = createTheme({
   shape: {
     borderRadius: 8,
   },
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: '12px',
-          padding: '12px 16px',
-          fontWeight: 700,
-        },
-      },
-    },
-    MuiTextField: {
-      styleOverrides: {
-        root: {
-          '& .MuiOutlinedInput-root': {
-            borderRadius: '12px',
-            backgroundColor: '#ffffff',
-          },
-        },
-      },
-    },
-  },
 });
