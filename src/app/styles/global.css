@@ -52,5 +52,5 @@ input {
   flex: 1;
   overflow-y: auto;
   /* Add padding at the bottom so content doesn't hide behind the navbar */
-  padding-bottom: 70px; 
+  padding-bottom: 70px;
 }

@@ -69,8 +69,7 @@ export function AuthPage() {
     setErrorMessage('');
     setSuccessMessage('');
     setIsSubmitting(true);
-    navigate("/home")
-
+    navigate('/home');
 
     // try {
     //   const response = await signIn(loginForm);
@@ -92,7 +91,9 @@ export function AuthPage() {
     try {
       const response = await signUp(signUpForm);
       persistAuthSession(response);
-      setSuccessMessage(`Account created for ${response.user.firstName} ${response.user.lastName}.`);
+      setSuccessMessage(
+        `Account created for ${response.user.firstName} ${response.user.lastName}.`
+      );
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : 'Unable to create account');
     } finally {
@@ -133,7 +134,11 @@ export function AuthPage() {
           </div>
 
           {(errorMessage || successMessage) && (
-            <div className={`auth-page__status ${errorMessage ? 'is-error' : 'is-success'}`} role="status" aria-live="polite">
+            <div
+              className={`auth-page__status ${errorMessage ? 'is-error' : 'is-success'}`}
+              role="status"
+              aria-live="polite"
+            >
               {errorMessage || successMessage}
             </div>
           )}
