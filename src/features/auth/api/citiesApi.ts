@@ -32,15 +32,24 @@ const MOCK_CITIES: City[] = [
   { id: 18, name: "Ra'anana" },
   { id: 19, name: 'Hadera' },
   { id: 20, name: 'Lod' },
+  ...Array.from({ length: 80 }, (_, i) => ({ id: 21 + i, name: `City ${21 + i}` })),
 ];
+console.log(MOCK_CITIES);
 
 export async function getCities(
   page: number = 1,
   limit: number = 10,
-  search?: string
+  search?: string,
+  signal?: AbortSignal
 ): Promise<CitiesResponse> {
   // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 300));
+  await new Promise((resolve, reject) => {
+    const timeout = setTimeout(resolve, 300);
+    signal?.addEventListener('abort', () => {
+      clearTimeout(timeout);
+      reject(new DOMException('Aborted', 'AbortError'));
+    });
+  });
 
   let filteredCities = MOCK_CITIES;
 

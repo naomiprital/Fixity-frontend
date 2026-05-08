@@ -1,9 +1,9 @@
-import { useState, type ChangeEvent, type FormEvent } from 'react';
+import { useState, useRef, useEffect, type ChangeEvent, type FormEvent } from 'react';
 import { signIn, signUp } from '@/features/auth/api/authApi';
 import { FixityWordmark } from '@/shared/brand/FixityWordmark';
 import { LockIcon, MailIcon, UserIcon } from '@/shared/icons/AuthIcons';
 import { TextField } from '@/shared/ui/TextField';
-import { CitySelect } from '@/features/auth/components/CitySelect';
+import { CitySelect, type CitySelectRef } from '@/features/auth/components/CitySelect/CitySelect';
 import './AuthPage.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -38,6 +38,27 @@ export function AuthPage() {
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
+  const citySelectRef = useRef<CitySelectRef>(null);
+  const fieldsRef = useRef<HTMLDivElement>(null);
+
+  // Set up scroll listener to close city select menu when fields are scrolled
+  useEffect(() => {
+    const fieldsElement = fieldsRef.current;
+
+    const handleScroll = () => {
+      citySelectRef.current?.closeMenu();
+    };
+
+    if (fieldsElement) {
+      fieldsElement.addEventListener('scroll', handleScroll);
+    }
+
+    return () => {
+      if (fieldsElement) {
+        fieldsElement.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, []);
 
   function persistAuthSession(payload: Awaited<ReturnType<typeof signIn>>) {
     localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(payload));
@@ -162,7 +183,7 @@ export function AuthPage() {
 
           {activeTab === 'login' ? (
             <form className="auth-form" onSubmit={handleLoginSubmit}>
-              <div className="auth-form__fields">
+              <div className="auth-form__fields" ref={fieldsRef}>
                 <TextField
                   id="email"
                   name="email"
@@ -194,7 +215,7 @@ export function AuthPage() {
             </form>
           ) : (
             <form className="auth-form" onSubmit={handleSignUpSubmit}>
-              <div className="auth-form__fields">
+              <div className="auth-form__fields" ref={fieldsRef}>
                 <div className="auth-form__name-row">
                   <TextField
                     id="first-name"
@@ -242,6 +263,7 @@ export function AuthPage() {
                   disabled={isSubmitting}
                 />
                 <CitySelect
+                  ref={citySelectRef}
                   value={signUpForm.cityId}
                   onChange={handleCityChange}
                   disabled={isSubmitting}
