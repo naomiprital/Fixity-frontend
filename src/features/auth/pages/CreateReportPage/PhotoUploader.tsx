@@ -56,7 +56,7 @@ export const PhotoUploader = ({ onFileChange }: PhotoUploaderProps) => {
         >
             <input
                 type="file"
-                accept="image/*"
+                accept="image/jpeg,image/png,image/webp"
                 ref={fileInputRef}
                 style={{ display: 'none' }}
                 onChange={handleFileChange}

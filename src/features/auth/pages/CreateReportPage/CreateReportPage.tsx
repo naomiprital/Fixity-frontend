@@ -9,20 +9,21 @@ import { LocationPicker } from './LocationPicker';
 import { PhotoUploader } from './PhotoUploader';
 import { PageHeader } from '../../../../shared/ui/PageHeader';
 import { useReportCategories } from '../../../../hooks/ReportCategories';
-import { useCreateReport } from '../../../../hooks/Reports';
+import { useCreateReport, useUploadAndAnalyze } from '../../../../hooks/Reports';
 
 type Location = { latLng: { lat: number; lng: number }; address: string };
-
 
 const CreateReportPage = () => {
     const navigate = useNavigate();
     const { data: reportCategories } = useReportCategories();
     const { mutateAsync: createReport } = useCreateReport();
+    const { mutateAsync: uploadAndAnalyze, isPending: isUploading } = useUploadAndAnalyze();
 
     const [category, setCategory] = useState<string>('');
     const [description, setDescription] = useState<string>('');
     const [location, setLocation] = useState<Location | null>(null);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [uploadedImageUrl, setUploadedImageUrl] = useState<string | null>(null);
     const [showMap, setShowMap] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [descriptionRows, setDescriptionRows] = useState<number>(3);
@@ -43,6 +44,19 @@ const CreateReportPage = () => {
         return true;
     };
 
+    const handleAutoFill = async () => {
+        if (!selectedFile) { toast.error('Please select an image first.'); return; }
+        try {
+            const result = await uploadAndAnalyze(selectedFile);
+            setUploadedImageUrl(result.imageUrl);
+            if (result.aiDraft?.categoryId) setCategory(String(result.aiDraft.categoryId));
+            if (result.aiDraft?.description) setDescription(result.aiDraft.description);
+            toast.success('AI analysis complete!');
+        } catch {
+            toast.error('Failed to analyze the image. Please try again.');
+        }
+    };
+
     const handleSubmit = async () => {
         if (!validate()) return;
         setIsSubmitting(true);
@@ -50,13 +64,20 @@ const CreateReportPage = () => {
             const raw = localStorage.getItem('fixity.auth');
             const cityId = raw ? JSON.parse(raw).user?.cityId : null;
 
+            let imageUrl = uploadedImageUrl;
+            if (selectedFile && !imageUrl) {
+                const result = await uploadAndAnalyze(selectedFile);
+                imageUrl = result.imageUrl;
+                setUploadedImageUrl(result.imageUrl);
+            }
+
             await createReport({
-                categoryId: category,
+                categoryId: +category,
                 cityId,
                 description,
                 latitude: location?.latLng.lat,
                 longitude: location?.latLng.lng,
-                beforeImageUrl: selectedFile?.name ?? "",
+                beforeImageUrl: imageUrl ?? "",
             });
             toast.success('Report created successfully!');
             navigate(`/${PagesEnum.HOME}`);
@@ -72,14 +93,16 @@ const CreateReportPage = () => {
             <PageHeader title="New Report" backTo={`/${PagesEnum.HOME}`} />
 
             <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '1rem', padding: '2rem', height: "45.5rem" }}>
-                <PhotoUploader onFileChange={setSelectedFile} />
+                <PhotoUploader onFileChange={(file) => { setSelectedFile(file); setUploadedImageUrl(null); }} />
 
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', justifyContent: 'space-between' }}>
                     <LocationPicker showMap={showMap} setShowMap={setShowMap} onChange={setLocation} onMapToggle={handleMapToggle} />
 
                     <Button
                         variant="contained"
-                        startIcon={<AutoAwesomeIcon sx={{ color: 'warning.main' }} />}
+                        startIcon={isUploading ? <Loader /> : <AutoAwesomeIcon sx={{ color: 'warning.main' }} />}
+                        disabled={!selectedFile || isUploading}
+                        onClick={handleAutoFill}
                         sx={{
                             bgcolor: 'magic.main',
                             color: 'magic.contrastText',
@@ -88,9 +111,10 @@ const CreateReportPage = () => {
                             borderRadius: '1rem',
                             boxShadow: '0 4px 12px rgba(111, 78, 242, 0.3)',
                             '&:hover': { bgcolor: (theme) => darken(theme.palette.magic.main, 0.2) },
+                            '&.Mui-disabled': { bgcolor: 'action.disabledBackground', color: 'action.disabled' },
                         }}
                     >
-                        Auto-fill details with AI
+                        {isUploading ? 'Analyzing...' : 'Auto-fill details with AI'}
                     </Button>
 
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
