@@ -10,8 +10,8 @@ import {
 } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 import './Navbar.css';
-import { PagesEnum } from '../enums/PagesEnum';
-import { capitalizeFirstLetter } from '../utils/utilsFunctions';
+import { PagesEnum } from '@/enums/PagesEnum';
+import { capitalizeFirstLetter } from '@/utils/utilsFunctions';
 
 const Navbar = () => {
   const location = useLocation();
