@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 140">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFDF00"/>
+      <stop offset="100%" stop-color="#FF8C00"/>
+    </linearGradient>
+    <clipPath id="circleClip">
+      <circle cx="50" cy="50" r="40" />
+    </clipPath>
+  </defs>
+
+  <!-- Pin Marker Background -->
+  <path d="M 0 50 A 50 50 0 0 1 100 50 C 100 90 60 130 50 140 C 40 130 0 90 0 50 Z" fill="#0f5a61" />
+
+  <!-- Inner Gradient Circle -->
+  <circle cx="50" cy="50" r="40" fill="url(#bgGrad)" />
+
+  <!-- Buildings clippped to the circle -->
+  <g clip-path="url(#circleClip)">
+    <!-- Center Building -->
+    <rect x="49" y="15" width="2" height="10" fill="#0f5a61" />
+    <polygon points="40,35 50,25 50,100 40,100" fill="#00b4d8" />
+    <polygon points="50,25 60,35 60,100 50,100" fill="#0f5a61" />
+
+    <!-- Left Building -->
+    <polygon points="24,57 32,50 32,100 24,100" fill="#00b4d8" />
+    <polygon points="32,50 40,57 40,100 32,100" fill="#0f5a61" />
+
+    <!-- Right Building -->
+    <polygon points="60,47 68,40 68,100 60,100" fill="#00b4d8" />
+    <polygon points="68,40 76,47 76,100 68,100" fill="#0f5a61" />
+  </g>
+</svg>

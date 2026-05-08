@@ -38,10 +38,7 @@ export function UserIcon({ className }: IconProps) {
 export function ChevronRightIcon({ className }: IconProps) {
   return (
     <svg className={className} viewBox="0 0 20 20" aria-hidden="true">
-      <path
-        d="m7.1 4.3 1.2-1.2L14.2 9l-5.9 5.9-1.2-1.2L11.8 9 7.1 4.3Z"
-        fill="currentColor"
-      />
+      <path d="m7.1 4.3 1.2-1.2L14.2 9l-5.9 5.9-1.2-1.2L11.8 9 7.1 4.3Z" fill="currentColor" />
     </svg>
   );
 }
