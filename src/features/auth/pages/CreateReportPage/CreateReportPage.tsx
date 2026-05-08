@@ -48,7 +48,7 @@ const CreateReportPage = () => {
         setIsSubmitting(true);
         try {
             const raw = localStorage.getItem('fixity.auth');
-            const cityId = raw ? JSON.parse(raw).user?.cityId : 1;
+            const cityId = raw ? JSON.parse(raw).user?.cityId : null;
 
             await createReport({
                 categoryId: category,
