@@ -1,8 +1,8 @@
 import { useState, type ChangeEvent, type FormEvent } from 'react';
-import { signIn, signUp } from '../../api/authApi';
-import { FixityWordmark } from '../../../../shared/brand/FixityWordmark';
-import { LockIcon, MailIcon, UserIcon } from '../../../../shared/icons/AuthIcons';
-import { TextField } from '../../../../shared/ui/TextField';
+import { signIn, signUp } from '@/features/auth/api/authApi';
+import { FixityWordmark } from '@/shared/brand/FixityWordmark';
+import { LockIcon, MailIcon, UserIcon } from '@/shared/icons/AuthIcons';
+import { TextField } from '@/shared/ui/TextField';
 import './AuthPage.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -71,15 +71,15 @@ export function AuthPage() {
     setIsSubmitting(true);
     navigate('/home');
 
-    // try {
-    //   const response = await signIn(loginForm);
-    //   persistAuthSession(response);
-    //   setSuccessMessage(`Welcome back, ${response.user.firstName}.`);
-    // } catch (error) {
-    //   setErrorMessage(error instanceof Error ? error.message : 'Unable to sign in');
-    // } finally {
-    //   setIsSubmitting(false);
-    // }
+    try {
+      const response = await signIn(loginForm);
+      persistAuthSession(response);
+      setSuccessMessage(`Welcome back, ${response.user.firstName}.`);
+    } catch (error) {
+      setErrorMessage(error instanceof Error ? error.message : 'Unable to sign in');
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   async function handleSignUpSubmit(event: FormEvent<HTMLFormElement>) {
