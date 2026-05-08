@@ -46,7 +46,7 @@ const Navbar = () => {
       <NavItem page={PagesEnum.HOME} filledIcon={Home} outlinedIcon={HomeOutlined} />
 
       <div className="nav-fab-container">
-        <button className="nav-fab">
+        <button className="nav-fab" onClick={() => navigate(`/${PagesEnum.CREATE}`)}>
           <Add fontSize="large" />
         </button>
       </div>
