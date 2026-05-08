@@ -47,24 +47,17 @@ const CreateReportPage = () => {
         if (!validate()) return;
         setIsSubmitting(true);
         try {
-            console.log('Report:',
-                {
-                    categoryId: category,
-                    description,
-                    latitude: location?.latLng.lat,
-                    longitude: location?.latLng.lng,
-                    beforeImageUrl: selectedFile?.name,
-                    requesterId: 1506,
-                    cityId: 1,
-                });
-            createReport({
+            const raw = localStorage.getItem('fixity.auth');
+            const cityId = raw ? JSON.parse(raw).user?.cityId : 1;
+
+            await createReport({
                 categoryId: category,
+                cityId,
                 description,
                 latitude: location?.latLng.lat,
                 longitude: location?.latLng.lng,
-                beforeImageUrl: selectedFile?.name,
-                requesterId: 1506
-            })
+                beforeImageUrl: selectedFile?.name ?? "",
+            });
             toast.success('Report created successfully!');
             navigate(`/${PagesEnum.HOME}`);
         } catch {
