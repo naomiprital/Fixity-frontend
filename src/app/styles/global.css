@@ -39,18 +39,16 @@ input {
   font: inherit;
 }
 
-/* Layout for full height and scrollable main content */
 .app-layout {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  height: 100dvh; /* For mobile browsers to ignore bottom bar */
+  height: 100dvh;
   overflow: hidden;
 }
 
 .main-content {
   flex: 1;
   overflow-y: auto;
-  /* Add padding at the bottom so content doesn't hide behind the navbar */
-  padding-bottom: 70px;
+  padding-bottom: 5rem;
 }
