@@ -1,5 +1,23 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme, type PaletteColorOptions, type PaletteColor } from '@mui/material/styles';
 
+declare module '@mui/material/styles' {
+  interface Palette {
+    magic: PaletteColor;
+    surface: PaletteColor;
+    reportAction: PaletteColor;
+  }
+  interface PaletteOptions {
+    magic?: PaletteColorOptions;
+    surface?: PaletteColorOptions;
+    reportAction?: PaletteColorOptions;
+  }
+}
+
+declare module '@mui/material/Button' {
+  interface ButtonPropsColorOverrides {
+    magic: true;
+  }
+}
 export const theme = createTheme({
   palette: {
     primary: {
@@ -16,9 +34,27 @@ export const theme = createTheme({
       secondary: '#697286',
       disabled: '#94A3B8',
     },
+    warning: {
+      main: '#FFD700',
+    },
+    info: {
+      main: '#3b82f6',
+    },
     background: {
-      default: '#e4e6eb',
+      default: '#f7f9fc',
       paper: '#ffffff',
+    },
+    magic: {
+      main: '#6f4ef2',
+      contrastText: '#ffffff',
+    },
+    surface: {
+      main: '#f0f2f4',
+      dark: '#d5d8df',
+    },
+    reportAction: {
+      main: '#2c405a',
+      contrastText: '#ffffff',
     },
   },
   typography: {
@@ -54,15 +90,5 @@ export const theme = createTheme({
   },
   shape: {
     borderRadius: 8,
-  },
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: '8px',
-          padding: '8px 16px',
-        },
-      },
-    },
   },
 });
