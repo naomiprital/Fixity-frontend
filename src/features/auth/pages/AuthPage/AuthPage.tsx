@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, type ChangeEvent, type FormEvent } from 'react';
+import { toast } from 'react-toastify';
 import { signIn, signUp } from '@/features/auth/api/authApi';
 import { FixityWordmark } from '@/shared/brand/FixityWordmark';
 import { LockIcon, MailIcon, UserIcon } from '@/shared/icons/AuthIcons';
@@ -35,8 +36,6 @@ export function AuthPage() {
     cityId: null,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
   const citySelectRef = useRef<CitySelectRef>(null);
   const fieldsRef = useRef<HTMLDivElement>(null);
@@ -91,31 +90,76 @@ export function AuthPage() {
 
   function handleTabChange(tab: AuthTab) {
     setActiveTab(tab);
-    setErrorMessage('');
-    setSuccessMessage('');
+  }
+
+  function validateEmail(email: string) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  function validateLoginForm() {
+    if (!loginForm.email.trim()) {
+      return 'Email is required.';
+    }
+    if (!validateEmail(loginForm.email)) {
+      return 'Please enter a valid email address.';
+    }
+    if (!loginForm.password.trim()) {
+      return 'Password is required.';
+    }
+    return null;
+  }
+
+  function validateSignUpForm() {
+    if (!signUpForm.firstName.trim()) {
+      return 'First name is required.';
+    }
+
+    if (!signUpForm.lastName.trim()) {
+      return 'Last name is required.';
+    }
+
+    if (!signUpForm.email.trim()) {
+      return 'Email is required.';
+    }
+
+    if (!validateEmail(signUpForm.email)) {
+      return 'Please enter a valid email address.';
+    }
+
+    if (!signUpForm.password.trim()) {
+      return 'Password is required.';
+    }
+
+    if (signUpForm.password.length < 8) {
+      return 'Password must be at least 8 characters long.';
+    }
+
+    if (!signUpForm.cityId) {
+      return 'Please select a city.';
+    }
+    return null;
   }
 
   async function handleLoginSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setErrorMessage('');
-    setSuccessMessage('');
     setIsSubmitting(true);
+
+    const validationError = validateLoginForm();
+    if (validationError) {
+      toast.error(validationError);
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       const response = await signIn(loginForm);
       persistAuthSession(response);
 
-      setSuccessMessage(`Welcome back, ${response.user.firstName}.`);
+      toast.success(`Welcome back, ${response.user.firstName}.`);
 
-      console.log('Login successful. User role:', response.user.role);
-
-      // Navigate based on role (case-insensitive check)
-      if (response.user.role?.toLowerCase() === 'worker') {
-        navigate('/worker/pool');
-      } else {
-        navigate('/home');
-      }
+      navigate('/home');
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : 'Unable to sign in');
+      toast.error(error instanceof Error ? error.message : 'Unable to sign in');
     } finally {
       setIsSubmitting(false);
     }
@@ -123,25 +167,23 @@ export function AuthPage() {
 
   async function handleSignUpSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setErrorMessage('');
-    setSuccessMessage('');
     setIsSubmitting(true);
 
-    if (!signUpForm.cityId) {
-      setErrorMessage('Please select a city');
+    const validationError = validateSignUpForm();
+    if (validationError) {
+      toast.error(validationError);
       setIsSubmitting(false);
       return;
     }
 
     try {
-      const payload = { ...signUpForm, cityId: signUpForm.cityId };
+      const payload = { ...signUpForm, cityId: signUpForm.cityId! };
       const response = await signUp(payload);
       persistAuthSession(response);
-      setSuccessMessage(
-        `Account created for ${response.user.firstName} ${response.user.lastName}.`
-      );
+      toast.success(`Account created for ${response.user.firstName} ${response.user.lastName}.`);
+      navigate('/home');
     } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : 'Unable to create account');
+      toast.error(error instanceof Error ? error.message : 'Unable to create account');
     } finally {
       setIsSubmitting(false);
     }
@@ -178,16 +220,6 @@ export function AuthPage() {
               Sign Up
             </button>
           </div>
-
-          {(errorMessage || successMessage) && (
-            <div
-              className={`auth-page__status ${errorMessage ? 'is-error' : 'is-success'}`}
-              role="status"
-              aria-live="polite"
-            >
-              {errorMessage || successMessage}
-            </div>
-          )}
 
           {activeTab === 'login' ? (
             <form className="auth-form" onSubmit={handleLoginSubmit}>
