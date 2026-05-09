@@ -13,25 +13,20 @@ const App = () => {
   const appLocation = useLocation();
   const isAuthPage = appLocation.pathname === '/';
 
-  // Detect role for layout adjustments
-  const authData = localStorage.getItem('fixity.auth');
-  const user = authData ? JSON.parse(authData).user : null;
-  const isWorker = user?.role?.toLowerCase() === 'worker';
-
   return (
     <div className="app-layout">
-      <main className="main-content" style={isWorker ? { paddingBottom: 0 } : {}}>
+      <main className="main-content">
         <Routes>
           <Route path="/" element={<AuthPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/reports" element={<MyReportsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/create" element={<CreateReportPage />} />
-          
+
           {/* Worker Routes */}
           <Route path="/worker/pool" element={<WorkerTasksView mode="pool" />} />
           <Route path="/worker/my-tasks" element={<WorkerTasksView mode="myTasks" />} />
-          
+
           <Route element={<ProtectedRoute allowedRoles={['Manager', 'Official']} />}>
             <Route path="/manager" element={<ManagerDashboardPage />} />
           </Route>
