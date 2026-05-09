@@ -13,3 +13,8 @@ export const createReport = async (report: any) => {
   const { data } = await api.post(REPORTS_ROUTE, report);
   return data.data;
 };
+
+export const fetchMyReports = async (): Promise<any[]> => {
+  const { data } = await api.get(`${REPORTS_ROUTE}/me`);
+  return data;
+};
