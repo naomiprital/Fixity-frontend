@@ -27,6 +27,7 @@ interface Props {
   onDeleteIncident: (id: number) => void;
   onEditTask: (task: Task) => void;
   onDeleteTask: (id: number) => void;
+  onRemoveReport?: (incidentId: number, reportId: number) => void;
 }
 
 export function IncidentCard({
@@ -35,6 +36,7 @@ export function IncidentCard({
   onTaskNoteChange, onTaskCatChange, onCreateTask,
   onEditIncident, onDeleteIncident,
   onEditTask, onDeleteTask,
+  onRemoveReport,
 }: Props) {
   return (
     <Accordion className="mgr-accordion" disableGutters>
@@ -73,9 +75,16 @@ export function IncidentCard({
         </Typography>
         <Box className="mgr-linked-list">
           {incident.reports.map(r => (
-            <Box key={r.reportId} className="mgr-linked-item">
-              <Typography variant="body2" sx={{ fontWeight: 600 }}>#{r.reportId}</Typography>
-              <Typography variant="body2" sx={{ color: 'text.secondary', flex: 1 }}>{r.description}</Typography>
+            <Box key={r.reportId} className="mgr-linked-item" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Box sx={{ display: 'flex', gap: 1, alignItems: 'baseline', flex: 1, minWidth: 0 }}>
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>#{r.reportId}</Typography>
+                <Typography variant="body2" sx={{ color: 'text.secondary', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.description}</Typography>
+              </Box>
+              <Tooltip title="Remove from incident">
+                <IconButton size="small" color="error" onClick={() => onRemoveReport?.(incident.incidentId, r.reportId)}>
+                  <DeleteOutlineIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
             </Box>
           ))}
         </Box>

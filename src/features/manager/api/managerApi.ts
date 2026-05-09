@@ -96,3 +96,20 @@ export async function deleteTask(id: number): Promise<void> {
   });
   if (!res.ok) throw new Error('Failed to delete task');
 }
+
+export async function addReportsToIncident(incidentId: number, reportIds: number[]): Promise<void> {
+  const res = await fetch(`${API_BASE_URL}/incidents/${incidentId}/reports`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
+    body: JSON.stringify({ reportIds }),
+  });
+  if (!res.ok) throw new Error('Failed to add reports to incident');
+}
+
+export async function removeReportFromIncident(incidentId: number, reportId: number): Promise<void> {
+  const res = await fetch(`${API_BASE_URL}/incidents/${incidentId}/reports/${reportId}`, {
+    method: 'DELETE',
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw new Error('Failed to remove report from incident');
+}

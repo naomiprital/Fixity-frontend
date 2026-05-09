@@ -15,6 +15,7 @@ interface Props {
   onDeleteIncident: (id: number) => void;
   onEditTask: (task: Task) => void;
   onDeleteTask: (id: number) => void;
+  onRemoveReport: (incidentId: number, reportId: number) => void;
 }
 
 export function IncidentsSection({
@@ -23,6 +24,7 @@ export function IncidentsSection({
   onTaskNoteChange, onTaskCatChange, onCreateTask,
   onEditIncident, onDeleteIncident,
   onEditTask, onDeleteTask,
+  onRemoveReport,
 }: Props) {
   return (
     <Box className="mgr-section">
@@ -54,6 +56,7 @@ export function IncidentsSection({
           onDeleteIncident={onDeleteIncident}
           onEditTask={onEditTask}
           onDeleteTask={onDeleteTask}
+          onRemoveReport={onRemoveReport}
         />
       ))}
     </Box>
