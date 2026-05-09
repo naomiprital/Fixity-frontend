@@ -17,7 +17,7 @@ const App = () => {
       <main className="main-content">
         <Routes>
           <Route path="/" element={<AuthPage />} />
-          
+
           <Route element={<ProtectedRoute />}>
             <Route path="/home" element={<HomePage />} />
             <Route path="/reports" element={<MyReportsPage />} />

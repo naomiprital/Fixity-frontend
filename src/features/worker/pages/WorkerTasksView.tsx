@@ -143,7 +143,7 @@ export const WorkerTasksView: React.FC<WorkerTasksViewProps> = ({ mode }) => {
   );
 
   return (
-    <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#F8F9FA', overflow: 'hidden' }}>
+    <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: '#F8F9FA', overflow: 'hidden' }}>
       {/* Header */}
       <Box
         sx={{

@@ -1,7 +1,7 @@
 .my-reports-page {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 100%;
     background-color: #e4e6eb;
 }
 

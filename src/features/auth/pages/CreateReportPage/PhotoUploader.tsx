@@ -36,6 +36,7 @@ export const PhotoUploader = ({ onFileChange }: PhotoUploaderProps) => {
         <Box
             onClick={handleBoxClick}
             sx={{
+                minHeight: { xs: '15rem', md: 'auto' },
                 position: 'relative',
                 border: imagePreview ? 'none' : '2px dashed',
                 borderColor: 'surface.dark',
