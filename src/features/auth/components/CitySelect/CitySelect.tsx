@@ -58,8 +58,8 @@ export const CitySelect = forwardRef<CitySelectRef, CitySelectProps>(
           abortControllerRef.current.signal
         );
 
-        const newOptions: CityOption[] = response.cities.map((city) => ({
-          value: city.id,
+        const newOptions: CityOption[] = response.items.map((city) => ({
+          value: city.cityId,
           label: city.name,
         }));
 
@@ -71,7 +71,7 @@ export const CitySelect = forwardRef<CitySelectRef, CitySelectProps>(
           setPage(1);
         }
 
-        setHasMore(response.cities.length === 10 && currentPage * 10 < response.total);
+        setHasMore(response.items.length === 10 && currentPage * 10 < response.total);
       } catch (error) {
         if (error instanceof DOMException && error.name === 'AbortError') {
           return; // Request was cancelled, ignore
