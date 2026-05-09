@@ -1,5 +1,5 @@
 import {
-  Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography, darken,
+  Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography, darken, CircularProgress, Box,
 } from '@mui/material';
 import type { Incident } from '@/types/models';
 
@@ -10,6 +10,7 @@ interface CreateIncidentDialogProps {
   onDescriptionChange: (v: string) => void;
   onConfirm: () => void;
   onClose: () => void;
+  loading?: boolean;
 }
 
 interface EditIncidentDialogProps {
@@ -27,27 +28,37 @@ interface DeleteIncidentDialogProps {
 }
 
 export function CreateIncidentDialog({
-  open, selectedCount, description, onDescriptionChange, onConfirm, onClose,
+  open, selectedCount, description, onDescriptionChange, onConfirm, onClose, loading,
 }: CreateIncidentDialogProps) {
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle sx={{ fontFamily: '"Sora", sans-serif', fontWeight: 700 }}>Create Incident</DialogTitle>
-      <DialogContent>
-        <Typography sx={{ mb: 2, color: 'text.secondary' }}>
-          Creating incident from <strong>{selectedCount}</strong> selected report(s).
-        </Typography>
-        <TextField
-          autoFocus label="Description" fullWidth multiline rows={3}
-          value={description}
-          onChange={e => onDescriptionChange(e.target.value)}
-          sx={{ '& .MuiOutlinedInput-root': { borderRadius: '0.5rem' } }}
-        />
+      <DialogContent sx={{ position: 'relative', minHeight: '120px', display: 'flex', flexDirection: 'column' }}>
+        {loading ? (
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flex: 1, gap: 2, py: 2 }}>
+            <CircularProgress size={40} color="primary" />
+            <Typography variant="body2" color="text.secondary">Creating incident and analyzing reports...</Typography>
+          </Box>
+        ) : (
+          <>
+            <Typography sx={{ mb: 2, color: 'text.secondary' }}>
+              Creating incident from <strong>{selectedCount}</strong> selected report(s).
+            </Typography>
+            <TextField
+              autoFocus label="Description" fullWidth multiline rows={3}
+              value={description}
+              onChange={e => onDescriptionChange(e.target.value)}
+              sx={{ '& .MuiOutlinedInput-root': { borderRadius: '0.5rem' } }}
+            />
+          </>
+        )}
       </DialogContent>
       <DialogActions sx={{ px: 3, pb: 2, gap: 1 }}>
-        <Button onClick={onClose} sx={{ borderRadius: '0.75rem' }}>Cancel</Button>
+        <Button onClick={onClose} disabled={loading} sx={{ borderRadius: '0.75rem' }}>Cancel</Button>
         <Button
           variant="contained" onClick={onConfirm}
-          sx={{ bgcolor: 'primary.main', borderRadius: '0.75rem', fontWeight: 700, '&:hover': { bgcolor: (t) => darken(t.palette.primary.main, 0.2) } }}
+          disabled={loading}
+          sx={{ bgcolor: 'primary.main', minWidth: '100px', borderRadius: '0.75rem', fontWeight: 700, '&:hover': { bgcolor: (t) => darken(t.palette.primary.main, 0.2) } }}
         >
           Create
         </Button>
