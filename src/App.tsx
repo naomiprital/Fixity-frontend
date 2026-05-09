@@ -2,7 +2,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import { AuthPage } from './features/auth/pages/AuthPage/AuthPage';
 import HomePage from './features/auth/pages/HomePage/HomePage';
-import ReportsPage from './features/auth/pages/ReportsPage/ReportsPage';
+import MyReportsPage from './features/auth/pages/ReportsPage/MyReportsPage';
 import ProfilePage from './features/auth/pages/ProfilePage/ProfilePage';
 import CreateReportPage from './features/auth/pages/CreateReportPage/CreateReportPage';
 import { ProtectedRoute } from './components/ProtectedRoute';
@@ -19,7 +19,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<AuthPage />} />
           <Route path="/home" element={<HomePage />} />
-          <Route path="/reports" element={<ReportsPage />} />
+          <Route path="/reports" element={<MyReportsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/create" element={<CreateReportPage />} />
           <Route element={<ProtectedRoute allowedRoles={['Manager', 'Official']} />}>
