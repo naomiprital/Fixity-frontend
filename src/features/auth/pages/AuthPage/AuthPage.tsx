@@ -100,12 +100,20 @@ export function AuthPage() {
     setErrorMessage('');
     setSuccessMessage('');
     setIsSubmitting(true);
-    navigate('/home');
-
     try {
       const response = await signIn(loginForm);
       persistAuthSession(response);
+
       setSuccessMessage(`Welcome back, ${response.user.firstName}.`);
+
+      console.log('Login successful. User role:', response.user.role);
+
+      // Navigate based on role (case-insensitive check)
+      if (response.user.role?.toLowerCase() === 'worker') {
+        navigate('/worker/pool');
+      } else {
+        navigate('/home');
+      }
     } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : 'Unable to sign in');
     } finally {

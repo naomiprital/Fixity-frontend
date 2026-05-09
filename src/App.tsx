@@ -5,6 +5,7 @@ import HomePage from './features/auth/pages/HomePage/HomePage';
 import MyReportsPage from './features/auth/pages/ReportsPage/MyReportsPage';
 import ProfilePage from './features/auth/pages/ProfilePage/ProfilePage';
 import CreateReportPage from './features/auth/pages/CreateReportPage/CreateReportPage';
+import { WorkerTasksView } from './features/worker/pages/WorkerTasksView';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import ManagerDashboardPage from './features/manager/pages/ManagerDashboardPage/ManagerDashboardPage';
 
@@ -12,16 +13,25 @@ const App = () => {
   const appLocation = useLocation();
   const isAuthPage = appLocation.pathname === '/';
 
-  return (
+  // Detect role for layout adjustments
+  const authData = localStorage.getItem('fixity.auth');
+  const user = authData ? JSON.parse(authData).user : null;
+  const isWorker = user?.role?.toLowerCase() === 'worker';
 
+  return (
     <div className="app-layout">
-      <main className="main-content">
+      <main className="main-content" style={isWorker ? { paddingBottom: 0 } : {}}>
         <Routes>
           <Route path="/" element={<AuthPage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/reports" element={<MyReportsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/create" element={<CreateReportPage />} />
+          
+          {/* Worker Routes */}
+          <Route path="/worker/pool" element={<WorkerTasksView mode="pool" />} />
+          <Route path="/worker/my-tasks" element={<WorkerTasksView mode="myTasks" />} />
+          
           <Route element={<ProtectedRoute allowedRoles={['Manager', 'Official']} />}>
             <Route path="/manager" element={<ManagerDashboardPage />} />
           </Route>
