@@ -13,7 +13,7 @@ const MyReportsPage = () => {
 
     if (isLoading) {
         return (
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
                 <CircularProgress color="primary" />
             </Box>
         );

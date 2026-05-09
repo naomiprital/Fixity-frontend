@@ -92,7 +92,7 @@ const CreateReportPage = () => {
         <Box sx={{ display: 'flex', flexDirection: 'column', background: 'background.default' }}>
             <PageHeader title="New Report" backTo={`/${PagesEnum.HOME}`} />
 
-            <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '1rem', padding: '2rem', height: "45.5rem" }}>
+            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 2fr' }, gap: '1rem', padding: { xs: '1rem', md: '2rem' }, height: { xs: 'auto', md: '45.5rem' } }}>
                 <PhotoUploader onFileChange={(file) => { setSelectedFile(file); setUploadedImageUrl(null); }} />
 
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', justifyContent: 'space-between' }}>

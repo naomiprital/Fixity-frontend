@@ -38,7 +38,7 @@ export const CloseTaskScreen: React.FC<CloseTaskScreenProps> = ({ task, onBack, 
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', backgroundColor: '#F8F9FA', pb: 4 }}>
+    <Box sx={{ minHeight: '100%', backgroundColor: '#F8F9FA', pb: 4 }}>
       {/* Header */}
       <Box
         sx={{
