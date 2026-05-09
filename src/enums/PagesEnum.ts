@@ -3,4 +3,5 @@ export enum PagesEnum {
   REPORTS = 'reports',
   PROFILE = 'profile',
   CREATE = 'create',
+  MANAGER_DASHBOARD = 'manager',
 }
