@@ -10,9 +10,10 @@ interface Props {
   onToggleReport: (id: number) => void;
   onSelectAll: () => void;
   onOpenCreateIncident: () => void;
+  onOpenAddToIncident: () => void;
 }
 
-export function ReportsSection({ reports, selectedReportIds, onToggleReport, onSelectAll, onOpenCreateIncident }: Props) {
+export function ReportsSection({ reports, selectedReportIds, onToggleReport, onSelectAll, onOpenCreateIncident, onOpenAddToIncident }: Props) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -27,19 +28,32 @@ export function ReportsSection({ reports, selectedReportIds, onToggleReport, onS
           <Typography variant="h6" sx={{ fontWeight: 700, color: 'text.primary' }}>Open Reports</Typography>
           <Chip label={reports.length} size="small" sx={{ bgcolor: 'secondary.main', color: '#fff', fontWeight: 700 }} />
         </Box>
-        <Button
-          variant="contained"
-          size={isMobile ? 'small' : 'medium'}
-          disabled={selectedReportIds.length === 0}
-          onClick={onOpenCreateIncident}
-          sx={{
-            bgcolor: 'primary.main', color: '#fff', borderRadius: '0.75rem', fontWeight: 700,
-            '&:hover': { bgcolor: (t) => darken(t.palette.primary.main, 0.2) },
-            '&.Mui-disabled': { bgcolor: 'action.disabledBackground' },
-          }}
-        >
-          {isMobile ? 'New Incident' : `Create Incident (${selectedReportIds.length} selected)`}
-        </Button>
+        <Box sx={{ display: 'flex', gap: 1 }}>
+          <Button
+            variant="outlined"
+            size={isMobile ? 'small' : 'medium'}
+            disabled={selectedReportIds.length === 0}
+            onClick={onOpenAddToIncident}
+            sx={{
+              borderRadius: '0.75rem', fontWeight: 700,
+            }}
+          >
+            Add to Existing
+          </Button>
+          <Button
+            variant="contained"
+            size={isMobile ? 'small' : 'medium'}
+            disabled={selectedReportIds.length === 0}
+            onClick={onOpenCreateIncident}
+            sx={{
+              bgcolor: 'primary.main', color: '#fff', borderRadius: '0.75rem', fontWeight: 700,
+              '&:hover': { bgcolor: (t) => darken(t.palette.primary.main, 0.2) },
+              '&.Mui-disabled': { bgcolor: 'action.disabledBackground' },
+            }}
+          >
+            {isMobile ? 'New' : `Create Incident (${selectedReportIds.length})`}
+          </Button>
+        </Box>
       </Box>
 
       {reports.length > 0 && (

@@ -4,6 +4,7 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import {
   fetchManagerReports, fetchIncidents, createIncident, createTask,
   fetchTaskCategories, updateIncident, deleteIncident, updateTask, deleteTask,
+  addReportsToIncident, removeReportFromIncident
 } from '../../api/managerApi';
 import type { Report, Incident, Task, TaskCategory } from '@/types/models';
 import { toast } from 'react-toastify';
@@ -11,6 +12,7 @@ import { ReportsSection } from './components/ReportsSection';
 import { IncidentsSection } from './components/IncidentsSection';
 import { CreateIncidentDialog, EditIncidentDialog, DeleteIncidentDialog } from './components/IncidentDialogs';
 import { EditTaskDialog, DeleteTaskDialog } from './components/TaskDialogs';
+import { AddToIncidentDialog } from './components/AddToIncidentDialog';
 import './ManagerDashboardPage.css';
 
 export default function ManagerDashboardPage() {
@@ -19,6 +21,7 @@ export default function ManagerDashboardPage() {
   const [taskCategories, setTaskCategories] = useState<TaskCategory[]>([]);
   const [selectedReportIds, setSelectedReportIds] = useState<number[]>([]);
   const [incidentDialogOpen, setIncidentDialogOpen] = useState(false);
+  const [addToIncidentOpen, setAddToIncidentOpen] = useState(false);
   const [incidentDesc, setIncidentDesc] = useState('');
   const [editIncident, setEditIncident] = useState<Incident | null>(null);
   const [editIncidentDesc, setEditIncidentDesc] = useState('');
@@ -121,6 +124,23 @@ export default function ManagerDashboardPage() {
     } catch (e: any) { toast.error(e.message); }
   };
 
+  const handleAddToIncident = async (incidentId: number) => {
+    try {
+      await addReportsToIncident(incidentId, selectedReportIds);
+      toast.success('Reports added to incident!');
+      setAddToIncidentOpen(false);
+      loadData();
+    } catch (e: any) { toast.error(e.message); }
+  };
+
+  const handleRemoveReport = async (incidentId: number, reportId: number) => {
+    try {
+      await removeReportFromIncident(incidentId, reportId);
+      toast.success('Report removed from incident');
+      loadData();
+    } catch (e: any) { toast.error(e.message); }
+  };
+
   return (
     <Box className="mgr-page">
       <Box className="mgr-header">
@@ -139,6 +159,7 @@ export default function ManagerDashboardPage() {
           onToggleReport={toggleReport}
           onSelectAll={handleSelectAll}
           onOpenCreateIncident={() => setIncidentDialogOpen(true)}
+          onOpenAddToIncident={() => setAddToIncidentOpen(true)}
         />
 
         <IncidentsSection
@@ -153,6 +174,7 @@ export default function ManagerDashboardPage() {
           onDeleteIncident={setDeleteIncidentId}
           onEditTask={openEditTask}
           onDeleteTask={setDeleteTaskId}
+          onRemoveReport={handleRemoveReport}
         />
       </Box>
 
@@ -176,6 +198,13 @@ export default function ManagerDashboardPage() {
         incidentId={deleteIncidentId}
         onConfirm={handleDeleteIncident}
         onClose={() => setDeleteIncidentId(null)}
+      />
+
+      <AddToIncidentDialog
+        open={addToIncidentOpen}
+        incidents={incidents}
+        onAdd={handleAddToIncident}
+        onClose={() => setAddToIncidentOpen(false)}
       />
 
       {/* Task dialogs */}
