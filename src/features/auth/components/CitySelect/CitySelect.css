@@ -1,0 +1,71 @@
+.city-select {
+  width: 100%;
+}
+
+.city-select__control,
+.city-select__control--is-focused,
+.city-select__control:hover {
+  min-height: 3rem;
+  border-radius: 0.75rem !important;
+  border: 1.5px solid #d5d8df !important;
+  background: #f0f2f4 !important;
+  box-shadow: none !important;
+  transition: border-color 0.2s ease;
+  padding: 0 !important;
+}
+
+.city-select__value-container {
+  padding: 0 0.85rem !important;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+}
+
+.city-select__input,
+.city-select__input input {
+  margin: 0;
+  padding: 0;
+}
+
+.city-select__input input {
+  color: var(--ink-900);
+  background: transparent;
+}
+
+.city-select__placeholder {
+  color: #aab1be;
+}
+
+.city-select__single-value {
+  color: var(--ink-900);
+}
+
+.city-select__menu {
+  border-radius: 0.75rem;
+  border: 1.5px solid #d5d8df !important;
+  background: #ffffff !important;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  z-index: 9999 !important;
+}
+
+.city-select__menu-list {
+  padding: 0;
+}
+
+.city-select__option {
+  color: var(--ink-900);
+}
+
+.city-select__option--is-focused {
+  background-color: #e4e6eb;
+}
+
+.city-select__option--is-selected {
+  background-color: #1d8190;
+  color: white;
+}
+
+.city-select__dropdown-indicator {
+  color: var(--ink-900);
+}
