@@ -46,15 +46,11 @@ const createIcon = (color: string) => {
   });
 };
 
-const highIcon = createIcon(WORKER_COLORS.highPriority);
-const mediumIcon = createIcon(WORKER_COLORS.mediumPriority);
-const lowIcon = createIcon(WORKER_COLORS.lowPriority);
-
 const getPriorityIcon = (score: string | number) => {
   const s = Number(score);
-  if (s >= 4) return highIcon;
-  if (s >= 3) return mediumIcon;
-  return lowIcon;
+  if (s > 100) return createIcon(WORKER_COLORS.criticalPriority);
+  if (s >= 50) return createIcon(WORKER_COLORS.highPriority);
+  return createIcon(WORKER_COLORS.normalPriority);
 };
 
 export const WorkerTasksView: React.FC<WorkerTasksViewProps> = ({ mode }) => {
@@ -75,7 +71,7 @@ export const WorkerTasksView: React.FC<WorkerTasksViewProps> = ({ mode }) => {
       if (showLoading) setLoading(true);
       const data = await workerApi.getTasks();
       setTasks(data);
-      
+
       const assigned = data.find((t) => t.status?.toLowerCase() === 'assigned');
       if (assigned) setActiveTask(assigned);
       else setActiveTask(null);
@@ -138,9 +134,9 @@ export const WorkerTasksView: React.FC<WorkerTasksViewProps> = ({ mode }) => {
     );
   }
 
-  const filteredTasks = tasks.filter((t) => 
-    mode === 'pool' ? t.status?.toLowerCase() === 'open' : t.status?.toLowerCase() === 'assigned'
-  );
+  const filteredTasks = tasks
+    .filter((t) => (mode === 'pool' ? t.status?.toLowerCase() === 'open' : t.status?.toLowerCase() === 'assigned'))
+    .sort((a, b) => Number(b.incident.priorityScore) - Number(a.incident.priorityScore));
 
   return (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', backgroundColor: '#F8F9FA', overflow: 'hidden' }}>
@@ -165,30 +161,30 @@ export const WorkerTasksView: React.FC<WorkerTasksViewProps> = ({ mode }) => {
         </Stack>
 
         <Box sx={{ backgroundColor: 'rgba(0,0,0,0.2)', borderRadius: '12px', p: 0.5, display: 'flex' }}>
-          <Button 
-            fullWidth 
+          <Button
+            fullWidth
             onClick={() => setView('list')}
-            sx={{ 
-              backgroundColor: view === 'list' ? 'white' : 'transparent', 
-              color: view === 'list' ? WORKER_COLORS.tealHeader : 'white', 
-              borderRadius: '10px', 
-              textTransform: 'none', 
-              fontWeight: 'bold', 
-              '&:hover': { backgroundColor: view === 'list' ? 'white' : 'rgba(255,255,255,0.1)' } 
+            sx={{
+              backgroundColor: view === 'list' ? 'white' : 'transparent',
+              color: view === 'list' ? WORKER_COLORS.tealHeader : 'white',
+              borderRadius: '10px',
+              textTransform: 'none',
+              fontWeight: 'bold',
+              '&:hover': { backgroundColor: view === 'list' ? 'white' : 'rgba(255,255,255,0.1)' }
             }}
           >
             List
           </Button>
-          <Button 
-            fullWidth 
+          <Button
+            fullWidth
             onClick={() => setView('map')}
-            sx={{ 
-              backgroundColor: view === 'map' ? 'white' : 'transparent', 
-              color: view === 'map' ? WORKER_COLORS.tealHeader : 'white', 
-              borderRadius: '10px', 
-              textTransform: 'none', 
-              fontWeight: 'bold', 
-              '&:hover': { backgroundColor: view === 'map' ? 'white' : 'rgba(255,255,255,0.1)' } 
+            sx={{
+              backgroundColor: view === 'map' ? 'white' : 'transparent',
+              color: view === 'map' ? WORKER_COLORS.tealHeader : 'white',
+              borderRadius: '10px',
+              textTransform: 'none',
+              fontWeight: 'bold',
+              '&:hover': { backgroundColor: view === 'map' ? 'white' : 'rgba(255,255,255,0.1)' }
             }}
           >
             Map
@@ -204,10 +200,10 @@ export const WorkerTasksView: React.FC<WorkerTasksViewProps> = ({ mode }) => {
         <Container maxWidth="sm" sx={{ flexGrow: 1, pt: 3, pb: 10, overflowY: 'auto' }}>
           {filteredTasks.length > 0 ? (
             filteredTasks.map((task) => (
-              <TaskCard 
-                key={task.taskId} 
-                task={task} 
-                onClaim={() => mode === 'pool' ? handleClaim(task.taskId) : handleFinish(task)} 
+              <TaskCard
+                key={task.taskId}
+                task={task}
+                onClaim={() => mode === 'pool' ? handleClaim(task.taskId) : handleFinish(task)}
               />
             ))
           ) : (
@@ -244,9 +240,9 @@ export const WorkerTasksView: React.FC<WorkerTasksViewProps> = ({ mode }) => {
           </MapContainer>
           {selectedTask && (
             <Box sx={{ position: 'absolute', bottom: 90, left: 16, right: 16, zIndex: 1000 }}>
-              <TaskCard 
-                task={selectedTask} 
-                onClaim={() => mode === 'pool' ? handleClaim(selectedTask.taskId) : handleFinish(selectedTask)} 
+              <TaskCard
+                task={selectedTask}
+                onClaim={() => mode === 'pool' ? handleClaim(selectedTask.taskId) : handleFinish(selectedTask)}
               />
             </Box>
           )}

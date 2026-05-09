@@ -41,7 +41,7 @@ export default function ManagerDashboardPage() {
         fetchManagerReports(), fetchIncidents(), fetchTaskCategories(),
       ]);
       setReports(reps);
-      setIncidents(incs);
+      setIncidents(incs.sort((a, b) => b.priorityScore - a.priorityScore));
       setTaskCategories(cats);
       setSelectedReportIds([]);
     } catch (e: any) {

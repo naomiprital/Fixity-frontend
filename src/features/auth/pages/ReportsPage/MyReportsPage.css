@@ -6,7 +6,7 @@
 }
 
 .my-reports-header {
-    background-color: #1A6756;
+    background-color: #0f5a61;
     color: white;
     padding: 1rem 1.5rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -48,7 +48,7 @@
 
 .tab-button.active {
     background: white;
-    color: #1A6756;
+    color: #0f5a61;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 

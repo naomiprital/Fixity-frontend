@@ -2,14 +2,17 @@ import { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import type { LatLngBoundsLiteral, LatLngTuple } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { Box, Typography, Button, IconButton, CircularProgress } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
+import { useAllReports } from '../../../../hooks/Reports';
+import { ReportCard } from '../../components/ReportCard';
+import { supportReport } from '../../api/services/reportApi';
+import { toast } from 'react-toastify';
+import { useAuthUser } from '@/hooks/Auth';
 import './HomePage.css';
-
-type ComplaintPin = {
-  id: number;
-  title: string;
-  category: string;
-  position: LatLngTuple;
-};
+import { useNavigate } from 'react-router-dom';
 
 const ISRAEL_CENTER: LatLngTuple = [31.7683, 35.2137];
 const ISRAEL_BOUNDS: LatLngBoundsLiteral = [
@@ -17,105 +20,240 @@ const ISRAEL_BOUNDS: LatLngBoundsLiteral = [
   [33.35, 35.92],
 ];
 
-const MOCK_COMPLAINTS: ComplaintPin[] = [
-  { id: 1, title: 'Broken street light', category: 'Infrastructure', position: [32.0853, 34.7818] },
-  { id: 2, title: 'Overflowing trash bin', category: 'Sanitation', position: [31.252, 34.7915] },
-  { id: 3, title: 'Pothole on main road', category: 'Roads', position: [32.794, 34.9896] },
-  { id: 4, title: 'Damaged park bench', category: 'Public spaces', position: [31.0461, 34.8516] },
-  { id: 5, title: 'Graffiti on wall', category: 'Cleanliness', position: [32.1093, 34.8555] },
-];
+const createPinIcon = (color: string) => {
+  return new L.DivIcon({
+    html: `
+      <div style="
+        background-color: ${color}; 
+        width: 30px; 
+        height: 30px; 
+        border-radius: 50% 50% 50% 0; 
+        transform: rotate(-45deg); 
+        border: 2px solid white; 
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      ">
+        <div style="
+          width: 10px; 
+          height: 10px; 
+          background-color: white; 
+          border-radius: 50%;
+          transform: rotate(45deg);
+        "></div>
+      </div>
+    `,
+    className: 'custom-pin-icon',
+    iconSize: [30, 30],
+    iconAnchor: [15, 30],
+  });
+};
 
 const HomePage = () => {
+  const navigate = useNavigate();
   const mapRef = useRef<HTMLDivElement | null>(null);
+  const leafletMap = useRef<L.Map | null>(null);
+  const [view, setView] = useState<'list' | 'map'>('map');
+  const [selectedReport, setSelectedReport] = useState<any>(null);
   const [userPosition, setUserPosition] = useState<LatLngTuple | null>(null);
-  const [locationError, setLocationError] = useState('');
+  const { data: reports, isLoading, refetch } = useAllReports();
+  const { data: currentUser } = useAuthUser();
+  const [isSupporting, setIsSupporting] = useState(false);
 
   useEffect(() => {
-    if (!mapRef.current) {
-      return;
+    if (currentUser?.role === 'Worker') {
+      navigate('/worker/pool');
+    }
+  }, [currentUser, navigate]);
+
+  const isSupported = selectedReport?.supports?.some((s: any) => s.userId === currentUser?.userId);
+  const isMyReport = currentUser?.userId === selectedReport?.requesterId;
+
+  useEffect(() => {
+    if (view !== 'map' || !mapRef.current || reports === undefined) return;
+
+    if (!leafletMap.current) {
+      leafletMap.current = L.map(mapRef.current, {
+        center: ISRAEL_CENTER,
+        zoom: 8,
+        minZoom: 7,
+        maxZoom: 18,
+        maxBounds: ISRAEL_BOUNDS,
+        maxBoundsViscosity: 1.0,
+        zoomControl: false,
+      });
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors',
+      }).addTo(leafletMap.current);
     }
 
-    const map = L.map(mapRef.current, {
-      center: ISRAEL_CENTER,
-      zoom: 8,
-      minZoom: 7,
-      maxZoom: 18,
-      maxBounds: ISRAEL_BOUNDS,
-      maxBoundsViscosity: 1.0,
-      zoomControl: true,
-      worldCopyJump: false,
+    const map = leafletMap.current;
+
+    map.eachLayer((layer) => {
+      if (layer instanceof L.Marker) {
+        map.removeLayer(layer);
+      }
     });
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors',
-    }).addTo(map);
-
-    MOCK_COMPLAINTS.forEach((complaint) => {
-      const marker = L.circleMarker(complaint.position, {
-        radius: 7,
-        color: '#d04835',
-        fillColor: '#ef5f43',
-        fillOpacity: 0.92,
-        weight: 2,
+    reports.forEach((report) => {
+      const marker = L.marker([report.latitude, report.longitude], {
+        icon: createPinIcon('#ef5f43'),
       }).addTo(map);
 
-      marker.bindPopup(`<strong>${complaint.title}</strong><br/>${complaint.category}`);
+      marker.on('click', () => {
+        setSelectedReport(report);
+        map.setView([report.latitude, report.longitude], map.getZoom(), { animate: true });
+      });
     });
 
-    if (!navigator.geolocation) {
-      setLocationError('Location is not supported on this device.');
-      return () => map.remove();
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      ({ coords }) => {
-        const position: LatLngTuple = [coords.latitude, coords.longitude];
-        setUserPosition(position);
-
-        const userMarker = L.circleMarker(position, {
+    if (userPosition) {
+      L.circleMarker(userPosition, {
+        radius: 9,
+        color: '#2f4f78',
+        fillColor: '#4785d9',
+        fillOpacity: 0.9,
+        weight: 2,
+      }).addTo(map).bindPopup('You are here');
+    } else if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(({ coords }) => {
+        const pos: LatLngTuple = [coords.latitude, coords.longitude];
+        setUserPosition(pos);
+        L.circleMarker(pos, {
           radius: 9,
           color: '#2f4f78',
           fillColor: '#4785d9',
           fillOpacity: 0.9,
           weight: 2,
         }).addTo(map);
+        map.setView(pos, 15, { animate: true });
+      });
+    }
+  }, [view, reports, userPosition]);
 
-        userMarker.bindPopup('You are here');
-        map.setView(position, 16, { animate: true });
-      },
-      () => {
-        setLocationError('Could not fetch your location. Showing default Israel view.');
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-      },
-    );
+  const handleSupport = async () => {
+    if (!selectedReport || isSupporting) return;
+    if (isMyReport) {
+      toast.info("You cannot support your own report.");
+      return;
+    }
+    setIsSupporting(true);
+    try {
+      const res = await supportReport(selectedReport.reportId);
+      toast.success(res.message);
+      refetch();
+      // Update local state for immediate feedback
+      setSelectedReport({
+        ...selectedReport,
+        supportCount: res.supportCount,
+        supports: res.supported
+          ? [...(selectedReport.supports || []), { userId: currentUser?.userId }]
+          : (selectedReport.supports || []).filter((s: any) => s.userId !== currentUser?.userId)
+      });
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || 'Failed to update support.');
+    } finally {
+      setIsSupporting(false);
+    }
+  };
 
-    return () => {
-      map.remove();
-    };
-  }, []);
+  const API_BASE = import.meta.env.VITE_SERVER_BASE_URL || 'http://localhost:3000/api';
+  const IMAGE_BASE = API_BASE.replace('/api', '');
 
   return (
-    <section className="home-page">
-      <header className="home-page__header">
-        <h1 className="home-page__title">Complaints Map</h1>
-        <p className="home-page__subtitle">Israel only. Your location is shown in blue.</p>
-      </header>
+    <Box className="home-page">
+      <Box className="home-page__header-v2">
+        <Typography variant="h1" sx={{ color: 'white', mb: 2, fontSize: '1.5rem', width: '100%', maxWidth: '400px', textAlign: 'left' }}>
+          Nearby Reports
+        </Typography>
+        <Box className="view-toggle">
+          <Button
+            className={`toggle-btn ${view === 'list' ? 'active' : ''}`}
+            onClick={() => setView('list')}
+          >
+            List
+          </Button>
+          <Button
+            className={`toggle-btn ${view === 'map' ? 'active' : ''}`}
+            onClick={() => setView('map')}
+          >
+            Map
+          </Button>
+        </Box>
+      </Box>
 
-      {locationError && <p className="home-page__error">{locationError}</p>}
+      {
+        view === 'map' ? (
+          <Box className="map-container-v2">
+            <div ref={mapRef} className="home-page__map" />
 
-      <div className="home-page__map-shell">
-        <div ref={mapRef} className="home-page__map" aria-label="Israel complaints map" />
-      </div>
+            {selectedReport && (
+              <Box className="floating-report-card">
+                <IconButton
+                  className="close-btn"
+                  size="small"
+                  onClick={() => setSelectedReport(null)}
+                >
+                  <CloseIcon fontSize="small" />
+                </IconButton>
 
-      {userPosition && (
-        <p className="home-page__location">
-          Your location: {userPosition[0].toFixed(4)}, {userPosition[1].toFixed(4)}
-        </p>
-      )}
-    </section>
+                <Box className="card-content">
+                  <img
+                    src={selectedReport.beforeImageUrl ? `${IMAGE_BASE}${selectedReport.beforeImageUrl}` : 'https://placehold.co/80'}
+                    alt={selectedReport.description}
+                    className="card-image"
+                  />
+                  <Box className="card-info">
+                    <Typography className="card-title">
+                      {selectedReport.category?.name || 'Broken Streetlight'}
+                    </Typography>
+                    <Typography className="card-subtitle">
+                      {selectedReport.description.length > 30
+                        ? selectedReport.description.substring(0, 30) + '...'
+                        : selectedReport.description} • {selectedReport.status}
+                    </Typography>
+                  </Box>
+                </Box>
+
+                {!(isSupporting || isMyReport) && (
+                  <Button
+                    fullWidth
+                    className="support-btn"
+                    startIcon={isSupporting ? (
+                      <CircularProgress size={20} color="inherit" />
+                    ) : isSupported ? (
+                      <ThumbUpIcon />
+                    ) : (
+                      <ThumbUpOutlinedIcon />
+                    )}
+                    onClick={handleSupport}
+                  >
+                    {isSupported ? 'Supported' : 'I see this too'} ({selectedReport.supportCount || 0})
+                  </Button>
+                )}
+              </Box>
+            )}
+          </Box>
+        ) : (
+          <Box className="list-container-v2">
+            {isLoading ? (
+              <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+                <CircularProgress />
+              </Box>
+            ) : reports && reports.length > 0 ? (
+              reports.map((report: any) => (
+                <ReportCard key={report.reportId} report={report} />
+              ))
+            ) : (
+              <Typography sx={{ textAlign: 'center', mt: 4, opacity: 0.6 }}>
+                No reports found.
+              </Typography>
+            )}
+          </Box>
+        )
+      }
+    </Box >
   );
 };
 

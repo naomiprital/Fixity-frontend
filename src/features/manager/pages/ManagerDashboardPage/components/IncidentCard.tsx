@@ -8,6 +8,13 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import type { Incident, Task, TaskCategory } from '@/types/models';
+import { WORKER_COLORS } from '../../../../worker/types';
+
+const getPriorityInfo = (score: number) => {
+  if (score > 100) return { label: 'CRITICAL', color: WORKER_COLORS.criticalPriority };
+  if (score >= 50) return { label: 'HIGH', color: WORKER_COLORS.highPriority };
+  return { label: 'NORMAL', color: WORKER_COLORS.normalPriority };
+};
 
 const statusColor = (status: string) => {
   if (status === 'Open') return { bg: '#e8f5e9', text: '#2e7d32' };
@@ -52,6 +59,18 @@ export function IncidentCard({
             <Typography variant="caption" sx={{ color: 'text.secondary' }}>
               {incident.reports.length} report{incident.reports.length !== 1 ? 's' : ''} · {incident.tasks.length} task{incident.tasks.length !== 1 ? 's' : ''}
             </Typography>
+            <Chip
+              label={getPriorityInfo(incident.priorityScore).label}
+              size="small"
+              sx={{
+                height: 16,
+                fontSize: '0.65rem',
+                fontWeight: 800,
+                ml: 1,
+                bgcolor: getPriorityInfo(incident.priorityScore).color,
+                color: '#fff'
+              }}
+            />
           </Box>
           <Box sx={{ display: 'flex', gap: 0.5, flexShrink: 0 }}>
             <Tooltip title="Edit incident">

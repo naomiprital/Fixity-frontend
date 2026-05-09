@@ -10,9 +10,9 @@ interface TaskCardProps {
 
 const getPriorityInfo = (score: string | number) => {
   const s = Number(score);
-  if (s >= 4) return { label: 'HIGH', color: WORKER_COLORS.highPriority };
-  if (s >= 3) return { label: 'MEDIUM', color: WORKER_COLORS.mediumPriority };
-  return { label: 'LOW', color: WORKER_COLORS.lowPriority };
+  if (s > 100) return { label: 'CRITICAL', color: WORKER_COLORS.criticalPriority };
+  if (s >= 50) return { label: 'HIGH', color: WORKER_COLORS.highPriority };
+  return { label: 'NORMAL', color: WORKER_COLORS.normalPriority };
 };
 
 export const TaskCard: React.FC<TaskCardProps> = ({ task, onClaim }) => {

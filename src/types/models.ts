@@ -10,7 +10,10 @@ export type Report = {
   incidentId?: number | null;
   createdAt: string;
   category: { name: string };
-  requester: { firstName: string; lastName: string; cityId: number };
+  requesterId: number;
+  requester: { userId: number; firstName: string; lastName: string; cityId: number };
+  supportCount: number;
+  supports?: { userId: number }[];
 };
 
 export type Task = {

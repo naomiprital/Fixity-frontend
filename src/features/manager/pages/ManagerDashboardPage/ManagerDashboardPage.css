@@ -8,7 +8,7 @@
 
 /* ── Header – matches the green PageHeader used in CreateReportPage ─────── */
 .mgr-header {
-  background-color: #1A6756;
+  background-color: #0f5a61;
   color: #ffffff;
   height: 4rem;
   display: flex;
@@ -80,12 +80,12 @@
 }
 
 .mgr-report-card:hover {
-  border-color: #1A6756;
+  border-color: #0f5a61;
   background: #f0f6f4;
 }
 
 .mgr-report-card--selected {
-  border-color: #1A6756;
+  border-color: #0f5a61;
   background: #eaf4f1;
   box-shadow: 0 0 0 2px rgba(26, 103, 86, 0.15);
 }

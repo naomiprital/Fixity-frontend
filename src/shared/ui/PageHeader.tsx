@@ -13,7 +13,7 @@ export const PageHeader = ({ title, backTo }: PageHeaderProps) => {
     return (
         <Box
             sx={{
-                backgroundColor: 'primary.main',
+                backgroundColor: 'primary.dark',
                 color: 'primary.contrastText',
                 height: '4rem',
                 display: 'flex',
