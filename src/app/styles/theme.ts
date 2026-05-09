@@ -40,6 +40,9 @@ export const theme = createTheme({
     info: {
       main: '#3b82f6',
     },
+    error: {
+      main: '#f44336',
+    },
     background: {
       default: '#f7f9fc',
       paper: '#ffffff',

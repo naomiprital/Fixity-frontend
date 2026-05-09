@@ -18,24 +18,16 @@ import { useTheme } from '@mui/material/styles';
 import './Navbar.css';
 import { PagesEnum } from '@/enums/PagesEnum';
 import { capitalizeFirstLetter } from '@/utils/utilsFunctions';
-import type { AuthResponse } from '@/features/auth/api/authApi';
+import { useAuthUser } from '@/hooks/Auth';
 
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const theme = useTheme();
-  
-  // Detect role from localStorage
-  const authDataString = localStorage.getItem('fixity.auth');
-  let userRole = '';
-  
-  if (authDataString) {
-    try {
-      const authData = JSON.parse(authDataString) as AuthResponse;
-      userRole = authData.user?.role || '';
-    } catch (e) {}
-  }
-  
+
+  const { data: user } = useAuthUser();
+  const userRole = user?.role || '';
+
   const isWorker = userRole.toLowerCase() === 'worker';
   const isManagerOrOfficial = userRole === 'Manager' || userRole === 'Official';
 

@@ -40,7 +40,13 @@ export function AuthPage() {
   const citySelectRef = useRef<CitySelectRef>(null);
   const fieldsRef = useRef<HTMLDivElement>(null);
 
-  // Set up scroll listener to close city select menu when fields are scrolled
+  useEffect(() => {
+    const authData = localStorage.getItem(AUTH_STORAGE_KEY);
+    if (authData) {
+      navigate('/home', { replace: true });
+    }
+  }, [navigate]);
+
   useEffect(() => {
     const fieldsElement = fieldsRef.current;
 
