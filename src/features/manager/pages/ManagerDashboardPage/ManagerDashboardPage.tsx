@@ -32,6 +32,7 @@ export default function ManagerDashboardPage() {
   const [editTaskNotes, setEditTaskNotes] = useState('');
   const [editTaskCategoryId, setEditTaskCategoryId] = useState(0);
   const [deleteTaskId, setDeleteTaskId] = useState<number | null>(null);
+  const [isCreatingIncident, setIsCreatingIncident] = useState(false);
 
   useEffect(() => { loadData(); }, []);
 
@@ -41,7 +42,7 @@ export default function ManagerDashboardPage() {
         fetchManagerReports(), fetchIncidents(), fetchTaskCategories(),
       ]);
       setReports(reps);
-      setIncidents(incs);
+      setIncidents(incs.sort((a, b) => b.priorityScore - a.priorityScore));
       setTaskCategories(cats);
       setSelectedReportIds([]);
     } catch (e: any) {
@@ -59,12 +60,17 @@ export default function ManagerDashboardPage() {
 
   const handleCreateIncident = async () => {
     try {
+      setIsCreatingIncident(true);
       await createIncident({ reportIds: selectedReportIds, description: incidentDesc });
       toast.success('Incident created!');
       setIncidentDialogOpen(false);
       setIncidentDesc('');
       loadData();
-    } catch (e: any) { toast.error(e.message); }
+    } catch (e: any) {
+      toast.error(e.message);
+    } finally {
+      setIsCreatingIncident(false);
+    }
   };
 
   const handleUpdateIncident = async () => {
@@ -186,6 +192,7 @@ export default function ManagerDashboardPage() {
         onDescriptionChange={setIncidentDesc}
         onConfirm={handleCreateIncident}
         onClose={() => setIncidentDialogOpen(false)}
+        loading={isCreatingIncident}
       />
       <EditIncidentDialog
         incident={editIncident}

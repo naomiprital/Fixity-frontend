@@ -18,3 +18,13 @@ export const fetchMyReports = async (): Promise<any[]> => {
   const { data } = await api.get(`${REPORTS_ROUTE}/me`);
   return data;
 };
+
+export const supportReport = async (reportId: number) => {
+  const { data } = await api.post(`${REPORTS_ROUTE}/${reportId}/support`);
+  return data;
+};
+
+export const fetchAllReports = async (): Promise<any[]> => {
+  const { data } = await api.get(REPORTS_ROUTE);
+  return data;
+};

@@ -21,10 +21,10 @@ export interface Task {
 }
 
 export const WORKER_COLORS = {
-  tealHeader: '#135D66',
-  highPriority: '#FF5252',
-  mediumPriority: '#F39C12', // Slightly deeper orange
-  lowPriority: '#3498DB',    // Vibrant blue instead of gray
+  tealHeader: '#0f5a61',
+  criticalPriority: '#D32F2F', // Deep red
+  highPriority: '#FF9800',     // Orange
+  normalPriority: '#4CAF50',   // Green/Blue
   successGreen: '#2ECC71',
   darkBlueFooter: '#2C4364',
 };
