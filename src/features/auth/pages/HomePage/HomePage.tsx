@@ -67,6 +67,23 @@ const HomePage = () => {
     }
   }, [currentUser, navigate]);
 
+  useEffect(() => {
+    if (view === 'map' && leafletMap.current) {
+      setTimeout(() => {
+        leafletMap.current?.invalidateSize();
+      }, 100);
+    }
+  }, [view]);
+
+  useEffect(() => {
+    return () => {
+      if (leafletMap.current) {
+        leafletMap.current.remove();
+        leafletMap.current = null;
+      }
+    };
+  }, []);
+
   const isSupported = selectedReport?.supports?.some((s: any) => s.userId === currentUser?.userId);
   const isMyReport = currentUser?.userId === selectedReport?.requesterId;
 
@@ -92,12 +109,12 @@ const HomePage = () => {
     const map = leafletMap.current;
 
     map.eachLayer((layer) => {
-      if (layer instanceof L.Marker) {
+      if (layer instanceof L.Marker || layer instanceof L.CircleMarker) {
         map.removeLayer(layer);
       }
     });
 
-    reports.forEach((report) => {
+    reports.forEach((report: any) => {
       const marker = L.marker([report.latitude, report.longitude], {
         icon: createPinIcon('#ef5f43'),
       }).addTo(map);
@@ -183,76 +200,72 @@ const HomePage = () => {
         </Box>
       </Box>
 
-      {
-        view === 'map' ? (
-          <Box className="map-container-v2">
-            <div ref={mapRef} className="home-page__map" />
+      <Box className="map-container-v2" sx={{ display: view === 'map' ? 'block' : 'none' }}>
+        <div ref={mapRef} className="home-page__map" />
 
-            {selectedReport && (
-              <Box className="floating-report-card">
-                <IconButton
-                  className="close-btn"
-                  size="small"
-                  onClick={() => setSelectedReport(null)}
-                >
-                  <CloseIcon fontSize="small" />
-                </IconButton>
+        {selectedReport && (
+          <Box className="floating-report-card">
+            <IconButton
+              className="close-btn"
+              size="small"
+              onClick={() => setSelectedReport(null)}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
 
-                <Box className="card-content">
-                  <img
-                    src={selectedReport.beforeImageUrl ? `${IMAGE_BASE}${selectedReport.beforeImageUrl}` : 'https://placehold.co/80'}
-                    alt={selectedReport.description}
-                    className="card-image"
-                  />
-                  <Box className="card-info">
-                    <Typography className="card-title">
-                      {selectedReport.category?.name || 'Broken Streetlight'}
-                    </Typography>
-                    <Typography className="card-subtitle">
-                      {selectedReport.description.length > 30
-                        ? selectedReport.description.substring(0, 30) + '...'
-                        : selectedReport.description} • {selectedReport.status}
-                    </Typography>
-                  </Box>
-                </Box>
+            <Box className="card-content">
+              <img
+                src={selectedReport.beforeImageUrl ? `${IMAGE_BASE}${selectedReport.beforeImageUrl}` : 'https://placehold.co/80'}
+                alt={selectedReport.description}
+                className="card-image"
+              />
+              <Box className="card-info">
+                <Typography className="card-title">
+                  {selectedReport.category?.name || 'Broken Streetlight'}
+                </Typography>
+                <Typography className="card-subtitle">
+                  {selectedReport.description.length > 30
+                    ? selectedReport.description.substring(0, 30) + '...'
+                    : selectedReport.description} • {selectedReport.status}
+                </Typography>
+              </Box>
+            </Box>
 
-                {!(isSupporting || isMyReport) && (
-                  <Button
-                    fullWidth
-                    className="support-btn"
-                    startIcon={isSupporting ? (
-                      <CircularProgress size={20} color="inherit" />
-                    ) : isSupported ? (
-                      <ThumbUpIcon />
-                    ) : (
-                      <ThumbUpOutlinedIcon />
-                    )}
-                    onClick={handleSupport}
-                  >
-                    {isSupported ? 'Supported' : 'I see this too'} ({selectedReport.supportCount || 0})
-                  </Button>
+            {!(isSupporting || isMyReport) && (
+              <Button
+                fullWidth
+                className="support-btn"
+                startIcon={isSupporting ? (
+                  <CircularProgress size={20} color="inherit" />
+                ) : isSupported ? (
+                  <ThumbUpIcon />
+                ) : (
+                  <ThumbUpOutlinedIcon />
                 )}
-              </Box>
+                onClick={handleSupport}
+              >
+                {isSupported ? 'Supported' : 'I see this too'} ({selectedReport.supportCount || 0})
+              </Button>
             )}
           </Box>
+        )}
+      </Box>
+
+      <Box className="list-container-v2" sx={{ display: view === 'list' ? 'flex' : 'none' }}>
+        {isLoading ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+            <CircularProgress />
+          </Box>
+        ) : reports && reports.length > 0 ? (
+          reports.map((report: any) => (
+            <ReportCard key={report.reportId} report={report} />
+          ))
         ) : (
-          <Box className="list-container-v2">
-            {isLoading ? (
-              <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-                <CircularProgress />
-              </Box>
-            ) : reports && reports.length > 0 ? (
-              reports.map((report: any) => (
-                <ReportCard key={report.reportId} report={report} />
-              ))
-            ) : (
-              <Typography sx={{ textAlign: 'center', mt: 4, opacity: 0.6 }}>
-                No reports found.
-              </Typography>
-            )}
-          </Box>
-        )
-      }
+          <Typography sx={{ textAlign: 'center', mt: 4, opacity: 0.6 }}>
+            No reports found.
+          </Typography>
+        )}
+      </Box>
     </Box >
   );
 };
