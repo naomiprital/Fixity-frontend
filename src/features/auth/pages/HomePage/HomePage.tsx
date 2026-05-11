@@ -114,7 +114,7 @@ const HomePage = () => {
       }
     });
 
-    reports.forEach((report: any) => {
+    reports.forEach((report) => {
       const marker = L.marker([report.latitude, report.longitude], {
         icon: createPinIcon('#ef5f43'),
       }).addTo(map);
