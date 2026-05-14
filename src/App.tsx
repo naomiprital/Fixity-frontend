@@ -11,6 +11,7 @@ import ManagerDashboardPage from './features/manager/pages/ManagerDashboardPage/
 import StaffManagement from './features/pages/OfficialPages/StaffManagement';
 import OfficialMap from './features/pages/OfficialPages/OfficialMap';
 import OfficialDashboard from './features/pages/OfficialPages/OfficialDashboard';
+import { PagesEnum } from './enums/PagesEnum';
 
 const App = () => {
   const appLocation = useLocation();
@@ -25,29 +26,33 @@ const App = () => {
             <Route path="/profile" element={<ProfilePage />} />
           </Route>
 
-          {/* Citizen Routes */}
+          {/* Shared Citizen & Manager Routes */}
+          <Route element={<ProtectedRoute allowedRoles={['Citizen', 'Manager']} />}>
+            <Route path={`/${PagesEnum.HOME}`} element={<HomePage />} />
+            <Route path={`/${PagesEnum.REPORTS}`} element={<MyReportsPage />} />
+          </Route>
+
+          {/* Citizen-only Routes */}
           <Route element={<ProtectedRoute allowedRoles={['Citizen']} />}>
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/reports" element={<MyReportsPage />} />
-            <Route path="/create" element={<CreateReportPage />} />
+            <Route path={`/${PagesEnum.CREATE}`} element={<CreateReportPage />} />
           </Route>
 
           {/* Worker Routes */}
           <Route element={<ProtectedRoute allowedRoles={['Worker']} />}>
-            <Route path="/worker/pool" element={<WorkerTasksView mode="pool" />} />
-            <Route path="/worker/my-tasks" element={<WorkerTasksView mode="myTasks" />} />
+            <Route path={`/${PagesEnum.WORKER_POOL}`} element={<WorkerTasksView mode="pool" />} />
+            <Route path={`/${PagesEnum.WORKER_TASKS}`} element={<WorkerTasksView mode="myTasks" />} />
           </Route>
 
-          {/* Manager Routes TODO: Manager routes */}
+          {/* Manager Routes */}
           <Route element={<ProtectedRoute allowedRoles={['Manager']} />}>
-            <Route path="/manager" element={<ManagerDashboardPage />} />
+            <Route path={`/${PagesEnum.MANAGER_DASHBOARD}`} element={<ManagerDashboardPage />} />
           </Route>
 
           {/* Official Routes */}
           <Route element={<ProtectedRoute allowedRoles={['Official']} />}>
-            <Route path="/official/dashboard" element={<OfficialDashboard />} />
-            <Route path="/official/map" element={<OfficialMap />} />
-            <Route path="/official/staff" element={<StaffManagement />} />
+            <Route path={`/${PagesEnum.OFFICIAL_DASHBOARD}`} element={<OfficialDashboard />} />
+            <Route path={`/${PagesEnum.OFFICIAL_MAP}`} element={<OfficialMap />} />
+            <Route path={`/${PagesEnum.OFFICIAL_STAFF}`} element={<StaffManagement />} />
           </Route>
 
           {/* Fallback route */}

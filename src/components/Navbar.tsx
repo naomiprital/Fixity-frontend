@@ -14,15 +14,17 @@ import {
   TaskAlt,
   TaskAltOutlined,
   InsightsOutlined,
+  Insights,
   Groups,
   GroupsOutlined,
+  Map,
+  MapOutlined,
 } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 import './Navbar.css';
 import { PagesEnum } from '@/enums/PagesEnum';
 import { capitalizeFirstLetter } from '@/utils/utilsFunctions';
 import { useAuthUser } from '@/hooks/Auth';
-import InsightsIcon from '@mui/icons-material/Insights';
 
 const Navbar = () => {
   const location = useLocation();
@@ -31,10 +33,6 @@ const Navbar = () => {
 
   const { data: user } = useAuthUser();
   const userRole = user?.role || '';
-
-  const isWorker = userRole.toLowerCase() === 'worker';
-  const isManager = userRole === 'Manager';
-  const isOfficial = userRole === 'Official';
 
   const NavItem = ({
     page,
@@ -60,50 +58,59 @@ const Navbar = () => {
     );
   };
 
-  if (isWorker) {
-    return (
-      <nav className="bottom-navbar">
-        <NavItem page="worker/pool" filledIcon={Explore} outlinedIcon={ExploreOutlined} label="Pool" />
-        <NavItem page="worker/my-tasks" filledIcon={TaskAlt} outlinedIcon={TaskAltOutlined} label="My Tasks" />
-        <NavItem page="profile" filledIcon={Person} outlinedIcon={PersonOutlined} label="Profile" />
-      </nav>
-    );
-  }
+  const navConfigs: Record<string, any[]> = {
+    Citizen: [
+      { page: PagesEnum.HOME, filledIcon: Home, outlinedIcon: HomeOutlined, label: 'Home' },
+      { isCreateReportFab: true },
+      { page: PagesEnum.REPORTS, filledIcon: Assignment, outlinedIcon: AssignmentOutlined, label: 'Reports' },
+      { page: PagesEnum.PROFILE, filledIcon: Person, outlinedIcon: PersonOutlined, label: 'Profile' },
+    ],
+    Worker: [
+      { page: PagesEnum.WORKER_POOL, filledIcon: Explore, outlinedIcon: ExploreOutlined, label: 'Pool' },
+      { page: PagesEnum.WORKER_TASKS, filledIcon: TaskAlt, outlinedIcon: TaskAltOutlined, label: 'My Tasks' },
+      { page: PagesEnum.PROFILE, filledIcon: Person, outlinedIcon: PersonOutlined, label: 'Profile' },
+    ],
+    Manager: [
+      { page: PagesEnum.HOME, filledIcon: Map, outlinedIcon: MapOutlined, label: 'Map' },
+      { page: PagesEnum.MANAGER_DASHBOARD, filledIcon: Dashboard, outlinedIcon: DashboardOutlined, label: 'Manager' },
+      { page: PagesEnum.REPORTS, filledIcon: Assignment, outlinedIcon: AssignmentOutlined, label: 'Reports' },
+      { page: PagesEnum.PROFILE, filledIcon: Person, outlinedIcon: PersonOutlined, label: 'Profile' },
+    ],
+    Official: [
+      { page: PagesEnum.OFFICIAL_DASHBOARD, filledIcon: Insights, outlinedIcon: InsightsOutlined, label: 'Dashboard' },
+      { page: PagesEnum.OFFICIAL_MAP, filledIcon: Map, outlinedIcon: MapOutlined, label: 'Map' },
+      { page: PagesEnum.OFFICIAL_STAFF, filledIcon: Groups, outlinedIcon: GroupsOutlined, label: 'Staff' },
+      { page: PagesEnum.PROFILE, filledIcon: Person, outlinedIcon: PersonOutlined, label: 'Profile' },
+    ],
 
-  if (isOfficial) {
-    return (
-      <nav className="bottom-navbar">
-        <NavItem page="official/dashboard" filledIcon={InsightsIcon} outlinedIcon={InsightsOutlined} label="Dashboard" />
-        <NavItem page="official/map" filledIcon={Explore} outlinedIcon={ExploreOutlined} label="Map" />
-        <NavItem page="official/staff" filledIcon={Groups} outlinedIcon={GroupsOutlined} label="Staff" />
-        <NavItem page="profile" filledIcon={Person} outlinedIcon={PersonOutlined} label="Profile" />
-      </nav>
-    );
-  }
+  };
 
-  if (isManager) {
-    return (
-      <nav className="bottom-navbar">
-        <NavItem page={PagesEnum.MANAGER_DASHBOARD} filledIcon={Dashboard} outlinedIcon={DashboardOutlined} label="Manager" />
-        <NavItem page={PagesEnum.REPORTS} filledIcon={Assignment} outlinedIcon={AssignmentOutlined} label="Reports" />
-        <NavItem page={PagesEnum.PROFILE} filledIcon={Person} outlinedIcon={PersonOutlined} label="Profile" />
-      </nav>
-    );
-  }
+  const currentRole = capitalizeFirstLetter(userRole) || 'Citizen';
+  const currentNavItems = navConfigs[currentRole] || navConfigs.Citizen;
 
-  // Default for Citizen
   return (
     <nav className="bottom-navbar">
-      <NavItem page={PagesEnum.HOME} filledIcon={Home} outlinedIcon={HomeOutlined} label="Home" />
+      {currentNavItems.map((item) => {
+        if (item.isCreateReportFab) {
+          return (
+            <div key="fab" className="nav-fab-container">
+              <button className="nav-fab" onClick={() => navigate(`/${PagesEnum.CREATE}`)}>
+                <Add fontSize="large" />
+              </button>
+            </div>
+          );
+        }
 
-      <div className="nav-fab-container">
-        <button className="nav-fab" onClick={() => navigate(`/${PagesEnum.CREATE}`)}>
-          <Add fontSize="large" />
-        </button>
-      </div>
-
-      <NavItem page={PagesEnum.REPORTS} filledIcon={Assignment} outlinedIcon={AssignmentOutlined} label="Reports" />
-      <NavItem page={PagesEnum.PROFILE} filledIcon={Person} outlinedIcon={PersonOutlined} label="Profile" />
+        return (
+          <NavItem
+            key={item.page}
+            page={item.page}
+            filledIcon={item.filledIcon}
+            outlinedIcon={item.outlinedIcon}
+            label={item.label}
+          />
+        );
+      })}
     </nav>
   );
 };

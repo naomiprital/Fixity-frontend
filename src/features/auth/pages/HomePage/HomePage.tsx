@@ -12,7 +12,6 @@ import { supportReport } from '../../api/services/reportApi';
 import { toast } from 'react-toastify';
 import { useAuthUser } from '@/hooks/Auth';
 import './HomePage.css';
-import { useNavigate } from 'react-router-dom';
 
 const ISRAEL_CENTER: LatLngTuple = [31.7683, 35.2137];
 const ISRAEL_BOUNDS: LatLngBoundsLiteral = [
@@ -51,7 +50,6 @@ const createPinIcon = (color: string) => {
 };
 
 const HomePage = () => {
-  const navigate = useNavigate();
   const mapRef = useRef<HTMLDivElement | null>(null);
   const leafletMap = useRef<L.Map | null>(null);
   const [view, setView] = useState<'list' | 'map'>('map');
@@ -60,12 +58,6 @@ const HomePage = () => {
   const { data: reports, isLoading, refetch } = useAllReports();
   const { data: currentUser } = useAuthUser();
   const [isSupporting, setIsSupporting] = useState(false);
-
-  useEffect(() => {
-    if (currentUser?.role === 'Worker') {
-      navigate('/worker/pool');
-    }
-  }, [currentUser, navigate]);
 
   const isSupported = selectedReport?.supports?.some((s: any) => s.userId === currentUser?.userId);
   const isMyReport = currentUser?.userId === selectedReport?.requesterId;
