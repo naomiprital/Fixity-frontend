@@ -59,21 +59,15 @@ const Navbar = () => {
   };
 
   const navConfigs: Record<string, any[]> = {
-    Citizen: [
-      { page: PagesEnum.HOME, filledIcon: Home, outlinedIcon: HomeOutlined, label: 'Home' },
-      { isCreateReportFab: true },
-      { page: PagesEnum.REPORTS, filledIcon: Assignment, outlinedIcon: AssignmentOutlined, label: 'Reports' },
-      { page: PagesEnum.PROFILE, filledIcon: Person, outlinedIcon: PersonOutlined, label: 'Profile' },
-    ],
     Worker: [
       { page: PagesEnum.WORKER_POOL, filledIcon: Explore, outlinedIcon: ExploreOutlined, label: 'Pool' },
       { page: PagesEnum.WORKER_TASKS, filledIcon: TaskAlt, outlinedIcon: TaskAltOutlined, label: 'My Tasks' },
       { page: PagesEnum.PROFILE, filledIcon: Person, outlinedIcon: PersonOutlined, label: 'Profile' },
     ],
     Manager: [
-      { page: PagesEnum.MAP, filledIcon: Map, outlinedIcon: MapOutlined, label: 'Map' },
+      { page: PagesEnum.MANAGER_HOME, filledIcon: Map, outlinedIcon: MapOutlined, label: 'Map' },
       { page: PagesEnum.MANAGER_DASHBOARD, filledIcon: Dashboard, outlinedIcon: DashboardOutlined, label: 'Manager' },
-      { page: PagesEnum.REPORTS, filledIcon: Assignment, outlinedIcon: AssignmentOutlined, label: 'Reports' },
+      { page: PagesEnum.MANAGER_REPORTS, filledIcon: Assignment, outlinedIcon: AssignmentOutlined, label: 'Reports' },
       { page: PagesEnum.PROFILE, filledIcon: Person, outlinedIcon: PersonOutlined, label: 'Profile' },
     ],
     Official: [
@@ -82,7 +76,12 @@ const Navbar = () => {
       { page: PagesEnum.OFFICIAL_STAFF, filledIcon: Groups, outlinedIcon: GroupsOutlined, label: 'Staff' },
       { page: PagesEnum.PROFILE, filledIcon: Person, outlinedIcon: PersonOutlined, label: 'Profile' },
     ],
-
+    Citizen: [
+      { page: PagesEnum.CITIZEN_HOME, filledIcon: Home, outlinedIcon: HomeOutlined, label: 'Home' },
+      { isCreateReportFab: true },
+      { page: PagesEnum.CITIZEN_REPORTS, filledIcon: Assignment, outlinedIcon: AssignmentOutlined, label: 'Reports' },
+      { page: PagesEnum.PROFILE, filledIcon: Person, outlinedIcon: PersonOutlined, label: 'Profile' },
+    ],
   };
 
   const currentRole = capitalizeFirstLetter(userRole) || 'Citizen';
@@ -90,11 +89,11 @@ const Navbar = () => {
 
   return (
     <nav className="bottom-navbar">
-      {currentNavItems.map((item) => {
+      {currentNavItems.map((item, index) => {
         if (item.isCreateReportFab) {
           return (
             <div key="fab" className="nav-fab-container">
-              <button className="nav-fab" onClick={() => navigate(`/${PagesEnum.CREATE}`)}>
+              <button className="nav-fab" onClick={() => navigate(`/${PagesEnum.CITIZEN_CREATE}`)}>
                 <Add fontSize="large" />
               </button>
             </div>
@@ -103,7 +102,7 @@ const Navbar = () => {
 
         return (
           <NavItem
-            key={item.page}
+            key={item.page || index}
             page={item.page}
             filledIcon={item.filledIcon}
             outlinedIcon={item.outlinedIcon}
