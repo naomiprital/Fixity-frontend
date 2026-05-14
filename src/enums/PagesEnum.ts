@@ -9,4 +9,5 @@ export enum PagesEnum {
   OFFICIAL_MAP = 'official/map',
   WORKER_POOL = 'worker/pool',
   WORKER_TASKS = 'worker/my-tasks',
+  MAP = 'map',
 }

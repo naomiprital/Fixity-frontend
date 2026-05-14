@@ -71,14 +71,14 @@ const Navbar = () => {
       { page: PagesEnum.PROFILE, filledIcon: Person, outlinedIcon: PersonOutlined, label: 'Profile' },
     ],
     Manager: [
-      { page: PagesEnum.HOME, filledIcon: Map, outlinedIcon: MapOutlined, label: 'Map' },
+      { page: PagesEnum.MAP, filledIcon: Map, outlinedIcon: MapOutlined, label: 'Map' },
       { page: PagesEnum.MANAGER_DASHBOARD, filledIcon: Dashboard, outlinedIcon: DashboardOutlined, label: 'Manager' },
       { page: PagesEnum.REPORTS, filledIcon: Assignment, outlinedIcon: AssignmentOutlined, label: 'Reports' },
       { page: PagesEnum.PROFILE, filledIcon: Person, outlinedIcon: PersonOutlined, label: 'Profile' },
     ],
     Official: [
       { page: PagesEnum.OFFICIAL_DASHBOARD, filledIcon: Insights, outlinedIcon: InsightsOutlined, label: 'Dashboard' },
-      { page: PagesEnum.OFFICIAL_MAP, filledIcon: Map, outlinedIcon: MapOutlined, label: 'Map' },
+      { page: PagesEnum.MAP, filledIcon: Map, outlinedIcon: MapOutlined, label: 'Map' },
       { page: PagesEnum.OFFICIAL_STAFF, filledIcon: Groups, outlinedIcon: GroupsOutlined, label: 'Staff' },
       { page: PagesEnum.PROFILE, filledIcon: Person, outlinedIcon: PersonOutlined, label: 'Profile' },
     ],

@@ -153,11 +153,14 @@ const HomePage = () => {
   const API_BASE = import.meta.env.VITE_SERVER_BASE_URL || 'http://localhost:3000/api';
   const IMAGE_BASE = API_BASE.replace('/api', '');
 
+  const isCitizen = currentUser?.role === 'Citizen';
+  const pageTitle = isCitizen ? 'Home' : 'Map';
+
   return (
     <Box className="home-page">
       <Box className="home-page__header-v2">
         <Typography variant="h1" sx={{ color: 'white', mb: 2, fontSize: '1.5rem', width: '100%', maxWidth: '400px', textAlign: 'left' }}>
-          Nearby Reports
+          {pageTitle}
         </Typography>
         <Box className="view-toggle">
           <Button
