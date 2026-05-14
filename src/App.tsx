@@ -8,6 +8,9 @@ import CreateReportPage from './features/auth/pages/CreateReportPage/CreateRepor
 import { WorkerTasksView } from './features/worker/pages/WorkerTasksView';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import ManagerDashboardPage from './features/manager/pages/ManagerDashboardPage/ManagerDashboardPage';
+import StaffManagement from './features/pages/OfficialPages/StaffManagement';
+import OfficialMap from './features/pages/OfficialPages/OfficialMap';
+import OfficialDashboard from './features/pages/OfficialPages/OfficialDashboard';
 
 const App = () => {
   const appLocation = useLocation();
@@ -19,18 +22,32 @@ const App = () => {
           <Route path="/" element={<AuthPage />} />
 
           <Route element={<ProtectedRoute />}>
+            <Route path="/profile" element={<ProfilePage />} />
+          </Route>
+
+          {/* Citizen Routes */}
+          <Route element={<ProtectedRoute allowedRoles={['Citizen']} />}>
             <Route path="/home" element={<HomePage />} />
             <Route path="/reports" element={<MyReportsPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
             <Route path="/create" element={<CreateReportPage />} />
+          </Route>
 
-            {/* Worker Routes */}
+          {/* Worker Routes */}
+          <Route element={<ProtectedRoute allowedRoles={['Worker']} />}>
             <Route path="/worker/pool" element={<WorkerTasksView mode="pool" />} />
             <Route path="/worker/my-tasks" element={<WorkerTasksView mode="myTasks" />} />
           </Route>
 
-          <Route element={<ProtectedRoute allowedRoles={['Manager', 'Official']} />}>
+          {/* Manager Routes TODO: Manager routes */}
+          <Route element={<ProtectedRoute allowedRoles={['Manager']} />}>
             <Route path="/manager" element={<ManagerDashboardPage />} />
+          </Route>
+
+          {/* Official Routes */}
+          <Route element={<ProtectedRoute allowedRoles={['Official']} />}>
+            <Route path="/official/dashboard" element={<OfficialDashboard />} />
+            <Route path="/official/map" element={<OfficialMap />} />
+            <Route path="/official/staff" element={<StaffManagement />} />
           </Route>
 
           {/* Fallback route */}

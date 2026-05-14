@@ -13,12 +13,16 @@ import {
   ExploreOutlined,
   TaskAlt,
   TaskAltOutlined,
+  InsightsOutlined,
+  Groups,
+  GroupsOutlined,
 } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 import './Navbar.css';
 import { PagesEnum } from '@/enums/PagesEnum';
 import { capitalizeFirstLetter } from '@/utils/utilsFunctions';
 import { useAuthUser } from '@/hooks/Auth';
+import InsightsIcon from '@mui/icons-material/Insights';
 
 const Navbar = () => {
   const location = useLocation();
@@ -29,7 +33,8 @@ const Navbar = () => {
   const userRole = user?.role || '';
 
   const isWorker = userRole.toLowerCase() === 'worker';
-  const isManagerOrOfficial = userRole === 'Manager' || userRole === 'Official';
+  const isManager = userRole === 'Manager';
+  const isOfficial = userRole === 'Official';
 
   const NavItem = ({
     page,
@@ -65,19 +70,37 @@ const Navbar = () => {
     );
   }
 
+  if (isOfficial) {
+    return (
+      <nav className="bottom-navbar">
+        <NavItem page="official/dashboard" filledIcon={InsightsIcon} outlinedIcon={InsightsOutlined} label="Dashboard" />
+        <NavItem page="official/map" filledIcon={Explore} outlinedIcon={ExploreOutlined} label="Map" />
+        <NavItem page="official/staff" filledIcon={Groups} outlinedIcon={GroupsOutlined} label="Staff" />
+        <NavItem page="profile" filledIcon={Person} outlinedIcon={PersonOutlined} label="Profile" />
+      </nav>
+    );
+  }
+
+  if (isManager) {
+    return (
+      <nav className="bottom-navbar">
+        <NavItem page={PagesEnum.MANAGER_DASHBOARD} filledIcon={Dashboard} outlinedIcon={DashboardOutlined} label="Manager" />
+        <NavItem page={PagesEnum.REPORTS} filledIcon={Assignment} outlinedIcon={AssignmentOutlined} label="Reports" />
+        <NavItem page={PagesEnum.PROFILE} filledIcon={Person} outlinedIcon={PersonOutlined} label="Profile" />
+      </nav>
+    );
+  }
+
+  // Default for Citizen
   return (
     <nav className="bottom-navbar">
       <NavItem page={PagesEnum.HOME} filledIcon={Home} outlinedIcon={HomeOutlined} label="Home" />
 
-      {isManagerOrOfficial ? (
-        <NavItem page={PagesEnum.MANAGER_DASHBOARD} filledIcon={Dashboard} outlinedIcon={DashboardOutlined} label="Manager" />
-      ) : (
-        <div className="nav-fab-container">
-          <button className="nav-fab" onClick={() => navigate(`/${PagesEnum.CREATE}`)}>
-            <Add fontSize="large" />
-          </button>
-        </div>
-      )}
+      <div className="nav-fab-container">
+        <button className="nav-fab" onClick={() => navigate(`/${PagesEnum.CREATE}`)}>
+          <Add fontSize="large" />
+        </button>
+      </div>
 
       <NavItem page={PagesEnum.REPORTS} filledIcon={Assignment} outlinedIcon={AssignmentOutlined} label="Reports" />
       <NavItem page={PagesEnum.PROFILE} filledIcon={Person} outlinedIcon={PersonOutlined} label="Profile" />
