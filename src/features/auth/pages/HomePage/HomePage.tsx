@@ -12,7 +12,6 @@ import { supportReport } from '../../api/services/reportApi';
 import { toast } from 'react-toastify';
 import { useAuthUser } from '@/hooks/Auth';
 import './HomePage.css';
-import { useNavigate } from 'react-router-dom';
 
 const ISRAEL_CENTER: LatLngTuple = [31.7683, 35.2137];
 const ISRAEL_BOUNDS: LatLngBoundsLiteral = [
@@ -51,7 +50,6 @@ const createPinIcon = (color: string) => {
 };
 
 const HomePage = () => {
-  const navigate = useNavigate();
   const mapRef = useRef<HTMLDivElement | null>(null);
   const leafletMap = useRef<L.Map | null>(null);
   const [view, setView] = useState<'list' | 'map'>('map');
@@ -60,12 +58,6 @@ const HomePage = () => {
   const { data: reports, isLoading, refetch } = useAllReports();
   const { data: currentUser } = useAuthUser();
   const [isSupporting, setIsSupporting] = useState(false);
-
-  useEffect(() => {
-    if (currentUser?.role === 'Worker') {
-      navigate('/worker/pool');
-    }
-  }, [currentUser, navigate]);
 
   const isSupported = selectedReport?.supports?.some((s: any) => s.userId === currentUser?.userId);
   const isMyReport = currentUser?.userId === selectedReport?.requesterId;
@@ -161,11 +153,14 @@ const HomePage = () => {
   const API_BASE = import.meta.env.VITE_SERVER_BASE_URL || 'http://localhost:3000/api';
   const IMAGE_BASE = API_BASE.replace('/api', '');
 
+  const isCitizen = currentUser?.role === 'Citizen';
+  const pageTitle = isCitizen ? 'Home' : 'Map';
+
   return (
     <Box className="home-page">
       <Box className="home-page__header-v2">
         <Typography variant="h1" sx={{ color: 'white', mb: 2, fontSize: '1.5rem', width: '100%', maxWidth: '400px', textAlign: 'left' }}>
-          Nearby Reports
+          {pageTitle}
         </Typography>
         <Box className="view-toggle">
           <Button
