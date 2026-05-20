@@ -1,4 +1,4 @@
-import { api } from '../../auth/api/services/axiosInstance';
+import { api } from '@/shared/api/axiosInstance';
 import { type Task } from '../types';
 
 export const workerApi = {

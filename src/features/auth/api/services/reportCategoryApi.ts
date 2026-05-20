@@ -1,4 +1,4 @@
-import { api } from './axiosInstance';
+import { api } from '@/shared/api/axiosInstance';
 
 const REPORT_CATEGORIES_ROUTE = 'report-categories';
 
