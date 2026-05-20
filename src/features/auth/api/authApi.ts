@@ -8,6 +8,7 @@ export type AuthUser = {
   role: string;
   cityId: number | null;
   cityName: string | null;
+  profilePictureUrl: string | null;
 };
 
 export type AuthResponse = {

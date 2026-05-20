@@ -124,6 +124,7 @@ export const CitySelect = forwardRef<CitySelectRef, CitySelectProps>(
           options={options}
           isLoading={loading}
           isDisabled={disabled}
+          filterOption={null}
           placeholder="Search for a city..."
           noOptionsMessage={() => (searchInput.length < 2 ? 'Start typing...' : 'No results')}
           className="city-select"
