@@ -6,6 +6,7 @@ const USER_ROUTE = 'user';
 export const updateUserProfile = async (payload: {
   firstName?: string;
   lastName?: string;
+  email?: string;
   cityId?: number;
 }): Promise<{ message: string; user: AuthUser }> => {
   const { data } = await api.patch(`${USER_ROUTE}/me`, payload);

@@ -73,6 +73,7 @@ const ProfilePage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
   const [cityId, setCityId] = useState<number | ''>('');
   const [cities, setCities] = useState<City[]>([]);
   const [loadingCities, setLoadingCities] = useState(false);
@@ -84,6 +85,7 @@ const ProfilePage = () => {
     if (user) {
       setFirstName(user.firstName || '');
       setLastName(user.lastName || '');
+      setEmail(user.email || '');
       setCityId(user.cityId || '');
     }
   }, [user, isEditing]);
@@ -248,6 +250,10 @@ const ProfilePage = () => {
       toast.error('Name fields cannot be empty');
       return;
     }
+    if (!email.trim()) {
+      toast.error('Email field cannot be empty');
+      return;
+    }
     if (!cityId) {
       toast.error('Please select a city');
       return;
@@ -258,6 +264,7 @@ const ProfilePage = () => {
       const res = await updateUserProfile({
         firstName,
         lastName,
+        email,
         cityId: Number(cityId),
       });
       syncLocalAuth(res.user);
@@ -552,6 +559,15 @@ const ProfilePage = () => {
                     fullWidth
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
+                    sx={{ '& .MuiOutlinedInput-root': { borderRadius: '1rem' } }}
+                  />
+
+                  <TextField
+                    label="Email Address"
+                    variant="outlined"
+                    fullWidth
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     sx={{ '& .MuiOutlinedInput-root': { borderRadius: '1rem' } }}
                   />
 
