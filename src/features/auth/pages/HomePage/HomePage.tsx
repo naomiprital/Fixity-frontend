@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import type { LatLngBoundsLiteral, LatLngTuple } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import 'leaflet.markercluster/dist/MarkerCluster.css';
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+import 'leaflet.markercluster';
 import { Box, Typography, Button, IconButton, CircularProgress } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
@@ -16,8 +19,8 @@ import { useNavigate } from 'react-router-dom';
 
 const ISRAEL_CENTER: LatLngTuple = [31.7683, 35.2137];
 const ISRAEL_BOUNDS: LatLngBoundsLiteral = [
-  [29.45, 34.2],
-  [33.35, 35.92],
+  [27.5, 31.5],
+  [36.5, 38.5],
 ];
 
 const createPinIcon = (color: string) => {
@@ -54,6 +57,7 @@ const HomePage = () => {
   const navigate = useNavigate();
   const mapRef = useRef<HTMLDivElement | null>(null);
   const leafletMap = useRef<L.Map | null>(null);
+  const markerClusterGroupRef = useRef<any>(null);
   const [view, setView] = useState<'list' | 'map'>('map');
   const [selectedReport, setSelectedReport] = useState<any>(null);
   const [userPosition, setUserPosition] = useState<LatLngTuple | null>(null);
@@ -77,7 +81,7 @@ const HomePage = () => {
       leafletMap.current = L.map(mapRef.current, {
         center: ISRAEL_CENTER,
         zoom: 8,
-        minZoom: 7,
+        minZoom: 5,
         maxZoom: 18,
         maxBounds: ISRAEL_BOUNDS,
         maxBoundsViscosity: 1.0,
@@ -91,22 +95,50 @@ const HomePage = () => {
 
     const map = leafletMap.current;
 
+    // Clean up previous marker cluster group if exists
+    if (markerClusterGroupRef.current) {
+      map.removeLayer(markerClusterGroupRef.current);
+      markerClusterGroupRef.current = null;
+    }
+
+    // Clean up any stray markers
     map.eachLayer((layer) => {
       if (layer instanceof L.Marker) {
         map.removeLayer(layer);
       }
     });
 
+    // Create custom marker cluster group
+    const clusterGroup = (L as any).markerClusterGroup({
+      showCoverageOnHover: false,
+      zoomToBoundsOnClick: true,
+      spiderfyOnMaxZoom: true,
+      iconCreateFunction: (cluster: any) => {
+        const count = cluster.getChildCount();
+        return L.divIcon({
+          html: `<div class="custom-cluster-icon">${count}</div>`,
+          className: 'custom-cluster-icon-wrapper',
+          iconSize: [44, 44],
+          iconAnchor: [22, 22],
+        });
+      },
+    });
+
     reports.forEach((report) => {
       const marker = L.marker([report.latitude, report.longitude], {
         icon: createPinIcon('#ef5f43'),
-      }).addTo(map);
+      });
 
       marker.on('click', () => {
         setSelectedReport(report);
         map.setView([report.latitude, report.longitude], map.getZoom(), { animate: true });
       });
+
+      clusterGroup.addLayer(marker);
     });
+
+    map.addLayer(clusterGroup);
+    markerClusterGroupRef.current = clusterGroup;
 
     if (userPosition) {
       L.circleMarker(userPosition, {
