@@ -1,8 +1,6 @@
-import { api } from './axiosInstance';
-
-const REPORT_CATEGORIES_ROUTE = 'report-categories';
+import { authApi, Paths } from '@/shared/api/axiosInstance';
 
 export const getReportCategories = async () => {
-  const { data } = await api.get(REPORT_CATEGORIES_ROUTE);
+  const { data } = await authApi.get(Paths.REPORT_CATEGORIES);
   return data.data;
 };

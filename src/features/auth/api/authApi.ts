@@ -1,4 +1,5 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000/api';
+import axios from 'axios';
+import { publicApi, Paths } from '@/shared/api/axiosInstance';
 
 export type AuthUser = {
   userId: number;
@@ -31,27 +32,22 @@ export type SignUpPayload = {
 };
 
 async function postJson<TResponse>(path: string, body: object): Promise<TResponse> {
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
-  });
-
-  const data = (await response.json().catch(() => null)) as { error?: string } | null;
-
-  if (!response.ok) {
-    throw new Error(data?.error || 'Request failed');
+  try {
+    const { data } = await publicApi.post<TResponse>(path, body);
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const serverError = error.response?.data as { error?: string; message?: string } | undefined;
+      throw new Error(serverError?.error || serverError?.message || error.message);
+    }
+    throw error;
   }
-
-  return data as TResponse;
 }
 
 export function signIn(payload: SignInPayload) {
-  return postJson<AuthResponse>('/auth/signin', payload);
+  return postJson<AuthResponse>(`${Paths.AUTH}/signin`, payload);
 }
 
 export function signUp(payload: SignUpPayload) {
-  return postJson<AuthResponse>('/auth/signup', payload);
+  return postJson<AuthResponse>(`${Paths.AUTH}/signup`, payload);
 }

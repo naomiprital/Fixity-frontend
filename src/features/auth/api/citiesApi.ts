@@ -1,3 +1,6 @@
+import axios from 'axios';
+import { publicApi, Paths } from '@/shared/api/axiosInstance';
+
 export type City = {
   cityId: number;
   name: string;
@@ -9,7 +12,6 @@ export type CitiesResponse = {
   page: number;
   limit: number;
 };
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:3000/api';
 
 export async function getCities(
   page: number = 1,
@@ -17,29 +19,26 @@ export async function getCities(
   filter?: string,
   signal?: AbortSignal
 ): Promise<CitiesResponse> {
-  const params = new URLSearchParams({
+  const params: Record<string, string> = {
     page: String(page),
     limit: String(limit),
-  });
+  };
 
   if (filter) {
-    params.set('filter', filter);
+    params.filter = filter;
   }
 
-  const response = await fetch(`${API_BASE_URL}/cities?${params.toString()}`, {
-    method: 'GET',
-    signal,
-  });
-
-  const data = (await response.json().catch(() => null)) as
-    | CitiesResponse
-    | { error?: string }
-    | null;
-
-  if (!response.ok) {
-    const errorMessage = data && 'error' in data ? data.error : 'Failed to load cities';
-    throw new Error(errorMessage);
+  try {
+    const { data } = await publicApi.get<CitiesResponse>(`${Paths.CITIES}`, {
+      params,
+      signal,
+    });
+    return data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const serverError = error.response?.data as { error?: string; message?: string } | undefined;
+      throw new Error(serverError?.error || serverError?.message || error.message);
+    }
+    throw error;
   }
-
-  return data as CitiesResponse;
 }
