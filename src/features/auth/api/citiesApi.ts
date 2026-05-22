@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { publicApi } from '@/shared/api/axiosInstance';
+import { publicApi, Paths } from '@/shared/api/axiosInstance';
 
 export type City = {
   cityId: number;
@@ -29,7 +29,7 @@ export async function getCities(
   }
 
   try {
-    const { data } = await publicApi.get<CitiesResponse>('/cities', {
+    const { data } = await publicApi.get<CitiesResponse>(`${Paths.CITIES}`, {
       params,
       signal,
     });

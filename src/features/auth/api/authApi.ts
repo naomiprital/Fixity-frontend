@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { publicApi } from '@/shared/api/axiosInstance';
+import { publicApi, Paths } from '@/shared/api/axiosInstance';
 
 export type AuthUser = {
   userId: number;
@@ -45,9 +45,9 @@ async function postJson<TResponse>(path: string, body: object): Promise<TRespons
 }
 
 export function signIn(payload: SignInPayload) {
-  return postJson<AuthResponse>('/auth/signin', payload);
+  return postJson<AuthResponse>(`${Paths.AUTH}/signin`, payload);
 }
 
 export function signUp(payload: SignUpPayload) {
-  return postJson<AuthResponse>('/auth/signup', payload);
+  return postJson<AuthResponse>(`${Paths.AUTH}/signup`, payload);
 }

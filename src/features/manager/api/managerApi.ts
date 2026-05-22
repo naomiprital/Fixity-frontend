@@ -1,13 +1,13 @@
 import type { Report, Task, Incident, TaskCategory } from '@/types/models';
-import { api } from '@/shared/api/axiosInstance';
+import { authApi, Paths } from '@/shared/api/axiosInstance';
 
 export async function fetchManagerReports(): Promise<Report[]> {
-  const { data } = await api.get<Report[]>('/reports');
+  const { data } = await authApi.get<Report[]>(Paths.REPORTS);
   return data.filter((r) => r.status === 'Open' && r.incidentId === null);
 }
 
 export async function fetchIncidents(): Promise<Incident[]> {
-  const { data } = await api.get<Incident[]>('/incidents');
+  const { data } = await authApi.get<Incident[]>(Paths.INCIDENTS);
   return data;
 }
 
@@ -15,7 +15,7 @@ export async function createIncident(payload: {
   reportIds: number[];
   description?: string;
 }): Promise<Incident> {
-  const { data } = await api.post('/incidents', payload);
+  const { data } = await authApi.post(Paths.INCIDENTS, payload);
   return data.incident;
 }
 
@@ -24,12 +24,12 @@ export async function createTask(payload: {
   categoryId: number;
   workerNotes?: string;
 }): Promise<Task> {
-  const { data } = await api.post('/tasks', payload);
+  const { data } = await authApi.post(Paths.TASKS, payload);
   return data.task;
 }
 
 export async function fetchTaskCategories(): Promise<TaskCategory[]> {
-  const { data } = await api.get<TaskCategory[]>('/categories');
+  const { data } = await authApi.get<TaskCategory[]>(Paths.CATEGORIES);
   return data;
 }
 
@@ -37,33 +37,33 @@ export async function updateIncident(
   id: number,
   payload: { description?: string }
 ): Promise<Incident> {
-  const { data } = await api.patch(`/incidents/${id}`, payload);
+  const { data } = await authApi.patch(`${Paths.INCIDENTS}/${id}`, payload);
   return data.incident;
 }
 
 export async function deleteIncident(id: number): Promise<void> {
-  await api.delete(`/incidents/${id}`);
+  await authApi.delete(`${Paths.INCIDENTS}/${id}`);
 }
 
 export async function updateTask(
   id: number,
   payload: { workerNotes?: string; categoryId?: number }
 ): Promise<Task> {
-  const { data } = await api.patch(`/tasks/${id}`, payload);
+  const { data } = await authApi.patch(`${Paths.TASKS}/${id}`, payload);
   return data.task;
 }
 
 export async function deleteTask(id: number): Promise<void> {
-  await api.delete(`/tasks/${id}`);
+  await authApi.delete(`${Paths.TASKS}/${id}`);
 }
 
 export async function addReportsToIncident(incidentId: number, reportIds: number[]): Promise<void> {
-  await api.post(`/incidents/${incidentId}/reports`, { reportIds });
+  await authApi.post(`${Paths.INCIDENTS}/${incidentId}/reports`, { reportIds });
 }
 
 export async function removeReportFromIncident(
   incidentId: number,
   reportId: number
 ): Promise<void> {
-  await api.delete(`/incidents/${incidentId}/reports/${reportId}`);
+  await authApi.delete(`${Paths.INCIDENTS}/${incidentId}/reports/${reportId}`);
 }

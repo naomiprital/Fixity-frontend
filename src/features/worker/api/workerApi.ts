@@ -1,16 +1,16 @@
-import { api } from '@/shared/api/axiosInstance';
+import { authApi, Paths } from '@/shared/api/axiosInstance';
 import { type Task } from '../types';
 
 export const workerApi = {
   claimTask: async (taskId: number): Promise<Task> => {
-    const response = await api.patch(`/tasks/${taskId}/assign`);
+    const response = await authApi.patch(`${Paths.TASKS}/${taskId}/assign`);
     return response.data;
   },
 
   uploadImage: async (taskId: number, file: File): Promise<{ imageUrl: string }> => {
     const formData = new FormData();
     formData.append('image', file);
-    const response = await api.post(`/tasks/${taskId}/image`, formData, {
+    const response = await authApi.post(`${Paths.TASKS}/${taskId}/image`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -19,7 +19,7 @@ export const workerApi = {
   },
 
   resolveTask: async (taskId: number, cityResponse: string): Promise<Task> => {
-    const response = await api.patch(`/tasks/${taskId}/status`, {
+    const response = await authApi.patch(`${Paths.TASKS}/${taskId}/status`, {
       status: 'closed',
       cityResponse,
     });
@@ -27,7 +27,7 @@ export const workerApi = {
   },
 
   getTasks: async (): Promise<Task[]> => {
-    const response = await api.get('/tasks');
+    const response = await authApi.get(`${Paths.TASKS}`);
     return response.data;
   },
 };

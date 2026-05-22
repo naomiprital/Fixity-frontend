@@ -5,7 +5,18 @@ const API_BASE_URL =
   import.meta.env.VITE_SERVER_BASE_URL ??
   'http://localhost:3000/api';
 const AUTH_STORAGE_KEY = 'fixity.auth';
-const REFRESH_PATH = '/auth/refresh';
+
+export enum Paths {
+  AUTH = '/auth',
+  CITIES = '/cities',
+  REPORT_CATEGORIES = '/report-categories',
+  REPORTS = '/reports',
+  MANAGER = '/manager',
+  INCIDENTS = '/incidents',
+  TASKS = '/tasks',
+  CATEGORIES = '/categories',
+}
+const REFRESH_PATH = `${Paths.AUTH}/refresh`;
 
 export type StoredAuthData = {
   token: string;
@@ -37,12 +48,12 @@ export const publicApi = axios.create({
   withCredentials: true,
 });
 
-export const api = axios.create({
+export const authApi = axios.create({
   baseURL: API_BASE_URL,
   withCredentials: true,
 });
 
-api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+authApi.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const authData = getStoredAuth();
   if (authData?.token) {
     const headers = AxiosHeaders.from(config.headers ?? {});
@@ -73,7 +84,7 @@ const processQueue = (error: unknown, token: string | null = null) => {
         headers.set('Authorization', `Bearer ${token}`);
         promise.config.headers = headers;
       }
-      promise.resolve(api(promise.config));
+      promise.resolve(authApi(promise.config));
     }
   });
   failedQueue = [];
@@ -84,7 +95,7 @@ const refreshClient = axios.create({
   withCredentials: true,
 });
 
-api.interceptors.response.use(
+authApi.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
     const originalRequest = error.config as RetryableRequest | undefined;
@@ -123,14 +134,14 @@ api.interceptors.response.use(
       };
 
       setStoredAuth(updatedAuth);
-      api.defaults.headers.common.Authorization = `Bearer ${updatedAuth.token}`;
+      authApi.defaults.headers.common.Authorization = `Bearer ${updatedAuth.token}`;
       processQueue(null, updatedAuth.token);
 
       const updatedHeaders = AxiosHeaders.from(originalRequest.headers ?? {});
       updatedHeaders.set('Authorization', `Bearer ${updatedAuth.token}`);
       originalRequest.headers = updatedHeaders;
 
-      return api(originalRequest);
+      return authApi(originalRequest);
     } catch (refreshError) {
       processQueue(refreshError, null);
       clearStoredAuth();
