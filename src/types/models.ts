@@ -45,3 +45,9 @@ export type TaskCategory = {
   categoryId: number;
   name: string;
 };
+
+export type City = {
+  cityId: number;
+  name: string;
+};
+

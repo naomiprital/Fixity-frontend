@@ -1,5 +1,5 @@
-import { api } from './axiosInstance';
-import type { AuthUser } from '../authApi';
+import { api } from '@/features/auth/api/services/axiosInstance';
+import type { AuthUser } from '@/features/auth/api/authApi';
 
 const USER_ROUTE = 'user';
 
