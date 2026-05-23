@@ -11,8 +11,7 @@ import {
   useMayorAiInsights,
   useMayorCriticalAlerts,
 } from '@/hooks/Mayor';
-import type { MetricConfig } from '@/types/metricConfig';
-import type { CriticalAlertConfig } from '@/types/criticalAlertsConfig';
+import { mapMayorMetrics, mapMayorAlerts } from '@/utils/dashboardUtils';
 import './OfficialDashboard.css';
 
 const OfficialDashboard = () => {
@@ -23,61 +22,9 @@ const OfficialDashboard = () => {
 
   const mayorCityName = user?.cityName || "Mayor's Office";
 
-  // Map backend metrics dynamically to our UI configurations
-  const metricsConfigs: MetricConfig[] = [
-    {
-      id: 'open-cases',
-      title: 'OPEN CASES',
-      accentColor: 'red',
-      accentPosition: 'bottom',
-      value: isLoadingStats || !stats ? '...' : stats.openReports.value.toString(),
-      trendText: stats?.openReports.delta || '0%',
-      trendDirection: stats?.openReports.delta.startsWith('+') ? 'up' : 'down',
-      trendColor: stats?.openReports.delta.startsWith('+') ? 'red' : 'green', // Open cases increasing is bad (red)
-    },
-    {
-      id: 'closed-cases',
-      title: 'CLOSED CASES',
-      accentColor: 'green',
-      accentPosition: 'bottom',
-      value: isLoadingStats || !stats ? '...' : stats.closedReports.value.toString(),
-      trendText: stats?.closedReports.delta || '0%',
-      trendDirection: stats?.closedReports.delta.startsWith('+') ? 'up' : 'down',
-      trendColor: stats?.closedReports.delta.startsWith('+') ? 'green' : 'red', // Closed cases increasing is good (green)
-    },
-    {
-      id: 'avg-close',
-      title: 'AVG CLOSE',
-      accentColor: 'green',
-      accentPosition: 'bottom',
-      value: isLoadingStats || !stats ? '...' : `${stats.resolutionTime.value}d`,
-      trendText: stats?.resolutionTime.delta || '0d',
-      trendDirection: stats?.resolutionTime.delta.startsWith('+') ? 'up' : 'down',
-      trendColor: stats?.resolutionTime.delta.startsWith('+') ? 'red' : 'green', // Higher resolution time is bad (red)
-    },
-    {
-      id: 'satisfaction',
-      title: 'SATISFACTION',
-      accentColor: 'teal',
-      accentPosition: 'bottom',
-      value: isLoadingStats || !stats ? '...' : `${stats.satisfaction.value}%`,
-      trendText: stats?.satisfaction.delta || '0%',
-      trendDirection: stats?.satisfaction.delta.startsWith('+') ? 'up' : 'down',
-      trendColor: stats?.satisfaction.delta.startsWith('+') ? 'green' : 'red', // Higher satisfaction is good (green)
-    },
-  ];
-
-  // Map the SLA-based critical alerts array to UI config
-  const criticalAlertsMapped: CriticalAlertConfig[] = alerts?.map(alert => {
-    return {
-      id: `alert-${alert.reportId}`,
-      title: `${alert.category}: ${alert.description.replace('Citizen reported: ', '')}`,
-      subtitle: alert.exceededSla 
-        ? `Exceeded SLA by ${Math.round(alert.ageDays - alert.slaDays)} days` 
-        : `Age: ${alert.ageDays} days (SLA: ${alert.slaDays}d)`,
-      accentColor: alert.exceededSla ? 'red' : 'orange',
-    };
-  }) || [];
+  // Map metrics and critical alerts dynamically using utility helper functions
+  const metricsConfigs = mapMayorMetrics(stats, isLoadingStats);
+  const criticalAlertsMapped = mapMayorAlerts(alerts);
 
   const handleDispatchTeam = () => {
     const action = aiInsight?.action_type || 'DISPATCH_TEAM';
@@ -159,8 +106,8 @@ const OfficialDashboard = () => {
             fullWidth
             disabled={isLoadingInsight || !aiInsight || aiInsight.action_type === 'MONITOR'}
           >
-            {aiInsight?.action_type 
-              ? aiInsight.action_type.replace('_', ' ') 
+            {aiInsight?.action_type
+              ? aiInsight.action_type.replace('_', ' ')
               : 'Dispatch Team'}
           </Button>
         </Box>
@@ -192,7 +139,7 @@ const OfficialDashboard = () => {
                   accentPosition="left"
                 >
                   <Box className="alert-item-layout">
-                    <Box 
+                    <Box
                       className="alert-icon-box"
                       sx={{
                         backgroundColor: alertItem.accentColor === 'red' ? '#fee2e2' : '#ffedd5',
