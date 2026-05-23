@@ -158,3 +158,57 @@
   background-color: #f1f5f9 !important;
   color: #94a3b8 !important;
 }
+
+/* Custom Marker Cluster Styles */
+.custom-cluster-icon-wrapper {
+  background: none !important;
+  border: none !important;
+}
+
+.custom-cluster-icon {
+  background: linear-gradient(135deg, #ff7e67 0%, #ef5f43 100%) !important;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 3px solid #ffffff;
+  box-shadow: 0 8px 24px rgba(239, 95, 67, 0.45), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 800;
+  font-family: 'Sora', 'Outfit', sans-serif;
+  font-size: 15px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.custom-cluster-icon::after {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  bottom: -6px;
+  border-radius: 50%;
+  border: 2px solid #ef5f43;
+  opacity: 0.4;
+  animation: cluster-glow 2s infinite ease-out;
+  pointer-events: none;
+}
+
+.custom-cluster-icon:hover {
+  transform: scale(1.12);
+  box-shadow: 0 12px 30px rgba(239, 95, 67, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+}
+
+@keyframes cluster-glow {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.25);
+    opacity: 0;
+  }
+}
