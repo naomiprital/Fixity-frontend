@@ -10,13 +10,6 @@ import { StatCard } from './components/StatCard';
 import { calculateDashboardMetrics } from '@/utils/dashboardUtils';
 import './OfficialDashboard.css';
 
-interface CriticalAlertConfig {
-  id: string;
-  title: string;
-  subtitle: string;
-  accentColor: 'red' | 'green' | 'orange' | 'teal';
-}
-
 const OfficialDashboard = () => {
   const { data: user } = useAuthUser();
   const { data: reports, isLoading: isLoadingReports } = useAllReports();
@@ -30,17 +23,7 @@ const OfficialDashboard = () => {
     : [];
 
   // Calculate dynamic dashboard stats using modular helper utility
-  const { metrics: metricsConfigs } = calculateDashboardMetrics(cityReports, isLoadingReports);
-
-  // Extensible Critical Alerts Array configuration
-  const criticalAlerts: CriticalAlertConfig[] = [
-    {
-      id: 'alert-sewage',
-      title: 'Sewage Leak: North Park',
-      subtitle: 'Overdue by 4 hours',
-      accentColor: 'orange',
-    },
-  ];
+  const { metrics: metricsConfigs, criticalAlerts } = calculateDashboardMetrics(cityReports, isLoadingReports);
 
   const handleDispatchTeam = () => {
     // Interactive dispatch mockup feedback

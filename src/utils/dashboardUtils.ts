@@ -1,15 +1,6 @@
 import type { Report } from '@/types/models';
-
-export interface MetricConfig {
-  id: string;
-  title: string;
-  accentColor: 'red' | 'green' | 'orange' | 'teal';
-  accentPosition: 'bottom' | 'left';
-  value: string;
-  trendText: string;
-  trendDirection: 'up' | 'down';
-  trendColor: 'red' | 'green';
-}
+import type { MetricConfig } from '@/types/metricConfig';
+import type { CriticalAlertConfig } from '@/types/criticalAlertsConfig';
 
 export const calculateDashboardMetrics = (
   cityReports: Report[],
@@ -18,6 +9,7 @@ export const calculateDashboardMetrics = (
   metrics: MetricConfig[];
   openCasesCount: number;
   closedCasesCount: number;
+  criticalAlerts: CriticalAlertConfig[];
 } => {
   const openCasesCount = cityReports.filter(
     (report) => report.status === 'Open' || report.status === 'InProgress'
@@ -49,6 +41,7 @@ export const calculateDashboardMetrics = (
     (r) => r.status === 'Open' || r.status === 'InProgress'
   ).length;
 
+  // Mock initial trend values
   let openTrendText = '+12%';
   let openTrendDirection: 'up' | 'down' = 'up';
   let openTrendColor: 'red' | 'green' = 'red';
@@ -178,9 +171,53 @@ export const calculateDashboardMetrics = (
     },
   ];
 
+  // Calculate dynamic Critical Alerts from active city reports (Open or InProgress)
+  const activeReports = cityReports.filter(
+    (r) => r.status === 'Open' || r.status === 'InProgress'
+  );
+
+  // Sort active reports by support count descending to prioritize critical issues
+  const sortedActive = [...activeReports].sort(
+    (a, b) => (b.supportCount || 0) - (a.supportCount || 0)
+  );
+
+  const dynamicAlerts: CriticalAlertConfig[] = sortedActive.slice(0, 3).map((report) => {
+    const cleanDesc = report.description.replace('Citizen reported: ', '');
+    const categoryName = report.category?.name || 'Alert';
+
+    // Calculate hours since creation
+    const createdTime = new Date(report.createdAt).getTime();
+    const diffMs = now.getTime() - createdTime;
+    const diffHours = Math.max(1, Math.round(diffMs / (1000 * 60 * 60)));
+
+    // Accent color is red if highly supported/severe, orange otherwise
+    let accentColor: 'red' | 'green' | 'orange' | 'teal' = 'orange';
+    if ((report.supportCount || 0) > 12) {
+      accentColor = 'red';
+    }
+
+    return {
+      id: `alert-${report.reportId}`,
+      title: `${categoryName}: ${cleanDesc}`,
+      subtitle: `Overdue by ${diffHours} hours`,
+      accentColor,
+    };
+  });
+
+  // Fallback to mockup warning if database is empty/has no active reports
+  const criticalAlerts = dynamicAlerts.length > 0 ? dynamicAlerts : [
+    {
+      id: 'alert-sewage',
+      title: 'Sewage Leak: North Park',
+      subtitle: 'Overdue by 4 hours',
+      accentColor: 'orange' as const,
+    }
+  ];
+
   return {
     metrics,
     openCasesCount: cityReports.length === 0 ? 142 : openCasesCount,
     closedCasesCount: cityReports.length === 0 ? 88 : closedCasesCount,
+    criticalAlerts,
   };
 };
