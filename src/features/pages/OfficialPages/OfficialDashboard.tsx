@@ -7,17 +7,8 @@ import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import { useAuthUser } from '@/hooks/Auth';
 import { useAllReports } from '@/hooks/Reports';
 import { StatCard } from './components/StatCard';
+import { calculateDashboardMetrics } from '@/utils/dashboardUtils';
 import './OfficialDashboard.css';
-
-interface MetricConfig {
-  id: string;
-  title: string;
-  accentColor: 'red' | 'green' | 'orange' | 'teal';
-  accentPosition: 'bottom' | 'left';
-  value: string;
-  trendText: string;
-  trendDirection: 'up' | 'down';
-}
 
 interface CriticalAlertConfig {
   id: string;
@@ -38,32 +29,8 @@ const OfficialDashboard = () => {
     ? reports.filter((report) => report.cityId === mayorCityId)
     : [];
 
-  // Dynamically compute number of open cases in the city (status: Open or InProgress)
-  const openCasesCount = reports
-    ? cityReports.filter((report) => report.status === 'Open' || report.status === 'InProgress').length
-    : 142; // mockup fallback value
-
-  // Extensible Metrics Array configuration to support dynamic statistics in the future
-  const metricsConfigs: MetricConfig[] = [
-    {
-      id: 'open-cases',
-      title: 'OPEN CASES',
-      accentColor: 'red',
-      accentPosition: 'bottom',
-      value: isLoadingReports ? '...' : openCasesCount.toString(),
-      trendText: '+12%',
-      trendDirection: 'up',
-    },
-    {
-      id: 'avg-close',
-      title: 'AVG CLOSE',
-      accentColor: 'green',
-      accentPosition: 'bottom',
-      value: '3.8d',
-      trendText: '-0.4d',
-      trendDirection: 'down',
-    },
-  ];
+  // Calculate dynamic dashboard stats using modular helper utility
+  const { metrics: metricsConfigs } = calculateDashboardMetrics(cityReports, isLoadingReports);
 
   // Extensible Critical Alerts Array configuration
   const criticalAlerts: CriticalAlertConfig[] = [
@@ -110,7 +77,7 @@ const OfficialDashboard = () => {
               accentPosition={metric.accentPosition}
             >
               {/* Dynamic slot-like injection of stats metrics content */}
-              {isLoadingReports && metric.id === 'open-cases' ? (
+              {isLoadingReports && (metric.id === 'open-cases' || metric.id === 'closed-cases' || metric.id === 'avg-close') ? (
                 <Box sx={{ display: 'flex', alignItems: 'center', minHeight: '3rem' }}>
                   <CircularProgress size={24} color="primary" />
                 </Box>
@@ -119,11 +86,9 @@ const OfficialDashboard = () => {
                   {metric.value}
                 </Typography>
               )}
-              
+
               <Box
-                className={`kpi-trend ${
-                  metric.trendDirection === 'up' ? 'kpi-trend--red' : 'kpi-trend--green'
-                }`}
+                className={`kpi-trend ${metric.trendColor === 'red' ? 'kpi-trend--red' : 'kpi-trend--green'}`}
               >
                 {metric.trendDirection === 'up' ? (
                   <ArrowUpwardIcon sx={{ fontSize: '1rem' }} />
