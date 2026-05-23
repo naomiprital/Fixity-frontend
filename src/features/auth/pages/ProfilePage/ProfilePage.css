@@ -1,0 +1,126 @@
+.profile-page {
+  height: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #F9FAFB;
+}
+
+.profile-page__header {
+  background-color: #0f5a61; /* Matches primary.dark in theme */
+  color: white;
+  padding: 2rem 1.5rem 2.5rem 1.5rem;
+  border-bottom-left-radius: 2rem;
+  border-bottom-right-radius: 2rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 8px 30px rgba(15, 90, 97, 0.15);
+}
+
+.profile-page__role-badge {
+  margin-top: 8px;
+  padding: 2px 12px;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+.profile-page__stats {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+  width: 100%;
+  max-width: 300px;
+}
+
+.profile-page__stat-item {
+  flex: 1;
+  text-align: center;
+}
+
+.profile-page__content {
+  padding: 1.5rem;
+}
+
+.profile-page__card {
+  border-radius: 1.5rem !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+  border: 1px solid #F1F5F9 !important;
+}
+
+.profile-page__card-content {
+  padding: 1.5rem !important;
+}
+
+.profile-page__details-title {
+  font-weight: bold !important;
+  flex-grow: 1;
+}
+
+.profile-page__detail-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.profile-page__detail-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.profile-page__detail-avatar {
+  background-color: rgba(15, 90, 97, 0.08) !important;
+  color: #0f5a61 !important; /* Matches primary.main */
+  width: 40px !important;
+  height: 40px !important;
+}
+
+.profile-page__detail-text {
+  font-weight: 600 !important;
+}
+
+.profile-page__edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.profile-page__form-field .MuiOutlinedInput-root {
+  border-radius: 1rem;
+}
+
+.profile-page__form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.profile-page__save-btn {
+  border-radius: 1rem !important;
+  padding-top: 9.6px !important;
+  padding-bottom: 9.6px !important;
+  font-weight: bold !important;
+  box-shadow: 0 4px 12px rgba(15, 90, 97, 0.2) !important;
+}
+
+.profile-page__cancel-btn {
+  border-radius: 1rem !important;
+  padding-top: 9.6px !important;
+  padding-bottom: 9.6px !important;
+  font-weight: bold !important;
+}
+
+.profile-page__logout-btn {
+  margin: 1.5rem !important;
+  border-radius: 1.5rem !important;
+  padding: 0.8rem !important;
+  font-weight: bold !important;
+  border-width: 2px !important;
+  background-color: white !important;
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.05) !important;
+}

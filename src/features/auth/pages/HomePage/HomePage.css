@@ -11,7 +11,7 @@
   background-color: #0f5a61;
   padding: 1rem 1.5rem 1.5rem;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   z-index: 10;
 }

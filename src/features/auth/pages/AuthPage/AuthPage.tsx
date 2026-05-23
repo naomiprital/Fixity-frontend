@@ -7,6 +7,8 @@ import { TextField } from '@/shared/ui/TextField';
 import { CitySelect, type CitySelectRef } from '@/features/auth/components/CitySelect/CitySelect';
 import './AuthPage.css';
 import { useNavigate } from 'react-router-dom';
+import { getDefaultPathForRole } from '@/utils/utilsFunctions';
+import type { AuthResponse } from '@/features/auth/api/authApi';
 
 type AuthTab = 'login' | 'signup';
 
@@ -41,9 +43,14 @@ export function AuthPage() {
   const fieldsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const authData = localStorage.getItem(AUTH_STORAGE_KEY);
-    if (authData) {
-      navigate('/home', { replace: true });
+    const authDataString = localStorage.getItem(AUTH_STORAGE_KEY);
+    if (authDataString) {
+      try {
+        const authData = JSON.parse(authDataString) as AuthResponse;
+        navigate(getDefaultPathForRole(authData.user?.role), { replace: true });
+      } catch {
+        navigate('/home', { replace: true });
+      }
     }
   }, [navigate]);
 
@@ -163,7 +170,7 @@ export function AuthPage() {
 
       toast.success(`Welcome back, ${response.user.firstName}.`);
 
-      navigate('/home');
+      navigate(getDefaultPathForRole(response.user.role));
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Unable to sign in');
     } finally {
@@ -187,7 +194,7 @@ export function AuthPage() {
       const response = await signUp(payload);
       persistAuthSession(response);
       toast.success(`Account created for ${response.user.firstName} ${response.user.lastName}.`);
-      navigate('/home');
+      navigate(getDefaultPathForRole(response.user.role));
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Unable to create account');
     } finally {
