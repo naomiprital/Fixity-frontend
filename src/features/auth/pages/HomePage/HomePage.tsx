@@ -15,6 +15,7 @@ import { supportReport } from '../../api/services/reportApi';
 import { toast } from 'react-toastify';
 import { useAuthUser } from '@/hooks/Auth';
 import './HomePage.css';
+import { useNavigate } from 'react-router-dom';
 
 const ISRAEL_CENTER: LatLngTuple = [31.7683, 35.2137];
 const ISRAEL_BOUNDS: LatLngBoundsLiteral = [
@@ -62,6 +63,7 @@ const HomePage = () => {
   const { data: reports, isLoading, refetch } = useAllReports();
   const { data: currentUser } = useAuthUser();
   const [isSupporting, setIsSupporting] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (currentUser?.role === 'Worker') {
