@@ -279,25 +279,25 @@
 /* Desktop Responsive Layout Grid Reflow (Width > 768px / 48rem) */
 @media (min-width: 48rem) {
   .official-dashboard {
-    max-width: 60rem;
-    margin: 0 auto;
     width: 100%;
-    padding: 1.5rem;
-    gap: 1.5rem;
+    padding: 0 0 2rem 0;
+    gap: 0;
   }
 
-  /* Make header look like a floating premium rounded card on desktop */
+  /* Flush edge-to-edge header at the top, matching mobile */
   .executive-header {
-    border-radius: 1.5rem;
+    border-radius: 0 0 2rem 2rem !important;
     margin: 0;
     padding: 3rem 2.5rem;
+    width: 100%;
   }
 
   .official-dashboard__content {
-    padding: 0;
+    padding: 2rem 2.5rem;
     display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: 1.5rem;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    box-sizing: border-box;
   }
 
   /* KPIs span both columns */
@@ -311,7 +311,7 @@
     font-size: 2.5rem !important;
   }
 
-  /* Side-by-side elements on desktop grid */
+  /* Symmetrical split elements on desktop grid */
   .ai-intelligence-card {
     grid-column: 1;
     height: fit-content;
