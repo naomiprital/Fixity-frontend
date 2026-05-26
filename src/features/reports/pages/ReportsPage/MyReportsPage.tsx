@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Box, Typography, CircularProgress } from '@mui/material';
 import AssignmentIcon from '@mui/icons-material/Assignment';
-import { useMyReports } from '../../../../hooks/Reports';
+import { useMyReports } from '../../hooks/useReports';
 import './MyReportsPage.css';
 import { ReportCard } from '../../components/ReportCard';
 

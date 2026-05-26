@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { createReport, uploadAndAnalyze, fetchMyReports, fetchAllReports } from "../features/auth/api/services/reportApi";
+import { createReport, uploadAndAnalyze, fetchMyReports, fetchAllReports } from "../api/reportApi";
 
 export const useAllReports = () => {
     return useQuery({

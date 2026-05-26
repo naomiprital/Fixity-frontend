@@ -24,14 +24,14 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PersonIcon from '@mui/icons-material/Person';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import { useNavigate } from 'react-router-dom';
-import { useAuthUser } from '@/hooks/Auth';
-import { useMyReports } from '@/hooks/Reports';
+import { useAuthUser } from '@/features/auth/hooks/useAuth';
+import { useMyReports } from '@/features/reports/hooks/useReports';
 import { getCities } from '@/features/auth/api/citiesApi';
-import { updateUserProfile } from '@/features/auth/api/services/userApi';
+import { updateUserProfile } from '@/features/profile/api/userApi';
 import { toast } from 'react-toastify';
 import { useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
-import { ProfileAvatar } from '@/features/auth/components/ProfileAvatar/ProfileAvatar';
+import { ProfileAvatar } from '@/features/profile/components/ProfileAvatar/ProfileAvatar';
 import type { City } from '@/types/models';
 import './ProfilePage.css';
 

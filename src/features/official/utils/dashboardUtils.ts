@@ -1,4 +1,4 @@
-import type { MayorStatsResponse, MayorCriticalAlert } from '@/hooks/Mayor';
+import type { MayorStatsResponse, MayorCriticalAlert } from '../api/mayorApi';
 import type { MetricConfig } from '@/types/metricConfig';
 import type { CriticalAlertConfig } from '@/types/criticalAlertsConfig';
 

@@ -4,10 +4,10 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutlined';
 import { format } from 'date-fns';
-import { supportReport } from '../api/services/reportApi';
+import { supportReport } from '../api/reportApi';
 import { toast } from 'react-toastify';
 import type { Report } from '@/types/models';
-import { useAuthUser } from '@/hooks/Auth';
+import { useAuthUser } from '@/features/auth/hooks/useAuth';
 
 interface ReportCardProps {
   report: Report;

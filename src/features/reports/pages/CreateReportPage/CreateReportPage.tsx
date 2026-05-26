@@ -3,13 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Typography, TextField, Button, MenuItem, darken } from '@mui/material';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { PagesEnum } from '../../../../enums/PagesEnum';
-import Loader from '../../../../utils/Loader';
+import Loader from '../../../../shared/ui/Loader';
 import { toast } from 'react-toastify';
 import { LocationPicker } from './LocationPicker';
 import { PhotoUploader } from './PhotoUploader';
 import { PageHeader } from '../../../../shared/ui/PageHeader';
-import { useReportCategories } from '../../../../hooks/ReportCategories';
-import { useCreateReport, useUploadAndAnalyze } from '../../../../hooks/Reports';
+import { useReportCategories } from '../../hooks/useReportCategories';
+import { useCreateReport, useUploadAndAnalyze } from '../../hooks/useReports';
 
 type Location = { latLng: { lat: number; lng: number }; address: string };
 

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getReportCategories } from "../features/auth/api/services/reportCategoryApi";
+import { getReportCategories } from "../api/reportCategoryApi";
 
 export const useReportCategories = () => {
     return useQuery({
