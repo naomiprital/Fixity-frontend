@@ -8,7 +8,7 @@ import CreateReportPage from './features/reports/pages/CreateReportPage/CreateRe
 import { WorkerTasksView } from './features/worker/pages/WorkerTasksView';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import ManagerDashboardPage from './features/manager/pages/ManagerDashboardPage/ManagerDashboardPage';
-import StaffManagement from './features/official/pages/OfficialStaffManagementPage';
+import OfficialStaffManagement from './features/official/pages/OfficialStaffManagementPage';
 import OfficialDashboard from './features/official/pages/OfficialDashboard';
 import { PagesEnum } from './enums/PagesEnum';
 
@@ -49,7 +49,7 @@ const App = () => {
           {/* Official Routes */}
           <Route element={<ProtectedRoute allowedRoles={['Official']} />}>
             <Route path={`/${PagesEnum.OFFICIAL_DASHBOARD}`} element={<OfficialDashboard />} />
-            <Route path={`/${PagesEnum.OFFICIAL_STAFF}`} element={<StaffManagement />} />
+            <Route path={`/${PagesEnum.OFFICIAL_STAFF}`} element={<OfficialStaffManagement />} />
           </Route>
 
           {/* Shared Map Route (Manager & Official) */}

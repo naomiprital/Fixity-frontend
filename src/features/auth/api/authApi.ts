@@ -10,6 +10,7 @@ export type AuthUser = {
   cityId: number | null;
   cityName: string | null;
   profilePictureUrl: string | null;
+  createdAt: string;
 };
 
 export type AuthResponse = {

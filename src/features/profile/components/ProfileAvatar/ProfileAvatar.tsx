@@ -260,12 +260,12 @@ export const ProfileAvatar: React.FC<ProfileAvatarProps> = ({ user, onUploadSucc
         onClose={handleCloseDialog}
         maxWidth="xs"
         fullWidth
-        PaperProps={{
-          sx: {
-            borderRadius: '1.5rem',
-            padding: '0.5rem',
-          },
-        }}
+        // PaperProps={{
+        //   sx: {
+        //     borderRadius: '1.5rem',
+        //     padding: '0.5rem',
+        //   },
+        // }}
       >
         <DialogTitle
           sx={{ fontWeight: 'bold', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}

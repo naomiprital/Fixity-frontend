@@ -80,7 +80,7 @@ const CreateReportPage = () => {
                 beforeImageUrl: imageUrl ?? "",
             });
             toast.success('Report created successfully!');
-            navigate(`/${PagesEnum.HOME}`);
+            navigate(`/${PagesEnum.CITIZEN_HOME}`);
         } catch {
             toast.error('An error occurred while creating the report.');
         } finally {
@@ -90,7 +90,7 @@ const CreateReportPage = () => {
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', background: 'background.default' }}>
-            <PageHeader title="New Report" backTo={`/${PagesEnum.HOME}`} />
+            <PageHeader title="New Report" backTo={`/${PagesEnum.CITIZEN_HOME}`} />
 
             <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 2fr' }, gap: '1rem', padding: { xs: '1rem', md: '2rem' }, height: { xs: 'auto', md: '45.5rem' } }}>
                 <PhotoUploader onFileChange={(file) => { setSelectedFile(file); setUploadedImageUrl(null); }} />
