@@ -11,7 +11,7 @@ import {
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutlined';
-import { type Task, WORKER_COLORS, UPLOADS_BASE_URL } from '../types';
+import { type Task, WORKER_COLORS } from '../types';
 
 interface CloseTaskScreenProps {
   task: Task;
