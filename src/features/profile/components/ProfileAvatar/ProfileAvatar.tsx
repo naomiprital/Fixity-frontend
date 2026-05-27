@@ -20,14 +20,14 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloseIcon from '@mui/icons-material/Close';
 import { toast } from 'react-toastify';
-import { uploadAvatar } from '@/features/auth/api/services/userApi';
+import { uploadAvatar } from '@/features/profile/api/userApi';
 import type { AuthUser } from '@/features/auth/api/authApi';
 import {
   validateAvatarFile,
   startCameraStream,
   stopCameraStream,
   captureCanvasPhoto,
-} from '@/features/auth/utils/avatarUtils';
+} from '@/features/profile/utils/avatarUtils';
 
 interface ProfileAvatarProps {
   user: AuthUser | null | undefined;

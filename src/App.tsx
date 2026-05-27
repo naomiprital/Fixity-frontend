@@ -1,15 +1,15 @@
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import { AuthPage } from './features/auth/pages/AuthPage/AuthPage';
-import HomePage from './features/auth/pages/HomePage/HomePage';
-import MyReportsPage from './features/auth/pages/ReportsPage/MyReportsPage';
-import ProfilePage from './features/auth/pages/ProfilePage/ProfilePage';
-import CreateReportPage from './features/auth/pages/CreateReportPage/CreateReportPage';
+import HomePage from './features/reports/pages/HomePage/HomePage';
+import MyReportsPage from './features/reports/pages/ReportsPage/MyReportsPage';
+import ProfilePage from './features/profile/pages/ProfilePage/ProfilePage';
+import CreateReportPage from './features/reports/pages/CreateReportPage/CreateReportPage';
 import { WorkerTasksView } from './features/worker/pages/WorkerTasksView';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import ManagerDashboardPage from './features/manager/pages/ManagerDashboardPage/ManagerDashboardPage';
-import StaffManagement from './features/pages/OfficialPages/StaffManagement';
-import OfficialDashboard from './features/pages/OfficialPages/OfficialDashboard';
+import StaffManagement from './features/official/pages/StaffManagement';
+import OfficialDashboard from './features/official/pages/OfficialDashboard';
 import { PagesEnum } from './enums/PagesEnum';
 
 const App = () => {

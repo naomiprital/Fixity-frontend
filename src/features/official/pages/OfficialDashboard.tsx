@@ -4,14 +4,14 @@ import SmartToyIcon from '@mui/icons-material/SmartToy';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
-import { useAuthUser } from '@/hooks/Auth';
-import { StatCard } from './components/StatCard';
+import { useAuthUser } from '@/features/auth/hooks/useAuth';
+import { StatCard } from '../components/StatCard';
 import {
   useMayorStats,
   useMayorAiInsights,
   useMayorCriticalAlerts,
-} from '@/hooks/Mayor';
-import { mapMayorMetrics, mapMayorAlerts } from '@/utils/dashboardUtils';
+} from '../api/mayorApi';
+import { mapMayorMetrics, mapMayorAlerts } from '../utils/dashboardUtils';
 import './OfficialDashboard.css';
 
 const OfficialDashboard = () => {

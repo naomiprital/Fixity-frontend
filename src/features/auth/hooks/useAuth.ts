@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import type { AuthUser } from '../features/auth/api/authApi';
+import type { AuthUser } from '../api/authApi';
 
 const getLocalAuthUser = (): AuthUser | null => {
     const authDataString = localStorage.getItem('fixity.auth');

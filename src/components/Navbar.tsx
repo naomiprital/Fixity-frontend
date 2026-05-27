@@ -24,7 +24,7 @@ import { useTheme } from '@mui/material/styles';
 import './Navbar.css';
 import { PagesEnum } from '@/enums/PagesEnum';
 import { capitalizeFirstLetter } from '@/utils/utilsFunctions';
-import { useAuthUser } from '@/hooks/Auth';
+import { useAuthUser } from '@/features/auth/hooks/useAuth';
 
 const Navbar = () => {
   const location = useLocation();

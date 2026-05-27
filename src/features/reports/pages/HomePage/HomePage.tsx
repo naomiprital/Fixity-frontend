@@ -9,11 +9,11 @@ import { Box, Typography, Button, IconButton, CircularProgress } from '@mui/mate
 import CloseIcon from '@mui/icons-material/Close';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
-import { useAllReports } from '../../../../hooks/Reports';
+import { useAllReports } from '../../hooks/useReports';
 import { ReportCard } from '../../components/ReportCard';
-import { supportReport } from '../../api/services/reportApi';
+import { supportReport } from '../../api/reportApi';
 import { toast } from 'react-toastify';
-import { useAuthUser } from '@/hooks/Auth';
+import { useAuthUser } from '@/features/auth/hooks/useAuth';
 import './HomePage.css';
 import { useNavigate } from 'react-router-dom';
 
