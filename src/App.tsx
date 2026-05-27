@@ -8,7 +8,7 @@ import CreateReportPage from './features/reports/pages/CreateReportPage/CreateRe
 import { WorkerTasksView } from './features/worker/pages/WorkerTasksView';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import ManagerDashboardPage from './features/manager/pages/ManagerDashboardPage/ManagerDashboardPage';
-import StaffManagement from './features/official/pages/StaffManagement';
+import StaffManagement from './features/official/pages/OfficialStaffManagementPage';
 import OfficialDashboard from './features/official/pages/OfficialDashboard';
 import { PagesEnum } from './enums/PagesEnum';
 
