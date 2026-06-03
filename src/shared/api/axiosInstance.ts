@@ -15,6 +15,7 @@ export enum Paths {
   INCIDENTS = '/incidents',
   TASKS = '/tasks',
   CATEGORIES = '/categories',
+  STAFF = '/staff',
 }
 const REFRESH_PATH = `${Paths.AUTH}/refresh`;
 
