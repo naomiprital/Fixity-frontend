@@ -3,7 +3,11 @@ import { PageHeader } from '@/shared/ui/PageHeader';
 import { PersonAdd, ExpandMore, ChevronRight } from '@mui/icons-material';
 import { useAuthUser } from '@/features/auth/hooks/useAuth';
 import { toast } from 'react-toastify';
-import { useStaffList, useCreateStaff } from '../../staffManagement/api/staffApi';
+import {
+  useStaffList,
+  useCreateStaff,
+  type CreateStaffPayload,
+} from '../../staffManagement/api/staffApi';
 import { StaffList } from '../../staffManagement/components/StaffList';
 import { CreateStaffForm } from '../../staffManagement/components/CreateStaffForm';
 import Loader from '@/shared/ui/Loader';
@@ -19,9 +23,9 @@ const OfficialStaffManagementPage = () => {
   const [managersCollapsed, setManagersCollapsed] = useState(false);
   const [workersCollapsed, setWorkersCollapsed] = useState(false);
 
-  const handleCreateStaff = (payload: any) => {
+  const handleCreateStaff = (payload: CreateStaffPayload) => {
     createStaffMutation.mutate(payload, {
-      onSuccess: (created) => {
+      onSuccess: () => {
         toast.success('Staff account created successfully');
         setShowAddForm(false); // hide form (fields reset when unmounted)
       },
@@ -57,9 +61,9 @@ const OfficialStaffManagementPage = () => {
               onSubmit={handleCreateStaff}
               isLoading={createStaffMutation.isPending}
             />
-            <div className="staff-divider" />
           </>
         )}
+        <div className="staff-divider" />
 
         {/* Scrollable lists area - only this container will scroll */}
         <div className="staff-lists">
