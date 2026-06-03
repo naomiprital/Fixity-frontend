@@ -27,7 +27,13 @@ const OfficialStaffManagementPage = () => {
       },
       onError: (err: any) => {
         console.log('Error creating staff account:', err);
-        const msg = err.response?.data?.message || err.error || 'Failed to create staff account';
+        const responseData = err?.response?.data;
+        const msg =
+          responseData?.error ||
+          responseData?.message ||
+          err?.message ||
+          err?.error ||
+          'Failed to create staff account';
         toast.error(msg);
       },
     });

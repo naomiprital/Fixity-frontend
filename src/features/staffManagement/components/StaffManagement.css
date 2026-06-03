@@ -10,13 +10,6 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  font-family:
-    'Inter',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    sans-serif;
 }
 
 /* Scrollable lists area inside the container */
