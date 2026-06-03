@@ -29,6 +29,7 @@ export const StaffListItem: React.FC<StaffListItemProps> = ({ member }) => {
 
       <div className="staff-details">
         <h4 className="staff-name">{`${member.firstName} ${member.lastName}`}</h4>
+        <p className="staff-subtitle">{member.email}</p>
       </div>
     </div>
   );
