@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { PageHeader } from '@/shared/ui/PageHeader';
-import { PersonAdd } from '@mui/icons-material';
+import { PersonAdd, ExpandMore, ChevronRight } from '@mui/icons-material';
 import { useAuthUser } from '@/features/auth/hooks/useAuth';
 import { toast } from 'react-toastify';
 import { useStaffList, useCreateStaff } from '../../staffManagement/api/staffApi';
@@ -16,6 +16,8 @@ const OfficialStaffManagementPage = () => {
   const createStaffMutation = useCreateStaff();
 
   const [showAddForm, setShowAddForm] = useState(false);
+  const [managersCollapsed, setManagersCollapsed] = useState(false);
+  const [workersCollapsed, setWorkersCollapsed] = useState(false);
 
   const handleCreateStaff = (payload: any) => {
     createStaffMutation.mutate(payload, {
@@ -54,27 +56,71 @@ const OfficialStaffManagementPage = () => {
         )}
 
         {/* Active managers list */}
-        <h3 className="active-staff-header" style={{ marginTop: '24px' }}>
-          MANAGERS ({isManagersLoading ? '...' : managers.length})
+        <h3
+          className="active-staff-header"
+          style={{
+            marginTop: '24px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <span>MANAGERS ({isManagersLoading ? '...' : managers.length})</span>
+          <button
+            onClick={() => setManagersCollapsed((s) => !s)}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#64748b',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+            aria-label="toggle managers"
+          >
+            {managersCollapsed ? <ChevronRight /> : <ExpandMore />}
+          </button>
         </h3>
         {isManagersLoading ? (
           <div style={{ display: 'flex', justifyContent: 'center', padding: '1rem' }}>
             <Loader />
           </div>
         ) : (
-          <StaffList staff={managers} />
+          !managersCollapsed && <StaffList staff={managers} />
         )}
 
         {/* Active workers list */}
-        <h3 className="active-staff-header" style={{ marginTop: '24px' }}>
-          WORKERS ({isWorkersLoading ? '...' : workers.length})
+        <h3
+          className="active-staff-header"
+          style={{
+            marginTop: '24px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+        >
+          <span>WORKERS ({isWorkersLoading ? '...' : workers.length})</span>
+          <button
+            onClick={() => setWorkersCollapsed((s) => !s)}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#64748b',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+            aria-label="toggle workers"
+          >
+            {workersCollapsed ? <ChevronRight /> : <ExpandMore />}
+          </button>
         </h3>
         {isWorkersLoading ? (
           <div style={{ display: 'flex', justifyContent: 'center', padding: '1rem' }}>
             <Loader />
           </div>
         ) : (
-          <StaffList staff={workers} />
+          !workersCollapsed && <StaffList staff={workers} />
         )}
 
         {/* Divider */}
