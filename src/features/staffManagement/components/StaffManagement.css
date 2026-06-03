@@ -3,7 +3,13 @@
   margin: 0 auto;
   padding: 16px;
   background-color: #f8fafc;
-  min-height: 100vh;
+  /* space for the page header (4rem) so the container fits its parent */
+  height: calc(100% - 4rem);
+  /* allow the flex parent to control overflow sizing */
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   font-family:
     'Inter',
     -apple-system,
@@ -11,6 +17,39 @@
     'Segoe UI',
     Roboto,
     sans-serif;
+}
+
+/* Scrollable lists area inside the container */
+.staff-lists {
+  overflow-y: auto;
+  flex: 1 1 auto;
+  -webkit-overflow-scrolling: touch;
+  /* prevent children margins from forcing parent overflow */
+  min-height: 0;
+}
+
+/* Header row for each staff section (managers/workers) */
+.staff-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Toggle button to collapse/expand lists */
+.toggle-collapse-btn {
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+/* Center loader wrapper used while fetching lists */
+.center-loader {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
 }
 
 /* Create button at top */

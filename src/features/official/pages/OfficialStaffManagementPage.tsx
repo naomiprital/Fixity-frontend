@@ -55,75 +55,46 @@ const OfficialStaffManagementPage = () => {
           </>
         )}
 
-        {/* Active managers list */}
-        <h3
-          className="active-staff-header"
-          style={{
-            marginTop: '24px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
-          <span>MANAGERS ({isManagersLoading ? '...' : managers.length})</span>
-          <button
-            onClick={() => setManagersCollapsed((s) => !s)}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: '#64748b',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-            aria-label="toggle managers"
-          >
-            {managersCollapsed ? <ChevronRight /> : <ExpandMore />}
-          </button>
-        </h3>
-        {isManagersLoading ? (
-          <div style={{ display: 'flex', justifyContent: 'center', padding: '1rem' }}>
-            <Loader />
-          </div>
-        ) : (
-          !managersCollapsed && <StaffList staff={managers} />
-        )}
+        {/* Scrollable lists area - only this container will scroll */}
+        <div className="staff-lists">
+          {/* Active managers list */}
+          <h3 className="active-staff-header staff-section-header">
+            <span>MANAGERS ({isManagersLoading ? '...' : managers.length})</span>
+            <button
+              onClick={() => setManagersCollapsed((s) => !s)}
+              className="toggle-collapse-btn"
+              aria-label="toggle managers"
+            >
+              {managersCollapsed ? <ChevronRight /> : <ExpandMore />}
+            </button>
+          </h3>
+          {isManagersLoading ? (
+            <div className="center-loader">
+              <Loader />
+            </div>
+          ) : (
+            !managersCollapsed && <StaffList staff={managers} />
+          )}
 
-        {/* Active workers list */}
-        <h3
-          className="active-staff-header"
-          style={{
-            marginTop: '24px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-          }}
-        >
-          <span>WORKERS ({isWorkersLoading ? '...' : workers.length})</span>
-          <button
-            onClick={() => setWorkersCollapsed((s) => !s)}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: '#64748b',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-            aria-label="toggle workers"
-          >
-            {workersCollapsed ? <ChevronRight /> : <ExpandMore />}
-          </button>
-        </h3>
-        {isWorkersLoading ? (
-          <div style={{ display: 'flex', justifyContent: 'center', padding: '1rem' }}>
-            <Loader />
-          </div>
-        ) : (
-          !workersCollapsed && <StaffList staff={workers} />
-        )}
-
-        {/* Divider */}
+          {/* Active workers list */}
+          <h3 className="active-staff-header staff-section-header">
+            <span>WORKERS ({isWorkersLoading ? '...' : workers.length})</span>
+            <button
+              onClick={() => setWorkersCollapsed((s) => !s)}
+              className="toggle-collapse-btn"
+              aria-label="toggle workers"
+            >
+              {workersCollapsed ? <ChevronRight /> : <ExpandMore />}
+            </button>
+          </h3>
+          {isWorkersLoading ? (
+            <div className="center-loader">
+              <Loader />
+            </div>
+          ) : (
+            !workersCollapsed && <StaffList staff={workers} />
+          )}
+        </div>
       </div>
     </>
   );
