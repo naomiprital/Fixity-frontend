@@ -1,10 +1,7 @@
-import { useState } from 'react';
-
 import {
   Box, Typography, Chip, Accordion, AccordionSummary, AccordionDetails,
   TextField, Button, FormControl, InputLabel, Select, MenuItem,
   IconButton, Tooltip, darken,
-  Dialog, DialogTitle, DialogContent, DialogActions,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutlined';
@@ -12,54 +9,10 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import type { Incident, Task, TaskCategory } from '@/types/models';
 import { WORKER_COLORS } from '../../../../worker/types';
+import { ExpandableTextWithDialog } from './ExpandableTextWithDialog';
 
 const API_BASE = import.meta.env.VITE_SERVER_BASE_URL || 'http://localhost:3000/api';
 const IMAGE_BASE = API_BASE.replace('/api', '');
-
-function ExpandableTextWithDialog({ text, limit = 150, variant = 'body2', sx = {} }: { text: string; limit?: number; variant?: string; sx?: any }) {
-  const [open, setOpen] = useState(false);
-  const truncated = text.length > limit ? `${text.substring(0, limit)}...` : text;
-
-  const handleOpen = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setOpen(true);
-  };
-  const handleClose = () => setOpen(false);
-
-  return (
-    <>
-      <Typography variant={variant as any} sx={sx}>
-        {truncated}{' '}
-        {text.length > limit && (
-          <Box
-            component="span"
-            onClick={handleOpen}
-            sx={{
-              color: 'primary.main',
-              fontWeight: 700,
-              cursor: 'pointer',
-              ml: 0.5,
-              fontSize: '0.75em',
-              textTransform: 'uppercase',
-            }}
-          >
-            Read More
-          </Box>
-        )}
-      </Typography>
-      <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-        <DialogTitle>Report Description</DialogTitle>
-        <DialogContent dividers>
-          <Typography variant={variant as any}>{text}</Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary" variant="contained">Close</Button>
-        </DialogActions>
-      </Dialog>
-    </>
-  );
-}
-
 
 
 const getPriorityInfo = (score: number) => {
