@@ -1,7 +1,10 @@
+import { useState } from 'react';
+
 import {
   Box, Typography, Chip, Accordion, AccordionSummary, AccordionDetails,
   TextField, Button, FormControl, InputLabel, Select, MenuItem,
   IconButton, Tooltip, darken,
+  Dialog, DialogTitle, DialogContent, DialogActions,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutlined';
@@ -9,6 +12,55 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import type { Incident, Task, TaskCategory } from '@/types/models';
 import { WORKER_COLORS } from '../../../../worker/types';
+
+const API_BASE = import.meta.env.VITE_SERVER_BASE_URL || 'http://localhost:3000/api';
+const IMAGE_BASE = API_BASE.replace('/api', '');
+
+function ExpandableTextWithDialog({ text, limit = 150, variant = 'body2', sx = {} }: { text: string; limit?: number; variant?: string; sx?: any }) {
+  const [open, setOpen] = useState(false);
+  const truncated = text.length > limit ? `${text.substring(0, limit)}...` : text;
+
+  const handleOpen = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setOpen(true);
+  };
+  const handleClose = () => setOpen(false);
+
+  return (
+    <>
+      <Typography variant={variant as any} sx={sx}>
+        {truncated}{' '}
+        {text.length > limit && (
+          <Box
+            component="span"
+            onClick={handleOpen}
+            sx={{
+              color: 'primary.main',
+              fontWeight: 700,
+              cursor: 'pointer',
+              ml: 0.5,
+              fontSize: '0.75em',
+              textTransform: 'uppercase',
+            }}
+          >
+            Read More
+          </Box>
+        )}
+      </Typography>
+      <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
+        <DialogTitle>Report Description</DialogTitle>
+        <DialogContent dividers>
+          <Typography variant={variant as any}>{text}</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary" variant="contained">Close</Button>
+        </DialogActions>
+      </Dialog>
+    </>
+  );
+}
+
+
 
 const getPriorityInfo = (score: number) => {
   if (score > 100) return { label: 'CRITICAL', color: WORKER_COLORS.criticalPriority };
@@ -95,9 +147,35 @@ export function IncidentCard({
         <Box className="mgr-linked-list">
           {incident.reports.map(r => (
             <Box key={r.reportId} className="mgr-linked-item" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Box sx={{ display: 'flex', gap: 1, alignItems: 'baseline', flex: 1, minWidth: 0 }}>
-                <Typography variant="body2" sx={{ fontWeight: 600 }}>#{r.reportId}</Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.description}</Typography>
+              <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center', flex: 1, minWidth: 0 }}>
+                <Box
+                  component="img"
+                  src={r.beforeImageUrl ? `${IMAGE_BASE}${r.beforeImageUrl}` : 'https://placehold.co/48'}
+                  alt={r.description}
+                  sx={{
+                    width: 48,
+                    height: 48,
+                    borderRadius: '0.375rem',
+                    objectFit: 'cover',
+                    flexShrink: 0,
+                    border: '1px solid #d8dbe0',
+                  }}
+                  onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                    const target = e.target as HTMLImageElement;
+                    if (target.src !== 'https://placehold.co/48') {
+                      target.src = 'https://placehold.co/48';
+                    }
+                  }}
+                />
+                <Box sx={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
+                  <Typography variant="caption" sx={{ fontWeight: 700, color: 'text.disabled', lineHeight: 1.2 }}>#{r.reportId}</Typography>
+                  <ExpandableTextWithDialog
+                    text={r.description}
+                    limit={120}
+                    variant="body2"
+                    sx={{ color: 'text.secondary', fontWeight: 500, lineHeight: 1.3 }}
+                  />
+                </Box>
               </Box>
               <Tooltip title="Remove from incident">
                 <IconButton size="small" color="error" onClick={() => onRemoveReport?.(incident.incidentId, r.reportId)}>

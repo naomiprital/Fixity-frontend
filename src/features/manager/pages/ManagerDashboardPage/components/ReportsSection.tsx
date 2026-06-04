@@ -1,8 +1,60 @@
-import { Box, Typography, Button, Chip, IconButton, useTheme, useMediaQuery, darken } from '@mui/material';
+import { useState } from 'react';
+import { Box, Typography, Button, Chip, IconButton, useTheme, useMediaQuery, darken, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import ReportProblemOutlinedIcon from '@mui/icons-material/ReportProblemOutlined';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import type { Report } from '@/types/models';
+
+const API_BASE = import.meta.env.VITE_SERVER_BASE_URL || 'http://localhost:3000/api';
+const IMAGE_BASE = API_BASE.replace('/api', '');
+
+function ExpandableTextWithDialog({ text, limit = 150, variant = 'body2', sx = {} }: { text: string; limit?: number; variant?: string; sx?: any }) {
+  const [open, setOpen] = useState(false);
+  const truncated = text.length > limit ? `${text.substring(0, limit)}...` : text;
+
+  const handleOpen = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setOpen(true);
+  };
+  const handleClose = () => setOpen(false);
+
+  return (
+    <>
+      <Typography variant={variant as any} sx={sx}>
+        {truncated}{' '}
+        {text.length > limit && (
+          <Box
+            component="span"
+            onClick={handleOpen}
+            sx={{
+              color: 'primary.main',
+              fontWeight: 700,
+              cursor: 'pointer',
+              ml: 0.5,
+              fontSize: '0.75em',
+              textTransform: 'uppercase',
+            }}
+          >
+            Read More
+          </Box>
+        )}
+      </Typography>
+      <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
+        <DialogTitle>Report Description</DialogTitle>
+        <DialogContent dividers>
+          <Typography variant={variant as any}>{text}</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary" variant="contained">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
+  );
+}
+
+
 
 interface Props {
   reports: Report[];
@@ -84,6 +136,25 @@ export function ReportsSection({ reports, selectedReportIds, onToggleReport, onS
               <IconButton size="small" sx={{ color: selected ? 'primary.main' : 'text.disabled', flexShrink: 0 }}>
                 {selected ? <CheckBoxIcon /> : <CheckBoxOutlineBlankIcon />}
               </IconButton>
+              <Box
+                component="img"
+                src={r.beforeImageUrl ? `${IMAGE_BASE}${r.beforeImageUrl}` : 'https://placehold.co/60'}
+                alt={r.description}
+                sx={{
+                  width: 50,
+                  height: 50,
+                  borderRadius: '0.375rem',
+                  objectFit: 'cover',
+                  flexShrink: 0,
+                  border: '1px solid #e9ebef',
+                }}
+                onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+                  const target = e.target as HTMLImageElement;
+                  if (target.src !== 'https://placehold.co/60') {
+                    target.src = 'https://placehold.co/60';
+                  }
+                }}
+              />
               <Box sx={{ flex: 1, minWidth: 0 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap', mb: 0.25 }}>
                   <Chip label={r.category?.name} size="small" sx={{ bgcolor: 'surface.main', fontWeight: 600, fontSize: '0.72rem' }} />
@@ -91,12 +162,12 @@ export function ReportsSection({ reports, selectedReportIds, onToggleReport, onS
                     #{r.reportId} · {new Date(r.createdAt).toLocaleDateString()}
                   </Typography>
                 </Box>
-                <Typography
+                <ExpandableTextWithDialog
+                  text={r.description}
+                  limit={120}
                   variant="body2"
-                  sx={{ color: 'text.primary', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
-                >
-                  {r.description}
-                </Typography>
+                  sx={{ color: 'text.secondary', fontWeight: 500, lineHeight: 1.3 }}
+                />
                 <Typography variant="caption" sx={{ color: 'text.secondary' }}>
                   {r.requester?.firstName} {r.requester?.lastName}
                 </Typography>
