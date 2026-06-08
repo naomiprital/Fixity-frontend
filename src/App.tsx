@@ -8,6 +8,7 @@ import CreateReportPage from './features/reports/pages/CreateReportPage/CreateRe
 import { WorkerTasksView } from './features/worker/pages/WorkerTasksView';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import ManagerDashboardPage from './features/manager/pages/ManagerDashboardPage/ManagerDashboardPage';
+import ManagerStaffManagementPage from './features/manager/pages/ManagerStaffManagementPage';
 import OfficialStaffManagement from './features/official/pages/OfficialStaffManagementPage';
 import OfficialDashboard from './features/official/pages/OfficialDashboard';
 import { PagesEnum } from './enums/PagesEnum';
@@ -44,6 +45,7 @@ const App = () => {
             <Route path={`/${PagesEnum.MANAGER_HOME}`} element={<HomePage />} />
             <Route path={`/${PagesEnum.MANAGER_REPORTS}`} element={<MyReportsPage />} />
             <Route path={`/${PagesEnum.MANAGER_DASHBOARD}`} element={<ManagerDashboardPage />} />
+            <Route path={`/${PagesEnum.MANAGER_STAFF}`} element={<ManagerStaffManagementPage />} />
           </Route>
 
           {/* Official Routes */}
