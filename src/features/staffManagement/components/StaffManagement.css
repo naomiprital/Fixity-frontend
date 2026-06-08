@@ -4,11 +4,9 @@
   margin: 0 auto;
   padding: 16px;
   background-color: #f8fafc;
-  height: calc(100% - 4rem);
-  min-height: 0;
+  min-height: calc(100vh - 4rem);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 
 @media (min-width: 768px) {
@@ -18,10 +16,7 @@
 }
 
 .staff-lists {
-  overflow-y: auto;
   flex: 1 1 auto;
-  -webkit-overflow-scrolling: touch;
-  min-height: 0;
 }
 
 .staff-section-header {

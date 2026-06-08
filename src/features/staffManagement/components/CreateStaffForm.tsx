@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Select, MenuItem } from '@mui/material';
 import type { CreateStaffPayload } from '../api/staffApi';
 import './CreateStaffForm.css';
 
@@ -14,11 +15,10 @@ export const CreateStaffForm: React.FC<CreateStaffFormProps> = ({
   onSubmit,
   isLoading,
 }) => {
-  const defaultRole = creatorRole === 'Official' ? 'Manager' : 'Worker';
-
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
+  const [role, setRole] = useState<'Manager' | 'Worker' | ''>(creatorRole === 'Official' ? '' : 'Worker');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,7 +28,7 @@ export const CreateStaffForm: React.FC<CreateStaffFormProps> = ({
       firstName: firstName.trim(),
       lastName: lastName.trim(),
       email: email.trim(),
-      role: defaultRole,
+      role: role as 'Manager' | 'Worker',
     });
   };
 
@@ -74,11 +74,33 @@ export const CreateStaffForm: React.FC<CreateStaffFormProps> = ({
           />
         </div>
 
-        {/* role is assigned automatically based on creator role; selection removed */}
+        {creatorRole === 'Official' && (
+          <div className="form-group">
+            <Select
+              value={role}
+              onChange={(e) => setRole(e.target.value as 'Manager' | 'Worker')}
+              disabled={isLoading}
+              displayEmpty
+              className="form-input form-select"
+              fullWidth
+              sx={{
+                '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
+                padding: 0
+              }}
+              inputProps={{
+                style: { padding: '14px 16px', height: 'auto' }
+              }}
+            >
+              <MenuItem value="" disabled>Select Role</MenuItem>
+              <MenuItem value="Manager">Manager</MenuItem>
+              <MenuItem value="Worker">Worker</MenuItem>
+            </Select>
+          </div>
+        )}
 
         <button
           type="submit"
-          disabled={isLoading || !firstName.trim() || !lastName.trim() || !email.trim()}
+          disabled={isLoading || !firstName.trim() || !lastName.trim() || !email.trim() || !role}
           className="form-submit-btn"
         >
           {isLoading ? 'Creating Account...' : 'Send Credentials'}
