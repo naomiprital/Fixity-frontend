@@ -64,7 +64,7 @@ const ProfilePage = () => {
 
   // Load cities if editing
   useEffect(() => {
-    if (isEditing && cities.length === 0) {
+    if (isEditing && user?.role === 'Citizen' && cities.length === 0) {
       setLoadingCities(true);
       getCities(1, 100)
         .then((res) => {
@@ -77,7 +77,7 @@ const ProfilePage = () => {
           setLoadingCities(false);
         });
     }
-  }, [isEditing, cities.length]);
+  }, [isEditing, user?.role, cities.length]);
 
   const rawFirstName = user?.firstName;
   const rawLastName = user?.lastName;
@@ -105,19 +105,22 @@ const ProfilePage = () => {
       toast.error('Email field cannot be empty');
       return;
     }
-    if (!cityId) {
+    if (user?.role === 'Citizen' && !cityId) {
       toast.error('Please select a city');
       return;
     }
 
     setIsSaving(true);
     try {
-      const res = await updateUserProfile({
+      const payload: any = {
         firstName,
         lastName,
         email,
-        cityId: Number(cityId),
-      });
+      };
+      if (user?.role === 'Citizen') {
+        payload.cityId = Number(cityId);
+      }
+      const res = await updateUserProfile(payload);
       syncLocalAuth(res.user);
       setIsEditing(false);
       toast.success('Profile updated successfully!');
@@ -302,28 +305,40 @@ const ProfilePage = () => {
                     className="profile-page__form-field"
                   />
 
-                  <FormControl fullWidth className="profile-page__form-field">
-                    <InputLabel id="city-select-label">City</InputLabel>
-                    <Select
-                      labelId="city-select-label"
-                      value={cityId}
-                      label="City"
-                      onChange={(e) => setCityId(Number(e.target.value))}
-                      disabled={loadingCities}
-                    >
-                      {loadingCities ? (
-                        <MenuItem disabled>
-                          <CircularProgress size={20} sx={{ mr: 1 }} /> Loading cities...
-                        </MenuItem>
-                      ) : (
-                        cities.map((city) => (
-                          <MenuItem key={city.cityId} value={city.cityId}>
-                            {city.name}
+                  {user?.role === 'Citizen' ? (
+                    <FormControl fullWidth className="profile-page__form-field">
+                      <InputLabel id="city-select-label">City</InputLabel>
+                      <Select
+                        labelId="city-select-label"
+                        value={cityId}
+                        label="City"
+                        onChange={(e) => setCityId(Number(e.target.value))}
+                        disabled={loadingCities}
+                      >
+                        {loadingCities ? (
+                          <MenuItem disabled>
+                            <CircularProgress size={20} sx={{ mr: 1 }} /> Loading cities...
                           </MenuItem>
-                        ))
-                      )}
-                    </Select>
-                  </FormControl>
+                        ) : (
+                          cities.map((city) => (
+                            <MenuItem key={city.cityId} value={city.cityId}>
+                              {city.name}
+                            </MenuItem>
+                          ))
+                        )}
+                      </Select>
+                    </FormControl>
+                  ) : (
+                    <TextField
+                      label="City"
+                      variant="outlined"
+                      fullWidth
+                      value={user?.cityName || 'Not set'}
+                      disabled
+                      helperText="Only citizens can change their city"
+                      className="profile-page__form-field"
+                    />
+                  )}
 
                   <Box className="profile-page__form-actions">
                     <Button

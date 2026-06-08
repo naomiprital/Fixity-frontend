@@ -30,17 +30,26 @@
 }
 
 .auth-page__brand-pill {
-  background: #f0f2f4;
+  background: #f5efe4;
   width: min(34rem, calc(100% - 5rem));
   min-height: 6.9rem;
   border-radius: 1.9rem;
-  padding: 0.9rem 1.75rem;
+  padding: 0.2rem 1.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow:
     0 2px 8px rgba(0, 0, 0, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  overflow: hidden;
+}
+
+.auth-page__logo-img {
+  height: 6.5rem;
+  max-width: 100%;
+  object-fit: contain;
+  border-radius: 1.2rem;
+  transform: scale(1.8);
 }
 
 .auth-page__tagline {
@@ -207,6 +216,10 @@
     min-height: 4.8rem;
     border-radius: 1.35rem;
     padding: 0.7rem 1.15rem;
+  }
+
+  .auth-page__logo-img {
+    max-height: 4rem;
   }
 
   .auth-page__card {

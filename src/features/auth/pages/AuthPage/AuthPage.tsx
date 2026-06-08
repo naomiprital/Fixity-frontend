@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect, type ChangeEvent, type FormEvent } from 'react';
 import { toast } from 'react-toastify';
 import { signIn, signUp } from '@/features/auth/api/authApi';
-import { FixityWordmark } from '@/shared/brand/FixityWordmark';
 import { LockIcon, MailIcon, UserIcon } from '@/shared/icons/AuthIcons';
 import { TextField } from '@/shared/ui/TextField';
 import { CitySelect, type CitySelectRef } from '@/features/auth/components/CitySelect/CitySelect';
@@ -207,7 +206,7 @@ export function AuthPage() {
       <div className="auth-page__layout">
         <header className="auth-page__hero">
           <div className="auth-page__brand-pill">
-            <FixityWordmark />
+            <img src="/assets/branding/logo.png" alt="Fixity Logo" className="auth-page__logo-img" />
           </div>
           <p className="auth-page__tagline">Better City. Together.</p>
         </header>
