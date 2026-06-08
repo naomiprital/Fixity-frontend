@@ -1,0 +1,95 @@
+.staff-management-container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 16px;
+  background-color: #f8fafc;
+  /* space for the page header (4rem) so the container fits its parent */
+  height: calc(100% - 4rem);
+  /* allow the flex parent to control overflow sizing */
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Scrollable lists area inside the container */
+.staff-lists {
+  overflow-y: auto;
+  flex: 1 1 auto;
+  -webkit-overflow-scrolling: touch;
+  /* prevent children margins from forcing parent overflow */
+  min-height: 0;
+}
+
+/* Header row for each staff section (managers/workers) */
+.staff-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Toggle button to collapse/expand lists */
+.toggle-collapse-btn {
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+/* Center loader wrapper used while fetching lists */
+.center-loader {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+}
+
+/* Create button at top */
+.create-staff-trigger-btn {
+  width: 100%;
+  padding: 16px;
+  background-color: #274567;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
+}
+
+.create-staff-trigger-btn:hover {
+  background-color: #1e3550;
+}
+
+.create-staff-trigger-btn:active {
+  transform: scale(0.98);
+}
+
+/* Active staff list section */
+.active-staff-header {
+  margin-top: 24px;
+  margin-bottom: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Divider line */
+.staff-divider {
+  height: 1px;
+  background-color: #e2e8f0;
+  margin: 24px 0;
+}
