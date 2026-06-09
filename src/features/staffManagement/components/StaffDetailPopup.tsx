@@ -1,14 +1,23 @@
-import React from 'react';
-import { Email, CalendarMonth } from '@mui/icons-material';
+import React, { useState } from 'react';
+import { Email, CalendarMonth, DeleteOutlined } from '@mui/icons-material';
 import type { StaffUser } from '../api/staffApi';
 import './StaffDetailPopup.css';
 
 interface StaffDetailPopupProps {
   member: StaffUser;
   onClose: () => void;
+  onDelete?: (userId: number) => void;
+  isDeleting?: boolean;
 }
 
-export const StaffDetailPopup: React.FC<StaffDetailPopupProps> = ({ member, onClose }) => {
+export const StaffDetailPopup: React.FC<StaffDetailPopupProps> = ({
+  member,
+  onClose,
+  onDelete,
+  isDeleting = false,
+}) => {
+  const [showConfirm, setShowConfirm] = useState(false);
+
   const getInitials = (first: string, last: string) =>
     `${first.charAt(0)}${last.charAt(0)}`.toUpperCase();
 
@@ -22,6 +31,14 @@ export const StaffDetailPopup: React.FC<StaffDetailPopupProps> = ({ member, onCl
 
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) onClose();
+  };
+
+  const handleDelete = () => {
+    if (!showConfirm) {
+      setShowConfirm(true);
+      return;
+    }
+    onDelete?.(member.userId);
   };
 
   return (
@@ -73,6 +90,39 @@ export const StaffDetailPopup: React.FC<StaffDetailPopupProps> = ({ member, onCl
               </div>
             </div>
           </div>
+
+          {/* Delete button */}
+          {onDelete && (
+            <div className="staff-popup-actions">
+              {showConfirm ? (
+                <div className="staff-popup-confirm-group">
+                  <span className="staff-popup-confirm-text">Are you sure?</span>
+                  <button
+                    className="staff-popup-confirm-btn confirm-yes"
+                    onClick={handleDelete}
+                    disabled={isDeleting}
+                  >
+                    {isDeleting ? 'Deleting...' : 'Yes, Delete'}
+                  </button>
+                  <button
+                    className="staff-popup-confirm-btn confirm-no"
+                    onClick={() => setShowConfirm(false)}
+                    disabled={isDeleting}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              ) : (
+                <button
+                  className="staff-popup-delete-btn"
+                  onClick={handleDelete}
+                >
+                  <DeleteOutlined fontSize="small" />
+                  Delete Account
+                </button>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

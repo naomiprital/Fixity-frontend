@@ -44,3 +44,17 @@ export const useCreateStaff = () => {
     },
   });
 };
+
+export async function deleteStaff(userId: number): Promise<void> {
+  await authApi.delete(`${Paths.STAFF}/${userId}`);
+}
+
+export const useDeleteStaff = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteStaff,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['staff-list'] });
+    },
+  });
+};
