@@ -8,6 +8,7 @@ export enum PagesEnum {
   MANAGER_DASHBOARD = 'manager/dashboard',
   MANAGER_HOME = 'manager/home',
   MANAGER_REPORTS = 'manager/reports',
+  MANAGER_STAFF = 'manager/staff',
   OFFICIAL_DASHBOARD = 'official/dashboard',
   OFFICIAL_STAFF = 'official/staff',
   MAP = 'map',
