@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { Box, Typography, Button, Chip, IconButton, useTheme, useMediaQuery, darken, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import { Box, Typography, Button, Chip, IconButton, useTheme, useMediaQuery, darken } from '@mui/material';
 import ReportProblemOutlinedIcon from '@mui/icons-material/ReportProblemOutlined';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';

@@ -276,12 +276,78 @@
   margin: 0 !important;
 }
 
+/* Dashboard Sub-Navigation Tabs Bar (Header Tab Bar) */
+.dashboard-tabs-bar {
+  background-color: #0f5a61;
+  display: flex;
+  padding: 0.5rem 1rem;
+  gap: 0.5rem;
+  justify-content: space-around;
+  border-bottom: 0.0625rem solid rgba(255, 255, 255, 0.1);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.tab-pill-btn {
+  color: rgba(255, 255, 255, 0.7) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 0.8125rem !important;
+  letter-spacing: 0.05rem !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 1rem !important;
+  transition: all 0.2s ease !important;
+  background-color: transparent !important;
+  text-transform: uppercase !important;
+}
+
+.tab-pill-btn:hover {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.tab-pill-btn--active {
+  color: #156c74 !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.1) !important;
+}
+
+.tab-pill-btn--active:hover {
+  color: #156c74 !important;
+  background-color: #ffffff !important;
+}
+
+.home-view-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.home-view-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
 /* Desktop Responsive Layout Grid Reflow (Width > 768px / 48rem) */
 @media (min-width: 48rem) {
   .official-dashboard {
     width: 100%;
     padding: 0 0 2rem 0;
     gap: 0;
+  }
+
+  .dashboard-tabs-bar {
+    padding: 0.75rem 2.5rem;
+    justify-content: flex-start;
+    gap: 1.5rem;
+  }
+
+  .tab-pill-btn {
+    padding: 0.625rem 1.5rem !important;
+    font-size: 0.875rem !important;
   }
 
   /* Flush edge-to-edge header at the top, matching mobile */
@@ -294,10 +360,19 @@
 
   .official-dashboard__content {
     padding: 2rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .home-view-layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
     box-sizing: border-box;
+    width: 100%;
   }
 
   /* KPIs span both columns */
