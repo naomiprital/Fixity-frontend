@@ -16,6 +16,7 @@ import { toast } from 'react-toastify';
 import { useAuthUser } from '@/features/auth/hooks/useAuth';
 import './HomePage.css';
 import { useNavigate } from 'react-router-dom';
+import { useCityBounds } from '../../../../hooks/useCityBounds';
 
 const ISRAEL_CENTER: LatLngTuple = [31.7683, 35.2137];
 const ISRAEL_BOUNDS: LatLngBoundsLiteral = [
@@ -62,6 +63,7 @@ const HomePage = () => {
   const [userPosition, setUserPosition] = useState<LatLngTuple | null>(null);
   const { data: reports, isLoading, refetch } = useAllReports();
   const { data: currentUser } = useAuthUser();
+  const { data: cityBounds, isLoading: isCityBoundsLoading } = useCityBounds(currentUser?.cityName);
   const [isSupporting, setIsSupporting] = useState(false);
   const navigate = useNavigate();
 
@@ -80,6 +82,23 @@ const HomePage = () => {
   }, [view]);
 
   useEffect(() => {
+    const currentMapRef = mapRef.current;
+    if (!currentMapRef) return;
+
+    const resizeObserver = new ResizeObserver(() => {
+      if (leafletMap.current) {
+        leafletMap.current.invalidateSize();
+      }
+    });
+
+    resizeObserver.observe(currentMapRef);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
     return () => {
       if (leafletMap.current) {
         leafletMap.current.remove();
@@ -92,15 +111,20 @@ const HomePage = () => {
   const isMyReport = currentUser?.userId === selectedReport?.requesterId;
 
   useEffect(() => {
-    if (view !== 'map' || !mapRef.current || reports === undefined) return;
+    if (view !== 'map' || !mapRef.current || reports === undefined || currentUser === undefined) return;
+    if (currentUser?.cityName && isCityBoundsLoading) return;
+
+    const defaultBounds = cityBounds ? cityBounds.bounds : ISRAEL_BOUNDS;
+    const defaultCenter = cityBounds ? cityBounds.center : ISRAEL_CENTER;
+    const defaultMinZoom = cityBounds ? 12 : 8;
 
     if (!leafletMap.current) {
       leafletMap.current = L.map(mapRef.current, {
-        center: ISRAEL_CENTER,
-        zoom: 8,
-        minZoom: 5,
+        center: defaultCenter,
+        zoom: defaultMinZoom + 1,
+        minZoom: defaultMinZoom,
         maxZoom: 18,
-        maxBounds: ISRAEL_BOUNDS,
+        maxBounds: defaultBounds,
         maxBoundsViscosity: 1.0,
         zoomControl: false,
       });
@@ -108,24 +132,29 @@ const HomePage = () => {
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors',
       }).addTo(leafletMap.current);
+
+      setTimeout(() => {
+        leafletMap.current?.invalidateSize();
+      }, 100);
+    } else {
+      leafletMap.current.setMaxBounds(defaultBounds);
+      leafletMap.current.setMinZoom(defaultMinZoom);
+      leafletMap.current.setView(defaultCenter, leafletMap.current.getZoom(), { animate: false });
     }
 
     const map = leafletMap.current;
 
-    // Clean up previous marker cluster group if exists
     if (markerClusterGroupRef.current) {
       map.removeLayer(markerClusterGroupRef.current);
       markerClusterGroupRef.current = null;
     }
 
-    // Clean up any stray markers
     map.eachLayer((layer) => {
       if (layer instanceof L.Marker || layer instanceof L.CircleMarker) {
         map.removeLayer(layer);
       }
     });
 
-    // Create custom marker cluster group
     const clusterGroup = (L as any).markerClusterGroup({
       showCoverageOnHover: false,
       zoomToBoundsOnClick: true,
@@ -176,10 +205,15 @@ const HomePage = () => {
           fillOpacity: 0.9,
           weight: 2,
         }).addTo(map);
-        map.setView(pos, 15, { animate: true });
+
+        if (L.latLngBounds(defaultBounds).contains(pos)) {
+          map.setView(pos, 15, { animate: true });
+        } else {
+          map.setView(defaultCenter, defaultMinZoom + 1, { animate: true });
+        }
       });
     }
-  }, [view, reports, userPosition]);
+  }, [view, reports, userPosition, currentUser, cityBounds, isCityBoundsLoading]);
 
   const handleSupport = async () => {
     if (!selectedReport || isSupporting) return;
@@ -192,7 +226,6 @@ const HomePage = () => {
       const res = await supportReport(selectedReport.reportId);
       toast.success(res.message);
       refetch();
-      // Update local state for immediate feedback
       setSelectedReport({
         ...selectedReport,
         supportCount: res.supportCount,
@@ -235,7 +268,7 @@ const HomePage = () => {
         </Box>
       </Box>
 
-      <Box className="map-container-v2" sx={{ display: view === 'map' ? 'block' : 'none' }}>
+      <Box className="map-container-v2" style={{ display: view === 'map' ? 'block' : 'none' }}>
         <div ref={mapRef} className="home-page__map" />
 
         {selectedReport && (
@@ -286,7 +319,7 @@ const HomePage = () => {
         )}
       </Box>
 
-      <Box className="list-container-v2" sx={{ display: view === 'list' ? 'flex' : 'none' }}>
+      <Box className="list-container-v2" style={{ display: view === 'list' ? 'flex' : 'none' }}>
         {isLoading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
             <CircularProgress />
