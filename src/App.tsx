@@ -11,6 +11,7 @@ import ManagerDashboardPage from './features/manager/pages/ManagerDashboardPage/
 import ManagerStaffManagementPage from './features/manager/pages/ManagerStaffManagementPage';
 import OfficialStaffManagement from './features/official/pages/OfficialStaffManagementPage';
 import OfficialDashboard from './features/official/pages/OfficialDashboard';
+import HRStaffManagementPage from './features/hr/pages/HRStaffManagementPage';
 import { PagesEnum } from './enums/PagesEnum';
 
 const App = () => {
@@ -54,8 +55,13 @@ const App = () => {
             <Route path={`/${PagesEnum.OFFICIAL_STAFF}`} element={<OfficialStaffManagement />} />
           </Route>
 
-          {/* Shared Map Route (Manager & Official) */}
-          <Route element={<ProtectedRoute allowedRoles={['Manager', 'Official']} />}>
+          {/* HR Routes */}
+          <Route element={<ProtectedRoute allowedRoles={['HR']} />}>
+            <Route path={`/${PagesEnum.HR_STAFF}`} element={<HRStaffManagementPage />} />
+          </Route>
+
+          {/* Shared Map Route (Manager, Official & HR) */}
+          <Route element={<ProtectedRoute allowedRoles={['Manager', 'Official', 'HR']} />}>
             <Route path={`/${PagesEnum.MAP}`} element={<HomePage />} />
           </Route>
 

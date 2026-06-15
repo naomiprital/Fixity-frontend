@@ -18,7 +18,10 @@ export const PageHeader = ({ title, backTo }: PageHeaderProps) => {
                 height: '4rem',
                 display: 'flex',
                 alignItems: 'center',
-                paddingLeft: backTo ? "0" : "1rem"
+                paddingLeft: backTo ? "0" : "1rem",
+                position: 'sticky',
+                top: 0,
+                zIndex: 100
             }}
         >
             {backTo && <IconButton

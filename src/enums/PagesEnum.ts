@@ -12,4 +12,5 @@ export enum PagesEnum {
   OFFICIAL_DASHBOARD = 'official/dashboard',
   OFFICIAL_STAFF = 'official/staff',
   MAP = 'map',
+  HR_STAFF = 'hr/staff',
 }
