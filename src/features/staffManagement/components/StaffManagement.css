@@ -4,7 +4,6 @@
   margin: 0 auto;
   padding: 16px;
   background-color: #f8fafc;
-  min-height: calc(100vh - 4rem);
   display: flex;
   flex-direction: column;
 }
@@ -83,5 +82,15 @@
 .staff-divider {
   height: 1px;
   background-color: #e2e8f0;
-  margin: 24px 0;
+  margin: 24px 0 0 0;
+}
+
+.staff-sticky-header {
+  position: sticky;
+  top: 4rem;
+  z-index: 90;
+  background-color: #f8fafc;
+  padding-top: 16px;
+  padding-bottom: 0px;
+  margin-top: -16px;
 }

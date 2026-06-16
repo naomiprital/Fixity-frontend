@@ -4,31 +4,35 @@ import type { CreateStaffPayload } from '../api/staffApi';
 import './CreateStaffForm.css';
 
 interface CreateStaffFormProps {
-  creatorRole: 'Official' | 'Manager';
+  allowedRoles: ('Manager' | 'Worker' | 'Official' | 'HR')[];
   onSubmit: (payload: CreateStaffPayload) => void;
   isLoading: boolean;
   error?: string | null;
 }
 
 export const CreateStaffForm: React.FC<CreateStaffFormProps> = ({
-  creatorRole,
+  allowedRoles,
   onSubmit,
   isLoading,
 }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
-  const [role, setRole] = useState<'Manager' | 'Worker' | ''>(creatorRole === 'Official' ? '' : 'Worker');
+
+  // If there's only one role, default to it, otherwise empty
+  const [role, setRole] = useState<'Manager' | 'Worker' | 'Official' | 'HR' | ''>(
+    allowedRoles.length === 1 ? allowedRoles[0] : ''
+  );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!firstName.trim() || !lastName.trim() || !email.trim()) return;
+    if (!firstName.trim() || !lastName.trim() || !email.trim() || !role) return;
 
     onSubmit({
       firstName: firstName.trim(),
       lastName: lastName.trim(),
       email: email.trim(),
-      role: role as 'Manager' | 'Worker',
+      role,
     });
   };
 
@@ -74,11 +78,11 @@ export const CreateStaffForm: React.FC<CreateStaffFormProps> = ({
           />
         </div>
 
-        {creatorRole === 'Official' && (
+        {allowedRoles.length > 1 && (
           <div className="form-group">
             <Select
               value={role}
-              onChange={(e) => setRole(e.target.value as 'Manager' | 'Worker')}
+              onChange={(e) => setRole(e.target.value as any)}
               disabled={isLoading}
               displayEmpty
               className="form-input form-select"
@@ -92,8 +96,11 @@ export const CreateStaffForm: React.FC<CreateStaffFormProps> = ({
               }}
             >
               <MenuItem value="" disabled>Select Role</MenuItem>
-              <MenuItem value="Manager">Manager</MenuItem>
-              <MenuItem value="Worker">Worker</MenuItem>
+              {allowedRoles.map((r) => (
+                <MenuItem key={r} value={r}>
+                  {r}
+                </MenuItem>
+              ))}
             </Select>
           </div>
         )}

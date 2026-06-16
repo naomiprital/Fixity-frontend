@@ -6,7 +6,7 @@ export interface StaffUser {
   firstName: string;
   lastName: string;
   email: string;
-  role: 'Manager' | 'Worker' | 'Citizen' | 'Official';
+  role: 'Manager' | 'Worker' | 'Citizen' | 'Official' | 'HR';
   profilePictureUrl: string | null;
   createdAt: string;
 }
@@ -18,7 +18,7 @@ export interface CreateStaffPayload {
   role: string;
 }
 
-export async function fetchStaff(role: 'Manager' | 'Worker'): Promise<StaffUser[]> {
+export async function fetchStaff(role: 'Manager' | 'Worker' | 'Official' | 'HR'): Promise<StaffUser[]> {
   const { data } = await authApi.get<StaffUser[]>(`${Paths.STAFF}?role=${role}`);
   return data;
 }
@@ -28,7 +28,7 @@ export async function createStaff(payload: CreateStaffPayload): Promise<StaffUse
   return data.user;
 }
 
-export const useStaffList = (role: 'Manager' | 'Worker') => {
+export const useStaffList = (role: 'Manager' | 'Worker' | 'Official' | 'HR') => {
   return useQuery<StaffUser[]>({
     queryKey: ['staff-list', role],
     queryFn: () => fetchStaff(role),

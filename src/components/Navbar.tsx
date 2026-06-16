@@ -83,6 +83,11 @@ const Navbar = () => {
       { page: PagesEnum.CITIZEN_REPORTS, filledIcon: Assignment, outlinedIcon: AssignmentOutlined, label: 'Reports' },
       { page: PagesEnum.PROFILE, filledIcon: Person, outlinedIcon: PersonOutlined, label: 'Profile' },
     ],
+    HR: [
+      { page: PagesEnum.MAP, filledIcon: Map, outlinedIcon: MapOutlined, label: 'Map' },
+      { page: PagesEnum.HR_STAFF, filledIcon: Groups, outlinedIcon: GroupsOutlined, label: 'Staff' },
+      { page: PagesEnum.PROFILE, filledIcon: Person, outlinedIcon: PersonOutlined, label: 'Profile' },
+    ],
   };
 
   const currentRole = capitalizeFirstLetter(userRole) || 'Citizen';

@@ -14,6 +14,8 @@ export const getDefaultPathForRole = (role?: string): string => {
       return `/${PagesEnum.WORKER_POOL}`;
     case 'Manager':
       return `/${PagesEnum.MANAGER_DASHBOARD}`;
+    case 'HR':
+      return `/${PagesEnum.HR_STAFF}`;
     case 'Citizen':
     default:
       return `/${PagesEnum.CITIZEN_HOME}`;
