@@ -272,6 +272,13 @@
   letter-spacing: 0.05rem;
 }
 
+.pulse-right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
 /* Desktop grid reflow for Public Pulse view */
 @media (min-width: 48rem) {
   .public-pulse {
@@ -287,16 +294,12 @@
   .happiness-card {
     grid-column: 1;
     height: 100%;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
   }
 
-  .trending-topics {
+  .pulse-right-col {
     grid-column: 2;
-  }
-
-  .ai-pulse-card {
-    grid-column: 2;
-    margin-top: -3.5rem;
-    /* pull up under trending topics on desktop */
   }
 }

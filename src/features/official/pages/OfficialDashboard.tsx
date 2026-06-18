@@ -23,7 +23,7 @@ const OfficialDashboard = () => {
   const { data: stats, isLoading: isLoadingStats } = useMayorStats();
   const { data: aiInsight, isLoading: isLoadingInsight } = useMayorAiInsights();
   const { data: alerts, isLoading: isLoadingAlerts } = useMayorCriticalAlerts();
-  
+
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = (searchParams.get('tab') || 'home') as 'home' | 'map' | 'kpis' | 'pulse';
 

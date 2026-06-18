@@ -1,5 +1,4 @@
-import { Box, Typography, IconButton, CircularProgress, Chip } from '@mui/material';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import { Box, Typography, CircularProgress, Chip } from '@mui/material';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
@@ -8,10 +7,6 @@ import './PublicPulse.css';
 
 export const PublicPulse = () => {
   const { data: pulseData, isLoading } = useMayorPulse();
-
-  const handleFavoriteClick = () => {
-    alert('Public Pulse added to favorites!');
-  };
 
   if (isLoading || !pulseData) {
     return (
@@ -40,11 +35,17 @@ export const PublicPulse = () => {
 
   const isIncrease = happinessDelta.toLowerCase().includes('increase') || happinessDelta.startsWith('+');
 
-  // Math for circular progress SVG
-  const strokeWidth = 10;
-  const radius = 60;
+  // Math for circular progress SVG - increased thickness for a premium SaaS look
+  const strokeWidth = 12;
+  const radius = 54;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (happinessScore / 100) * circumference;
+
+  const getCircleColor = (score: number) => {
+    if (score >= 75) return '#10b981';
+    if (score >= 50) return '#f97316';
+    return '#ef4444';
+  };
 
   return (
     <Box className="public-pulse">
@@ -58,9 +59,6 @@ export const PublicPulse = () => {
             CITIZEN SENTIMENT
           </Typography>
         </Box>
-        <IconButton className="pulse-fav-btn" onClick={handleFavoriteClick}>
-          <FavoriteIcon />
-        </IconButton>
       </Box>
 
       {/* Happiness Score Circular Card */}
@@ -79,20 +77,20 @@ export const PublicPulse = () => {
               r={radius}
               strokeWidth={strokeWidth}
             />
-            {/* Active filled ring with linear gradient */}
+            {/* Active filled ring with dynamic color */}
             <circle
               className="circle-fg"
               cx="70"
               cy="70"
               r={radius}
               strokeWidth={strokeWidth}
+              stroke={getCircleColor(happinessScore)}
               strokeDasharray={circumference}
               strokeDashoffset={strokeDashoffset}
               transform="rotate(-90 70 70)"
             />
           </svg>
 
-          {/* //TODO: change the css of the numbers to fit to the graph  */}
           {/* Centered Numbers */}
           <Box className="progress-center-text">
             <Typography variant="h3" className="score-value">
@@ -115,53 +113,56 @@ export const PublicPulse = () => {
         </Box>
       </Box>
 
-      {/* Trending Topics Tags Row */}
-      <Box className="trending-topics">
-        <Typography variant="caption" className="trending-title">
-          TRENDING TOPICS
-        </Typography>
-        <Box className="topics-chips-list">
-          {trendingTopics.map((topic) => {
-            let colorClass = 'chip--neutral';
-            if (topic.color === 'green') colorClass = 'chip--positive';
-            if (topic.color === 'red') colorClass = 'chip--negative';
-            if (topic.color === 'blue') colorClass = 'chip--info';
+      {/* Right Column Stack */}
+      <Box className="pulse-right-col">
+        {/* Trending Topics Tags Row */}
+        <Box className="trending-topics">
+          <Typography variant="caption" className="trending-title">
+            TRENDING TOPICS
+          </Typography>
+          <Box className="topics-chips-list">
+            {trendingTopics.map((topic) => {
+              let colorClass = 'chip--neutral';
+              if (topic.color === 'green') colorClass = 'chip--positive';
+              if (topic.color === 'red') colorClass = 'chip--negative';
+              if (topic.color === 'blue') colorClass = 'chip--info';
 
-            return (
-              <Chip
-                key={topic.tag}
-                label={topic.tag}
-                className={`topic-chip ${colorClass}`}
-              />
-            );
-          })}
-        </Box>
-      </Box>
-
-      {/* AI Pulse Summary Card */}
-      <Box className="ai-pulse-card">
-        <Box className="ai-pulse-header">
-          <SmartToyIcon sx={{ fontSize: '1.25rem' }} />
-          <span>AI Pulse Summary</span>
-        </Box>
-
-        <Typography className="ai-pulse-text">
-          "{summary}"
-        </Typography>
-
-        {/* Sentiment Statistics Counters */}
-        <Box className="sentiment-counters-row">
-          <Box className="counter-item">
-            <Typography className="counter-val counter-val--positive">
-              {formatNumber(positiveCount)}
-            </Typography>
-            <Typography className="counter-lbl">POSITIVE</Typography>
+              return (
+                <Chip
+                  key={topic.tag}
+                  label={topic.tag}
+                  className={`topic-chip ${colorClass}`}
+                />
+              );
+            })}
           </Box>
-          <Box className="counter-item">
-            <Typography className="counter-val counter-val--negative">
-              {formatNumber(negativeCount)}
-            </Typography>
-            <Typography className="counter-lbl">NEGATIVE</Typography>
+        </Box>
+
+        {/* AI Pulse Summary Card */}
+        <Box className="ai-pulse-card">
+          <Box className="ai-pulse-header">
+            <SmartToyIcon sx={{ fontSize: '1.25rem' }} />
+            <span>AI Pulse Summary</span>
+          </Box>
+
+          <Typography className="ai-pulse-text">
+            "{summary}"
+          </Typography>
+
+          {/* Sentiment Statistics Counters */}
+          <Box className="sentiment-counters-row">
+            <Box className="counter-item">
+              <Typography className="counter-val counter-val--positive">
+                {formatNumber(positiveCount)}
+              </Typography>
+              <Typography className="counter-lbl">POSITIVE</Typography>
+            </Box>
+            <Box className="counter-item">
+              <Typography className="counter-val counter-val--negative">
+                {formatNumber(negativeCount)}
+              </Typography>
+              <Typography className="counter-lbl">NEGATIVE</Typography>
+            </Box>
           </Box>
         </Box>
       </Box>
