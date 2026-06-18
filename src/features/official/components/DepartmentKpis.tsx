@@ -16,7 +16,6 @@ export const DepartmentKpis = () => {
 
   const { slaData, chartData } = deptData;
 
-  // Function to get the progress bar color and indicator styles
   const getSlaStyles = (val: number) => {
     if (val >= 85) return { color: '#10b981', bg: '#d1fae5', text: 'on-track' };
     if (val >= 70) return { color: '#f59e0b', bg: '#fef3c7', text: 'warning' };
@@ -25,7 +24,6 @@ export const DepartmentKpis = () => {
 
   return (
     <Box className="department-kpis">
-      {/* SLA Tracking Section Header */}
       <Box className="dept-header">
         <Box className="dept-header__info">
           <Typography variant="h5" className="dept-title">
@@ -37,7 +35,6 @@ export const DepartmentKpis = () => {
         </Box>
       </Box>
 
-      {/* SLA Progress Cards List */}
       <Box className="sla-cards-list">
         {slaData.map((item) => {
           const styles = getSlaStyles(item.sla);
@@ -52,7 +49,6 @@ export const DepartmentKpis = () => {
                 </Typography>
               </Box>
 
-              {/* Styled Progress Bar */}
               <Box className="sla-card__progress-container">
                 <Box
                   className="sla-card__progress-bar"
@@ -63,7 +59,6 @@ export const DepartmentKpis = () => {
                 />
               </Box>
 
-              {/* Card Footer */}
               <Box className="sla-card__row sla-card__footer">
                 <Typography className="sla-card__resolved">
                   {item.resolved} RESOLVED
@@ -85,7 +80,6 @@ export const DepartmentKpis = () => {
         })}
       </Box>
 
-      {/* Response Efficiency vs Budget Chart Container */}
       <Box className="budget-chart-container">
         <Typography variant="caption" className="budget-chart-title">
           RESPONSE EFFICIENCY VS BUDGET
@@ -93,14 +87,12 @@ export const DepartmentKpis = () => {
 
         <Box className="bar-chart-canvas">
           {chartData.map((data) => {
-            // Find corresponding SLA percentage for color code
             const relatedSla = slaData.find((s) => s.department === data.department)?.sla || data.efficiency;
             const slaStyles = getSlaStyles(relatedSla);
 
             return (
               <Box key={data.department} className="bar-group-item">
                 <Box className="bars-container">
-                  {/* Efficiency Bar (Teal / SLA color coded) */}
                   <Tooltip title={`Efficiency: ${data.efficiency}%`} arrow>
                     <Box
                       className="bar bar--efficiency"
@@ -114,7 +106,6 @@ export const DepartmentKpis = () => {
                     </Box>
                   </Tooltip>
 
-                  {/* Budget Bar (Semi-transparent background/border) */}
                   <Tooltip title={`Budget Utilization: ${data.budget}%`} arrow>
                     <Box
                       className="bar bar--budget"
@@ -127,14 +118,13 @@ export const DepartmentKpis = () => {
                   </Tooltip>
                 </Box>
                 <Typography className="bar-group-label">
-                  {data.department.split(' ')[0]} {/* Abbreviate (e.g. Water, Sanit.) */}
+                  {data.department.split(' ')[0]}
                 </Typography>
               </Box>
             );
           })}
         </Box>
 
-        {/* Chart Legend */}
         <Box className="chart-legend-row">
           <Box className="chart-legend-indicator">
             <Box className="legend-indicator-box legend-indicator-box--efficiency" />

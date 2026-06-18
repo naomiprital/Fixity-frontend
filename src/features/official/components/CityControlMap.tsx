@@ -49,7 +49,6 @@ export const CityControlMap = () => {
   useEffect(() => {
     if (!mapContainerRef.current) return;
 
-    // Initialize map if it doesn't exist
     if (!mapInstance.current) {
       mapInstance.current = L.map(mapContainerRef.current, {
         center: mapCenter,
@@ -85,7 +84,6 @@ export const CityControlMap = () => {
           const userPos: L.LatLngTuple = [coords.latitude, coords.longitude];
           mapInstance.current?.setView(userPos, 14, { animate: true });
 
-          // Add a circle marker to show "You are here"
           if (layersGroupRef.current) {
             L.circleMarker(userPos, {
               radius: 8,
@@ -108,7 +106,6 @@ export const CityControlMap = () => {
     }
   }, [user, mapCenter]);
 
-  // Sync size when visible
   useEffect(() => {
     if (mapInstance.current) {
       setTimeout(() => {
@@ -121,10 +118,7 @@ export const CityControlMap = () => {
   useEffect(() => {
     if (!mapInstance.current || !layersGroupRef.current || !densityData) return;
 
-    // Clear previous layers
     layersGroupRef.current.clearLayers();
-
-    // Map bounds to auto-fit markers
     const bounds: L.LatLngExpression[] = [];
 
     densityData.forEach((item) => {
@@ -133,16 +127,14 @@ export const CityControlMap = () => {
       const fillColor = isCritical ? '#fee2e2' : '#ffedd5';
       const label = selectedCategory === 'Potholes' ? 'POTHOLES' : selectedCategory === 'Water' ? 'WATER' : 'REPORTS';
 
-      // Circle representing density
       const circle = L.circle([item.lat, item.lng], {
         color,
         fillColor,
         fillOpacity: 0.75,
         weight: 2,
-        radius: 150 + item.density * 30, // radius in meters
+        radius: 150 + item.density * 30,
       }).addTo(layersGroupRef.current!);
 
-      // Popup content on hover/click
       circle.bindPopup(`
         <div style="font-family: 'Inter', sans-serif; padding: 0.25rem;">
           <strong style="color: ${color};">${item.severity.toUpperCase()} CLUSTER</strong><br/>
@@ -150,7 +142,6 @@ export const CityControlMap = () => {
         </div>
       `);
 
-      // Permanent tooltip bubble pointing to the center for example: "42 REPORTS"
       circle.bindTooltip(`${item.density} ${label}`, {
         permanent: true,
         direction: 'center',
@@ -160,7 +151,6 @@ export const CityControlMap = () => {
       bounds.push([item.lat, item.lng]);
     });
 
-    // Fit map bounds if clusters exist
     if (bounds.length > 0 && mapInstance.current) {
       mapInstance.current.fitBounds(L.latLngBounds(bounds), { padding: [50, 50] });
     } else {
@@ -170,7 +160,6 @@ export const CityControlMap = () => {
 
   return (
     <Box className="city-control-map">
-      {/* City Control Sub-Header */}
       <Box className="city-control-header">
         <Box className="city-control-header__info">
           <Typography variant="h5" className="city-control-title">
@@ -182,7 +171,6 @@ export const CityControlMap = () => {
         </Box>
       </Box>
 
-      {/* Categories Filter Chips Row */}
       <Box className="map-filters-row">
         {categories.map((cat) => (
           <Chip
@@ -194,7 +182,6 @@ export const CityControlMap = () => {
         ))}
       </Box>
 
-      {/* Map Area */}
       <Box className="map-canvas-container">
         {isLoading && (
           <Box className="map-loading-overlay">
@@ -203,7 +190,6 @@ export const CityControlMap = () => {
         )}
         <div ref={mapContainerRef} className="map-canvas" />
 
-        {/* Legend Box Over Map */}
         <Box className="map-legend">
           <Typography variant="caption" className="map-legend-title">
             FAULT DENSITY

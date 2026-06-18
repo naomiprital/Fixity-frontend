@@ -25,7 +25,6 @@ export const PublicPulse = () => {
     summary,
   } = pulseData;
 
-  // Format numbers to short k notation (e.g. 1200 -> 1.2k)
   const formatNumber = (num: number) => {
     if (num >= 1000) {
       return (num / 1000).toFixed(1) + 'k';
@@ -35,7 +34,6 @@ export const PublicPulse = () => {
 
   const isIncrease = happinessDelta.toLowerCase().includes('increase') || happinessDelta.startsWith('+');
 
-  // Math for circular progress SVG - increased thickness for a premium SaaS look
   const strokeWidth = 12;
   const radius = 54;
   const circumference = 2 * Math.PI * radius;
@@ -49,7 +47,6 @@ export const PublicPulse = () => {
 
   return (
     <Box className="public-pulse">
-      {/* Header Row */}
       <Box className="pulse-header">
         <Box className="pulse-header__info">
           <Typography variant="h5" className="pulse-title">
@@ -61,7 +58,6 @@ export const PublicPulse = () => {
         </Box>
       </Box>
 
-      {/* Happiness Score Circular Card */}
       <Box className="happiness-card">
         <Typography variant="caption" className="happiness-card-title">
           HAPPINESS SCORE
@@ -69,7 +65,6 @@ export const PublicPulse = () => {
 
         <Box className="circular-progress-wrapper">
           <svg className="circular-progress-svg" width="140" height="140">
-            {/* Background track ring */}
             <circle
               className="circle-bg"
               cx="70"
@@ -77,7 +72,6 @@ export const PublicPulse = () => {
               r={radius}
               strokeWidth={strokeWidth}
             />
-            {/* Active filled ring with dynamic color */}
             <circle
               className="circle-fg"
               cx="70"
@@ -91,7 +85,6 @@ export const PublicPulse = () => {
             />
           </svg>
 
-          {/* Centered Numbers */}
           <Box className="progress-center-text">
             <Typography variant="h3" className="score-value">
               {happinessScore}
@@ -102,7 +95,6 @@ export const PublicPulse = () => {
           </Box>
         </Box>
 
-        {/* Happiness Trend Indicator */}
         <Box className={`happiness-trend ${isIncrease ? 'trend--up' : 'trend--down'}`}>
           {isIncrease ? (
             <ArrowUpwardIcon sx={{ fontSize: '0.9375rem' }} />
@@ -113,9 +105,7 @@ export const PublicPulse = () => {
         </Box>
       </Box>
 
-      {/* Right Column Stack */}
       <Box className="pulse-right-col">
-        {/* Trending Topics Tags Row */}
         <Box className="trending-topics">
           <Typography variant="caption" className="trending-title">
             TRENDING TOPICS
@@ -138,7 +128,6 @@ export const PublicPulse = () => {
           </Box>
         </Box>
 
-        {/* AI Pulse Summary Card */}
         <Box className="ai-pulse-card">
           <Box className="ai-pulse-header">
             <SmartToyIcon sx={{ fontSize: '1.25rem' }} />
@@ -149,7 +138,6 @@ export const PublicPulse = () => {
             "{summary}"
           </Typography>
 
-          {/* Sentiment Statistics Counters */}
           <Box className="sentiment-counters-row">
             <Box className="counter-item">
               <Typography className="counter-val counter-val--positive">
