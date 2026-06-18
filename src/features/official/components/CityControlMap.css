@@ -83,7 +83,6 @@
 .map-filter-chip--active {
   background-color: #156c74 !important;
   color: #ffffff !important;
-  box-shadow: 0 0.25rem 0.75rem rgba(21, 108, 116, 0.2) !important;
 }
 
 /* Map Canvas Container */
@@ -132,7 +131,8 @@
 }
 
 .custom-map-tooltip::before {
-  display: none !important; /* Hide default leaflet tooltip arrow */
+  display: none !important;
+  /* Hide default leaflet tooltip arrow */
 }
 
 .tooltip-critical {
@@ -199,6 +199,7 @@
   .city-control-map {
     padding: 2rem;
   }
+
   .map-canvas-container {
     height: 30rem;
   }
