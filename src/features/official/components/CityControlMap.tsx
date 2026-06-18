@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Box, Typography, Chip, CircularProgress, IconButton } from '@mui/material';
-import FilterListIcon from '@mui/icons-material/FilterList';
+import { Box, Typography, Chip, CircularProgress } from '@mui/material';
 import { useAuthUser } from '@/features/auth/hooks/useAuth';
 import { useMayorMapDensity } from '../api/mayorApi';
 import './CityControlMap.css';
@@ -151,8 +150,8 @@ export const CityControlMap = () => {
         </div>
       `);
 
-      // Permanent tooltip bubble pointing to the center, matching Figma "DOWNTOWN: 42 REPORTS"
-      circle.bindTooltip(`DOWNTOWN: ${item.density} ${label}`, {
+      // Permanent tooltip bubble pointing to the center for example: "42 REPORTS"
+      circle.bindTooltip(`${item.density} ${label}`, {
         permanent: true,
         direction: 'center',
         className: `custom-map-tooltip ${isCritical ? 'tooltip-critical' : 'tooltip-moderate'}`,
@@ -181,9 +180,6 @@ export const CityControlMap = () => {
             LIVE DENSITY MAP
           </Typography>
         </Box>
-        <IconButton className="map-filter-btn">
-          <FilterListIcon />
-        </IconButton>
       </Box>
 
       {/* Categories Filter Chips Row */}

@@ -1,5 +1,4 @@
-import { Box, Typography, Button, IconButton, CircularProgress } from '@mui/material';
-import NotificationsIcon from '@mui/icons-material/Notifications';
+import { Box, Typography, Button, CircularProgress } from '@mui/material';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
@@ -71,10 +70,6 @@ const OfficialDashboard = () => {
                   {mayorCityName.toUpperCase()}
                 </Typography>
               </Box>
-              <IconButton className="notification-bell-btn">
-                <NotificationsIcon />
-                <Box className="notification-dot" />
-              </IconButton>
             </Box>
 
             {/* Home Content Layout */}
