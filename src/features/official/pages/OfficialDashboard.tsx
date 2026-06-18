@@ -5,6 +5,7 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import { useSearchParams } from 'react-router-dom';
 import { useAuthUser } from '@/features/auth/hooks/useAuth';
+import { OfficialDashboardTabsEnum } from '@/enums/OfficialDashboardTabsEnum';
 import { StatCard } from '../components/StatCard';
 import {
   useMayorStats,
@@ -24,7 +25,7 @@ const OfficialDashboard = () => {
   const { data: alerts, isLoading: isLoadingAlerts } = useMayorCriticalAlerts();
 
   const [searchParams, setSearchParams] = useSearchParams();
-  const activeTab = (searchParams.get('tab') || 'home') as 'home' | 'map' | 'kpis' | 'pulse';
+  const activeTab = (searchParams.get('tab') || OfficialDashboardTabsEnum.HOME) as OfficialDashboardTabsEnum;
 
   const mayorCityName = user?.cityName || "Mayor's Office";
 
@@ -37,7 +38,7 @@ const OfficialDashboard = () => {
     alert(`Triggered system action: ${action.replace('_', ' ')}!`);
   };
 
-  const handleTabChange = (tab: 'home' | 'map' | 'kpis' | 'pulse') => {
+  const handleTabChange = (tab: OfficialDashboardTabsEnum) => {
     setSearchParams({ tab });
   };
 
@@ -45,7 +46,7 @@ const OfficialDashboard = () => {
     <Box className="official-dashboard">
       {/* 1. Header Tab Bar (Sub-navigation for Mayor's views) */}
       <Box className="dashboard-tabs-bar">
-        {(['home', 'map', 'kpis', 'pulse'] as const).map((tab) => (
+        {Object.values(OfficialDashboardTabsEnum).map((tab) => (
           <Button
             key={tab}
             className={`tab-pill-btn ${activeTab === tab ? 'tab-pill-btn--active' : ''}`}
@@ -58,7 +59,7 @@ const OfficialDashboard = () => {
 
       {/* Main View Content Switcher */}
       <Box className="official-dashboard__content">
-        {activeTab === 'home' && (
+        {activeTab === OfficialDashboardTabsEnum.HOME && (
           <Box className="home-view-container">
             {/* Executive Header */}
             <Box className="executive-header">
@@ -189,9 +190,9 @@ const OfficialDashboard = () => {
           </Box>
         )}
 
-        {activeTab === 'map' && <CityControlMap />}
-        {activeTab === 'kpis' && <DepartmentKpis />}
-        {activeTab === 'pulse' && <PublicPulse />}
+        {activeTab === OfficialDashboardTabsEnum.MAP && <CityControlMap />}
+        {activeTab === OfficialDashboardTabsEnum.KPIS && <DepartmentKpis />}
+        {activeTab === OfficialDashboardTabsEnum.PULSE && <PublicPulse />}
       </Box>
     </Box>
   );
