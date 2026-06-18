@@ -1,5 +1,6 @@
 import { Box, Typography, CircularProgress, Tooltip } from '@mui/material';
 import WarningIcon from '@mui/icons-material/Warning';
+import { STATUS_COLORS } from '@/constants/colors';
 import { useMayorDepartments } from '../api/mayorApi';
 import './DepartmentKpis.css';
 
@@ -17,9 +18,9 @@ export const DepartmentKpis = () => {
   const { slaData, chartData } = deptData;
 
   const getSlaStyles = (val: number) => {
-    if (val >= 85) return { color: '#10b981', bg: '#d1fae5', text: 'on-track' };
-    if (val >= 70) return { color: '#f59e0b', bg: '#fef3c7', text: 'warning' };
-    return { color: '#ef4444', bg: '#fee2e2', text: 'critical' };
+    if (val >= 85) return { color: STATUS_COLORS.SUCCESS, bg: STATUS_COLORS.SUCCESS_BG, text: 'on-track' };
+    if (val >= 70) return { color: STATUS_COLORS.WARNING_AMBER, bg: STATUS_COLORS.WARNING_AMBER_BG, text: 'warning' };
+    return { color: STATUS_COLORS.CRITICAL, bg: STATUS_COLORS.CRITICAL_BG, text: 'critical' };
   };
 
   return (
@@ -66,8 +67,8 @@ export const DepartmentKpis = () => {
 
                 {isLowSla ? (
                   <Box className="sla-card__bottleneck-btn">
-                    <WarningIcon sx={{ fontSize: '0.875rem', mr: '0.25rem', color: '#ef4444' }} />
-                    <span style={{ color: '#ef4444', fontWeight: 800 }}>OVERLOADED</span>
+                    <WarningIcon sx={{ fontSize: '0.875rem', mr: '0.25rem', color: STATUS_COLORS.CRITICAL }} />
+                    <span style={{ color: STATUS_COLORS.CRITICAL, fontWeight: 800 }}>OVERLOADED</span>
                   </Box>
                 ) : (
                   <Typography className="sla-card__pending">

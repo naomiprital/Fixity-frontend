@@ -2,6 +2,7 @@ import { Box, Typography, CircularProgress, Chip } from '@mui/material';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import { STATUS_COLORS } from '@/constants/colors';
 import { useMayorPulse } from '../api/mayorApi';
 import './PublicPulse.css';
 
@@ -40,9 +41,9 @@ export const PublicPulse = () => {
   const strokeDashoffset = circumference - (happinessScore / 100) * circumference;
 
   const getCircleColor = (score: number) => {
-    if (score >= 75) return '#10b981';
-    if (score >= 50) return '#f97316';
-    return '#ef4444';
+    if (score >= 75) return STATUS_COLORS.SUCCESS;
+    if (score >= 50) return STATUS_COLORS.WARNING_ORANGE;
+    return STATUS_COLORS.CRITICAL;
   };
 
   return (

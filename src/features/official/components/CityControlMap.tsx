@@ -3,6 +3,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Box, Typography, Chip, CircularProgress } from '@mui/material';
 import { useAuthUser } from '@/features/auth/hooks/useAuth';
+import { STATUS_COLORS } from '@/constants/colors';
 import { useMayorMapDensity } from '../api/mayorApi';
 import './CityControlMap.css';
 
@@ -123,8 +124,8 @@ export const CityControlMap = () => {
 
     densityData.forEach((item) => {
       const isCritical = item.severity === 'Critical' || item.severity === 'High';
-      const color = isCritical ? '#ef4444' : '#f97316';
-      const fillColor = isCritical ? '#fee2e2' : '#ffedd5';
+      const color = isCritical ? STATUS_COLORS.CRITICAL : STATUS_COLORS.WARNING_ORANGE;
+      const fillColor = isCritical ? STATUS_COLORS.CRITICAL_BG : STATUS_COLORS.WARNING_ORANGE_BG;
       const label = selectedCategory === 'Potholes' ? 'POTHOLES' : selectedCategory === 'Water' ? 'WATER' : 'REPORTS';
 
       const circle = L.circle([item.lat, item.lng], {
