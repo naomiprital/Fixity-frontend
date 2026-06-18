@@ -7,68 +7,47 @@
   box-sizing: border-box;
 }
 
-/* Premium Floating Header Card on Desktop, Edge-to-Edge on Mobile */
+/* Executive Header (Light style, matching other tabs) */
 .executive-header {
-  background: linear-gradient(135deg, #156c74 0%, #0f5a61 100%);
-  color: #ffffff;
-  padding: 2.5rem 1.5rem 2rem 1.5rem;
-  border-bottom-left-radius: 2rem;
-  border-bottom-right-radius: 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 0.5rem 1.5rem rgba(15, 90, 97, 0.15);
-  position: relative;
-  overflow: hidden;
-}
-
-/* Sparkle background decoration inside header */
-.executive-header::before {
-  content: '';
-  position: absolute;
-  top: -20%;
-  right: -10%;
-  width: 15rem;
-  height: 15rem;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0) 70%);
-  border-radius: 50%;
-  pointer-events: none;
+  margin-bottom: 0.5rem;
+  width: 100%;
 }
 
 .executive-header__info {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-  z-index: 2;
+  gap: 0.125rem;
 }
 
 .executive-header__title {
   font-family: 'Sora', sans-serif !important;
-  font-size: 1.75rem !important;
+  font-size: 1.5rem !important;
   font-weight: 700 !important;
-  letter-spacing: -0.03rem;
+  color: #18454f !important;
   margin: 0 !important;
 }
 
 .executive-header__subtitle {
   font-size: 0.75rem !important;
   font-weight: 800 !important;
-  letter-spacing: 0.1rem;
+  letter-spacing: 0.08rem;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.7);
+  color: #697286 !important;
   margin: 0 !important;
 }
 
-/* Bell Notification Button */
+/* Bell Notification Button (Light style, matching other header buttons) */
 .notification-bell-btn {
   background-color: #ffffff !important;
   color: #156c74 !important;
-  width: 3rem !important;
-  height: 3rem !important;
+  width: 2.75rem !important;
+  height: 2.75rem !important;
   border-radius: 50% !important;
-  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.06) !important;
   transition: transform 0.2s ease, background-color 0.2s ease !important;
-  z-index: 2;
 }
 
 .notification-bell-btn:hover {
@@ -83,8 +62,8 @@
 /* Notification dot decoration */
 .notification-dot {
   position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
+  top: 0.625rem;
+  right: 0.625rem;
   width: 0.5rem;
   height: 0.5rem;
   background-color: #ef5350;
@@ -350,12 +329,8 @@
     font-size: 0.875rem !important;
   }
 
-  /* Flush edge-to-edge header at the top, matching mobile */
   .executive-header {
-    border-radius: 0 0 2rem 2rem !important;
-    margin: 0;
-    padding: 3rem 2.5rem;
-    width: 100%;
+    margin-bottom: 0.5rem;
   }
 
   .official-dashboard__content {
