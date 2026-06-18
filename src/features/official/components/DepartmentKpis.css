@@ -133,9 +133,10 @@
   transition: background-color 0.2s ease;
 }
 
-.sla-card__bottleneck-btn:hover {
+/* highlighted until we add the implementation of this button */
+/* .sla-card__bottleneck-btn:hover {
   background-color: #fecaca;
-}
+} */
 
 /* Response Efficiency vs Budget Chart Container */
 .budget-chart-container {

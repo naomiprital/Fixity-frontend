@@ -1,15 +1,10 @@
-import { Box, Typography, IconButton, CircularProgress, Tooltip } from '@mui/material';
-import GetAppIcon from '@mui/icons-material/GetApp';
+import { Box, Typography, CircularProgress, Tooltip } from '@mui/material';
 import WarningIcon from '@mui/icons-material/Warning';
 import { useMayorDepartments } from '../api/mayorApi';
 import './DepartmentKpis.css';
 
 export const DepartmentKpis = () => {
   const { data: deptData, isLoading } = useMayorDepartments();
-
-  const handleExport = () => {
-    alert('Exporting Department KPI reports as CSV/PDF...');
-  };
 
   if (isLoading || !deptData) {
     return (
@@ -40,9 +35,6 @@ export const DepartmentKpis = () => {
             SLA TRACKING
           </Typography>
         </Box>
-        <IconButton className="dept-export-btn" onClick={handleExport}>
-          <GetAppIcon />
-        </IconButton>
       </Box>
 
       {/* SLA Progress Cards List */}
@@ -80,7 +72,7 @@ export const DepartmentKpis = () => {
                 {isLowSla ? (
                   <Box className="sla-card__bottleneck-btn">
                     <WarningIcon sx={{ fontSize: '0.875rem', mr: '0.25rem', color: '#ef4444' }} />
-                    <span style={{ color: '#ef4444', fontWeight: 800 }}>VIEW BOTTLENECKS</span>
+                    <span style={{ color: '#ef4444', fontWeight: 800 }}>OVERLOADED</span>
                   </Box>
                 ) : (
                   <Typography className="sla-card__pending">
