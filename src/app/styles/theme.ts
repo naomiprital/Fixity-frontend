@@ -5,11 +5,13 @@ declare module '@mui/material/styles' {
     magic: PaletteColor;
     surface: PaletteColor;
     reportAction: PaletteColor;
+    pin: PaletteColor;
   }
   interface PaletteOptions {
     magic?: PaletteColorOptions;
     surface?: PaletteColorOptions;
     reportAction?: PaletteColorOptions;
+    pin?: PaletteColorOptions;
   }
 }
 
@@ -57,6 +59,11 @@ export const theme = createTheme({
     },
     reportAction: {
       main: '#2c405a',
+      contrastText: '#ffffff',
+    },
+    pin: {
+      light: '#ff7e67',
+      main: '#ef5f43',
       contrastText: '#ffffff',
     },
   },

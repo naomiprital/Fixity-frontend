@@ -11,12 +11,15 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
 import { useAllReports } from '../../hooks/useReports';
 import { ReportCard } from '../../components/ReportCard';
+import { ReportDetailsModal } from '../../components/ReportDetailsModal';
 import { supportReport } from '../../api/reportApi';
 import { toast } from 'react-toastify';
 import { useAuthUser } from '@/features/auth/hooks/useAuth';
 import './HomePage.css';
 import { useNavigate } from 'react-router-dom';
 import { useCityBounds } from '../../../../hooks/useCityBounds';
+import { createPinIcon } from '@/utils/mapUtils';
+import { theme } from '@/app/styles/theme';
 
 const ISRAEL_CENTER: LatLngTuple = [31.7683, 35.2137];
 const ISRAEL_BOUNDS: LatLngBoundsLiteral = [
@@ -24,42 +27,13 @@ const ISRAEL_BOUNDS: LatLngBoundsLiteral = [
   [36.5, 38.5],
 ];
 
-const createPinIcon = (color: string) => {
-  return new L.DivIcon({
-    html: `
-      <div style="
-        background-color: ${color}; 
-        width: 30px; 
-        height: 30px; 
-        border-radius: 50% 50% 50% 0; 
-        transform: rotate(-45deg); 
-        border: 2px solid white; 
-        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      ">
-        <div style="
-          width: 10px; 
-          height: 10px; 
-          background-color: white; 
-          border-radius: 50%;
-          transform: rotate(45deg);
-        "></div>
-      </div>
-    `,
-    className: 'custom-pin-icon',
-    iconSize: [30, 30],
-    iconAnchor: [15, 30],
-  });
-};
-
 const HomePage = () => {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const leafletMap = useRef<L.Map | null>(null);
   const markerClusterGroupRef = useRef<any>(null);
   const [view, setView] = useState<'list' | 'map'>('map');
   const [selectedReport, setSelectedReport] = useState<any>(null);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [userPosition, setUserPosition] = useState<LatLngTuple | null>(null);
   const { data: reports, isLoading, refetch } = useAllReports();
   const { data: currentUser } = useAuthUser();
@@ -162,7 +136,7 @@ const HomePage = () => {
       iconCreateFunction: (cluster: any) => {
         const count = cluster.getChildCount();
         return L.divIcon({
-          html: `<div class="custom-cluster-icon">${count}</div>`,
+          html: `<div class="custom-cluster-icon" style="background: linear-gradient(135deg, ${theme.palette.pin.light} 0%, ${theme.palette.pin.main} 100%) !important; border: 2px solid ${theme.palette.pin.main};">${count}</div>`,
           className: 'custom-cluster-icon-wrapper',
           iconSize: [44, 44],
           iconAnchor: [22, 22],
@@ -172,7 +146,7 @@ const HomePage = () => {
 
     reports.forEach((report) => {
       const marker = L.marker([report.latitude, report.longitude], {
-        icon: createPinIcon('#ef5f43'),
+        icon: createPinIcon(theme.palette.pin.main),
       });
 
       marker.on('click', () => {
@@ -281,7 +255,11 @@ const HomePage = () => {
               <CloseIcon fontSize="small" />
             </IconButton>
 
-            <Box className="card-content">
+            <Box 
+              className="card-content" 
+              onClick={() => setIsDetailsModalOpen(true)}
+              sx={{ cursor: 'pointer', transition: 'opacity 0.2s', '&:hover': { opacity: 0.8 } }}
+            >
               <img
                 src={selectedReport.beforeImageUrl ? `${IMAGE_BASE}${selectedReport.beforeImageUrl}` : 'https://placehold.co/80'}
                 alt={selectedReport.description}
@@ -334,6 +312,15 @@ const HomePage = () => {
           </Typography>
         )}
       </Box>
+      
+      {selectedReport && (
+        <ReportDetailsModal
+          open={isDetailsModalOpen}
+          onClose={() => setIsDetailsModalOpen(false)}
+          report={selectedReport}
+          isOwner={currentUser?.userId === selectedReport.requesterId}
+        />
+      )}
     </Box >
   );
 };
