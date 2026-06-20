@@ -40,6 +40,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report, isOwner }) => {
   }, [report.supportCount, report.supports, currentUser?.userId]);
 
   const isMyReport = currentUser?.userId === report.requesterId;
+  const canViewId = isMyReport || isOwner || (currentUser?.role && currentUser.role !== 'Citizen');
 
   const handleSupport = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -186,7 +187,9 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report, isOwner }) => {
                   ? 'City worker is handling this'
                   : `Closed: ${format(new Date(report.createdAt), 'MMM d, HH:mm')}`}
             </Typography>
-            <Typography className="report-id">#TR-{report.reportId}</Typography>
+            {canViewId && (
+              <Typography className="report-id">#TR-{report.reportId}</Typography>
+            )}
           </Box>
         </Box>
       </Box>

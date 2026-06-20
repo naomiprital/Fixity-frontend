@@ -67,6 +67,7 @@ export const ReportDetailsModal: React.FC<ReportDetailsModalProps> = ({ open, on
   if (!report) return null;
 
   const isMyReport = currentUser?.userId === report.requesterId;
+  const canViewId = isMyReport || isOwner || (currentUser?.role && currentUser.role !== 'Citizen');
 
   const handleSupport = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -184,9 +185,11 @@ export const ReportDetailsModal: React.FC<ReportDetailsModalProps> = ({ open, on
           <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <strong>Status:</strong> <span className={`status-chip ${getStatusClass(report.status)}`} style={{ padding: '4px 12px', fontSize: '0.8rem', borderRadius: '12px', fontWeight: 600 }}>{getStatusLabel(report.status)}</span>
           </Typography>
-          <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', color: 'text.secondary' }}>
-            <strong>Report ID:</strong> <span>#TR-{report.reportId}</span>
-          </Typography>
+          {canViewId && (
+            <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', color: 'text.secondary' }}>
+              <strong>Report ID:</strong> <span>#TR-{report.reportId}</span>
+            </Typography>
+          )}
           <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', color: 'text.secondary' }}>
             <strong>Reported On:</strong> <span>{format(new Date(report.createdAt), 'MMM d, yyyy HH:mm')}</span>
           </Typography>
