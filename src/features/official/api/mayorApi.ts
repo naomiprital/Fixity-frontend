@@ -35,6 +35,28 @@ export interface MayorMapDensity {
   severity: 'Low' | 'Medium' | 'High' | 'Critical';
 }
 
+export interface MayorDepartmentSla {
+  department: string;
+  sla: number;
+  resolved: number;
+  pending: number;
+  status: 'on_track' | 'needs_attention';
+}
+
+export interface MayorDepartmentsResponse {
+  slaData: MayorDepartmentSla[];
+  chartData: Array<{ department: string; efficiency: number; budget: number }>;
+}
+
+export interface MayorPulseResponse {
+  happinessScore: number;
+  happinessDelta: string;
+  trendingTopics: Array<{ tag: string; color: string }>;
+  positiveCount: number;
+  negativeCount: number;
+  summary: string;
+}
+
 export const useMayorStats = () => {
   return useQuery<MayorStatsResponse>({
     queryKey: ['mayor-stats'],
@@ -66,12 +88,35 @@ export const useMayorCriticalAlerts = () => {
   });
 };
 
-export const useMayorMapDensity = () => {
+export const useMayorMapDensity = (category?: string) => {
   return useQuery<MayorMapDensity[]>({
-    queryKey: ['mayor-map-density'],
+    queryKey: ['mayor-map-density', category],
     queryFn: async () => {
-      const { data } = await authApi.get('/mayor/map-density');
+      const { data } = await authApi.get('/mayor/map-density', {
+        params: category && category !== 'All Faults' ? { category } : undefined,
+      });
       return data;
     },
+  });
+};
+
+export const useMayorDepartments = () => {
+  return useQuery<MayorDepartmentsResponse>({
+    queryKey: ['mayor-departments'],
+    queryFn: async () => {
+      const { data } = await authApi.get('/mayor/departments');
+      return data;
+    },
+  });
+};
+
+export const useMayorPulse = () => {
+  return useQuery<MayorPulseResponse>({
+    queryKey: ['mayor-pulse'],
+    queryFn: async () => {
+      const { data } = await authApi.get('/mayor/pulse');
+      return data;
+    },
+    staleTime: 30000,
   });
 };
