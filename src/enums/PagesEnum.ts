@@ -1,0 +1,16 @@
+export enum PagesEnum {
+  CITIZEN_HOME = 'citizen/home',
+  CITIZEN_REPORTS = 'citizen/reports',
+  CITIZEN_CREATE = 'citizen/create',
+  PROFILE = 'profile',
+  WORKER_POOL = 'worker/pool',
+  WORKER_TASKS = 'worker/my-tasks',
+  MANAGER_DASHBOARD = 'manager/dashboard',
+  MANAGER_HOME = 'manager/home',
+  MANAGER_REPORTS = 'manager/reports',
+  MANAGER_STAFF = 'manager/staff',
+  OFFICIAL_DASHBOARD = 'official/dashboard',
+  OFFICIAL_STAFF = 'official/staff',
+  MAP = 'map',
+  HR_STAFF = 'hr/staff',
+}

@@ -1,0 +1,78 @@
+.stat-card {
+  border-radius: 1.5rem !important;
+  box-shadow: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.04) !important;
+  border: 0.0625rem solid #f1f5f9 !important;
+  background-color: #ffffff !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  overflow: hidden;
+}
+
+.stat-card:hover {
+  transform: translateY(-0.125rem);
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.06) !important;
+}
+
+.stat-card__content {
+  padding: 1.25rem !important;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.stat-card__title {
+  font-weight: 700 !important;
+  color: var(--ink-700, #697286) !important;
+  letter-spacing: 0.05rem;
+  text-transform: uppercase;
+  font-size: 0.75rem !important;
+  margin-bottom: 0.375rem !important;
+  display: block;
+}
+
+.stat-card__body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-grow: 1;
+}
+
+/* Border Accent Positions */
+.stat-card--position-bottom {
+  border-bottom-width: 0.25rem !important;
+  border-bottom-style: solid !important;
+}
+
+.stat-card--position-left {
+  border-left-width: 0.375rem !important;
+  border-left-style: solid !important;
+}
+
+/* Accent Colors - Mapping theme colors with rem-based borders */
+.stat-card--accent-red.stat-card--position-bottom {
+  border-bottom-color: #ef5350 !important;
+}
+.stat-card--accent-red.stat-card--position-left {
+  border-left-color: #ef5350 !important;
+}
+
+.stat-card--accent-green.stat-card--position-bottom {
+  border-bottom-color: #10b981 !important;
+}
+.stat-card--accent-green.stat-card--position-left {
+  border-left-color: #10b981 !important;
+}
+
+.stat-card--accent-orange.stat-card--position-bottom {
+  border-bottom-color: #f27a23 !important;
+}
+.stat-card--accent-orange.stat-card--position-left {
+  border-left-color: #f27a23 !important;
+}
+
+.stat-card--accent-teal.stat-card--position-bottom {
+  border-bottom-color: #1a6756 !important;
+}
+.stat-card--accent-teal.stat-card--position-left {
+  border-left-color: #1a6756 !important;
+}

@@ -1,0 +1,305 @@
+/* Public Pulse & Sentiment Analysis Styles */
+.public-pulse {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.pulse-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.pulse-header__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.pulse-title {
+  font-family: 'Sora', sans-serif !important;
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+  color: #18454f !important;
+  margin: 0 !important;
+}
+
+.pulse-subtitle {
+  font-size: 0.75rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+  color: #697286 !important;
+  margin: 0 !important;
+}
+
+.pulse-fav-btn {
+  background-color: #ffffff !important;
+  color: #ef5350 !important;
+  width: 2.75rem !important;
+  height: 2.75rem !important;
+  border-radius: 50% !important;
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Happiness Score Concentric Ring Card */
+.happiness-card {
+  background-color: #ffffff;
+  border-radius: 2rem;
+  padding: 1.75rem;
+  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  border: 0.0625rem solid #e2e8f0;
+}
+
+.happiness-card-title {
+  font-size: 0.75rem !important;
+  font-weight: 800 !important;
+  color: #697286 !important;
+  letter-spacing: 0.05rem;
+  text-transform: uppercase;
+}
+
+/* SVG circular gauge wrapper */
+.circular-progress-wrapper {
+  position: relative;
+  width: 8.75rem;
+  height: 8.75rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.circular-progress-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.circle-bg {
+  fill: none;
+  stroke: #f1f5f9;
+}
+
+.circle-fg {
+  fill: none;
+  stroke: #10b981;
+  /* Default success/happiness color */
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.8s ease-in-out;
+}
+
+/* Text floating inside circular progress gauge */
+.progress-center-text {
+  position: absolute;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  line-height: 1;
+}
+
+.score-value {
+  font-family: 'Sora', sans-serif !important;
+  font-size: 2.5rem !important;
+  font-weight: 800 !important;
+  color: #18454f !important;
+}
+
+.score-denominator {
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  color: #94a3b8 !important;
+}
+
+/* Trend indicator under circular meter */
+.happiness-trend {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.875rem;
+  font-weight: 800;
+  gap: 0.25rem;
+}
+
+.trend--up {
+  color: #10b981;
+}
+
+.trend--down {
+  color: #ef4444;
+}
+
+/* Trending Topics Chips */
+.trending-topics {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.trending-title {
+  font-size: 0.75rem !important;
+  font-weight: 800 !important;
+  color: #697286 !important;
+  letter-spacing: 0.05rem;
+  text-transform: uppercase;
+}
+
+.topics-chips-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+}
+
+.topic-chip {
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 0.8125rem !important;
+  height: 2.25rem !important;
+  border-radius: 1.125rem !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.topic-chip:hover {
+  transform: translateY(-0.0625rem);
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Custom HSL themed colors for trending topic tags */
+.chip--positive {
+  background-color: #d1fae5 !important;
+  color: #065f46 !important;
+}
+
+.chip--negative {
+  background-color: #fee2e2 !important;
+  color: #991b1b !important;
+}
+
+.chip--info {
+  background-color: #dbeafe !important;
+  color: #1e40af !important;
+}
+
+.chip--neutral {
+  background-color: #f1f5f9 !important;
+  color: #475569 !important;
+}
+
+/* AI Pulse Summary Card */
+.ai-pulse-card {
+  background: #ffffff;
+  border: 0.0625rem solid #e2e8f0;
+  border-radius: 2rem;
+  padding: 1.75rem;
+  box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ai-pulse-card:hover {
+  transform: translateY(-0.0625rem);
+  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.06);
+}
+
+.ai-pulse-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #00897b;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.05rem;
+  text-transform: uppercase;
+}
+
+.ai-pulse-text {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 1.0625rem !important;
+  line-height: 1.6 !important;
+  font-style: italic;
+  font-weight: 500 !important;
+  color: #334155 !important;
+  margin: 0 !important;
+}
+
+/* Sentiment Details Counter Panel */
+.sentiment-counters-row {
+  display: flex;
+  border-top: 0.0625rem solid #f1f5f9;
+  padding-top: 1.25rem;
+  margin-top: 0.25rem;
+}
+
+.counter-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.counter-item:first-child {
+  border-right: 0.0625rem solid #f1f5f9;
+}
+
+.counter-val {
+  font-family: 'Sora', sans-serif !important;
+  font-size: 1.75rem !important;
+  font-weight: 800 !important;
+}
+
+.counter-val--positive {
+  color: #10b981 !important;
+}
+
+.counter-val--negative {
+  color: #ef4444 !important;
+}
+
+.counter-lbl {
+  font-size: 0.6875rem !important;
+  font-weight: 800 !important;
+  color: #697286 !important;
+  letter-spacing: 0.05rem;
+}
+
+.pulse-right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+/* Desktop grid reflow for Public Pulse view */
+@media (min-width: 48rem) {
+  .public-pulse {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 2rem;
+  }
+
+  .pulse-header {
+    grid-column: 1 / -1;
+  }
+
+  .happiness-card {
+    grid-column: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .pulse-right-col {
+    grid-column: 2;
+  }
+}

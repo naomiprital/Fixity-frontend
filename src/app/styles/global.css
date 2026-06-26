@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&family=Sora:wght@600;700&display=swap');
+
+:root {
+  --bg-900: #191d24;
+  --bg-800: #232a33;
+  --brand-teal: #156c74;
+  --brand-teal-deep: #0f5a61;
+  --surface-100: #f2f2f4;
+  --surface-200: #e9ebef;
+  --surface-300: #d8dbe0;
+  --ink-900: #18454f;
+  --ink-700: #697286;
+  --ink-500: #98a0af;
+  --cta-blue: #2f4f78;
+  --accent-orange: #f27a23;
+  --shadow-card: 0 14px 26px rgba(17, 34, 59, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Nunito Sans', 'Segoe UI', sans-serif;
+  color: var(--ink-900);
+  background: #e4e6eb;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  /* padding-bottom: 5rem; */
+}
