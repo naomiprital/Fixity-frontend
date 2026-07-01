@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StaffListItem } from './StaffListItem';
 import { StaffDetailPopup } from './StaffDetailPopup';
 import type { StaffUser } from '../api/staffApi';
-import './Stafflist.css';
+import './StaffList.css';
 
 interface StaffListProps {
   staff: StaffUser[];
