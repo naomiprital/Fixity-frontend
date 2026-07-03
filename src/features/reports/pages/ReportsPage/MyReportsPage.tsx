@@ -4,10 +4,15 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import { useMyReports } from '../../hooks/useReports';
 import './MyReportsPage.css';
 import { ReportCard } from '../../components/ReportCard';
+import { useAuthUser } from '@/features/auth/hooks/useAuth';
 
 const MyReportsPage = () => {
     const { data: reports, isLoading, isError } = useMyReports();
     const [activeTab, setActiveTab] = useState<'ongoing' | 'completed'>('ongoing');
+    const { data: user } = useAuthUser();
+
+    const isManager = user?.role === 'Manager';
+    const pageTitle = isManager ? 'Reports' : 'My Reports';
 
     if (isLoading) {
         return (
@@ -34,16 +39,16 @@ const MyReportsPage = () => {
         <Box className="my-reports-page">
             <Box className="my-reports-header">
                 <Box className="my-reports-header-top">
-                    <Typography variant="h1">My Reports</Typography>
+                    <Typography variant="h1">{pageTitle}</Typography>
                 </Box>
                 <Box className="tabs-container">
-                    <button 
+                    <button
                         className={`tab-button ${activeTab === 'ongoing' ? 'active' : ''}`}
                         onClick={() => setActiveTab('ongoing')}
                     >
                         Open Reports
                     </button>
-                    <button 
+                    <button
                         className={`tab-button ${activeTab === 'completed' ? 'active' : ''}`}
                         onClick={() => setActiveTab('completed')}
                     >
@@ -60,8 +65,8 @@ const MyReportsPage = () => {
                             {activeTab === 'ongoing' ? "No open reports" : "No completed reports"}
                         </Typography>
                         <Typography variant="body2">
-                            {activeTab === 'ongoing' 
-                                ? "You haven't submitted any reports yet or all your reports are completed." 
+                            {activeTab === 'ongoing'
+                                ? "You haven't submitted any reports yet or all your reports are completed."
                                 : "You don't have any past reports yet."}
                         </Typography>
                     </Box>
