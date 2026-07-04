@@ -13,6 +13,7 @@ export interface Task {
     longitude: string;
     priorityScore: string | number;
     createdAt: string;
+    reports?: Array<{ beforeImageUrl?: string }>;
   };
   category: {
     name: string;

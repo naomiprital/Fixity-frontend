@@ -7,11 +7,13 @@ import {
   TextField,
   Paper,
   Chip,
+  Container,
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutlined';
 import { type Task, WORKER_COLORS } from '../types';
+import { getImageUrl } from '@/utils/imageUtils';
 
 interface CloseTaskScreenProps {
   task: Task;
@@ -68,7 +70,7 @@ export const CloseTaskScreen: React.FC<CloseTaskScreenProps> = ({ task, onBack, 
         />
       </Box>
 
-      <Box sx={{ p: 2 }}>
+      <Container maxWidth="sm" sx={{ p: 2 }}>
         <Typography variant="h4" sx={{ fontWeight: 'bold', mt: 1, mb: 3 }}>
           {task.incident.description}
         </Typography>
@@ -85,17 +87,25 @@ export const CloseTaskScreen: React.FC<CloseTaskScreenProps> = ({ task, onBack, 
             borderRadius: '16px',
             overflow: 'hidden',
             mb: 3,
-            height: 200,
+            height: { xs: 200, md: 300 },
             backgroundColor: '#E0E0E0',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
           }}
         >
-          {/* In the mockup, there's a before image. Since we don't have one in the task, we might use a placeholder or check incident data if available */}
-          <Typography variant="body2" color="text.secondary">
-            Original incident image
-          </Typography>
+          {task.incident.reports?.[0]?.beforeImageUrl ? (
+            <img
+              src={getImageUrl(task.incident.reports[0].beforeImageUrl)}
+              alt="Original incident"
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              crossOrigin="anonymous"
+            />
+          ) : (
+            <Typography variant="body2" color="text.secondary">
+              No original incident image available
+            </Typography>
+          )}
         </Paper>
 
         {/* Proof of Work */}
@@ -110,7 +120,7 @@ export const CloseTaskScreen: React.FC<CloseTaskScreenProps> = ({ task, onBack, 
           sx={{
             border: `2px dashed ${WORKER_COLORS.tealHeader}`,
             borderRadius: '16px',
-            height: 150,
+            height: { xs: 200, md: 300 },
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -194,7 +204,7 @@ export const CloseTaskScreen: React.FC<CloseTaskScreenProps> = ({ task, onBack, 
         >
           Mark as Resolved
         </Button>
-      </Box>
+      </Container>
     </Box>
   );
 };
