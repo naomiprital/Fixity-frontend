@@ -123,17 +123,19 @@ const OfficialDashboard = () => {
                     {aiInsight?.insight ? `"${aiInsight.insight}"` : '"No critical issues or geographic clusters detected."'}
                   </Typography>
                 )}
-                <Button
-                  variant="contained"
-                  className="dispatch-btn"
-                  onClick={handleDispatchTeam}
-                  fullWidth
-                  disabled={isLoadingInsight || !aiInsight || aiInsight.action_type === 'MONITOR'}
-                >
-                  {aiInsight?.action_type
-                    ? aiInsight.action_type.replace('_', ' ')
-                    : 'Dispatch Team'}
-                </Button>
+                {aiInsight?.action_type !== 'INVESTIGATE_INFRASTRUCTURE' && (
+                  <Button
+                    variant="contained"
+                    className="dispatch-btn"
+                    onClick={handleDispatchTeam}
+                    fullWidth
+                    disabled={isLoadingInsight || !aiInsight || aiInsight.action_type === 'MONITOR'}
+                  >
+                    {aiInsight?.action_type
+                      ? aiInsight.action_type.replace('_', ' ')
+                      : 'Dispatch Team'}
+                  </Button>
+                )}
               </Box>
 
               {/* Critical Alerts Section */}
