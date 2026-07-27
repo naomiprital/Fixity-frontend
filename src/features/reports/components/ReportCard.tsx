@@ -65,9 +65,9 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report, isOwner }) => {
 
   const getStatusClass = (status: string) => {
     switch (status) {
-      case 'Open': return 'status-open';
-      case 'InProgress': return 'status-inprogress';
-      case 'Closed': return 'status-closed';
+      case 'Open': return 'report-status-open';
+      case 'Assigned': return 'report-status-inprogress';
+      case 'Closed': return 'report-status-closed';
       default: return '';
     }
   };
@@ -75,7 +75,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report, isOwner }) => {
   const getStatusLabel = (status: string) => {
     switch (status) {
       case 'Open': return 'Received';
-      case 'InProgress': return 'In Progress';
+      case 'Assigned': return 'In Progress';
       case 'Closed': return 'Completed';
       default: return status;
     }
@@ -84,7 +84,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report, isOwner }) => {
   const getProgressWidth = (status: string) => {
     switch (status) {
       case 'Open': return '15%';
-      case 'InProgress': return '60%';
+      case 'Assigned': return '60%';
       case 'Closed': return '100%';
       default: return '0%';
     }
@@ -170,7 +170,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report, isOwner }) => {
             </span>
           </Box>
 
-          {report.status === 'InProgress' && (
+          {report.status === 'Assigned' && (
             <Box className="progress-bar-container">
               <Box
                 className="progress-bar"
@@ -183,7 +183,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report, isOwner }) => {
             <Typography className="report-meta">
               {report.status === 'Open'
                 ? `Opened: ${format(new Date(report.createdAt), 'MMM d, HH:mm')}`
-                : report.status === 'InProgress'
+                : report.status === 'Assigned'
                   ? 'City worker is handling this'
                   : `Closed: ${format(new Date(report.createdAt), 'MMM d, HH:mm')}`}
             </Typography>
@@ -194,11 +194,11 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report, isOwner }) => {
         </Box>
       </Box>
 
-      <ReportDetailsModal 
-        open={isModalOpen} 
-        onClose={handleCloseModal} 
-        report={report} 
-        isOwner={isOwner} 
+      <ReportDetailsModal
+        open={isModalOpen}
+        onClose={handleCloseModal}
+        report={report}
+        isOwner={isOwner}
       />
     </>
   );

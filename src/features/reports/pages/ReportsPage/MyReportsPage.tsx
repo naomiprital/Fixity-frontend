@@ -25,7 +25,7 @@ const MyReportsPage = () => {
         );
     }
 
-    const ongoingReports = reports?.filter(r => r.status === 'Open' || r.status === 'InProgress') || [];
+    const ongoingReports = reports?.filter(r => r.status === 'Open' || r.status === 'Assigned') || [];
     const completedReports = reports?.filter(r => r.status === 'Closed') || [];
 
     const displayedReports = activeTab === 'ongoing' ? ongoingReports : completedReports;

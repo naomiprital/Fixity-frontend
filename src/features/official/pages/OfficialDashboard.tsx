@@ -42,10 +42,7 @@ const OfficialDashboard = () => {
   const metricsConfigs = mapMayorMetrics(stats, isLoadingStats);
   const criticalAlertsMapped = mapMayorAlerts(alerts);
 
-  const handleDispatchTeam = () => {
-    const action = aiInsight?.action_type || 'DISPATCH_TEAM';
-    alert(`Triggered system action: ${action.replace('_', ' ')}!`);
-  };
+
 
   const handleTabChange = (tab: OfficialDashboardTabsEnum) => {
     setSearchParams({ tab });
@@ -192,17 +189,7 @@ const OfficialDashboard = () => {
                       {aiInsight?.insight ? `"${aiInsight.insight}"` : '"No critical issues or geographic clusters detected."'}
                     </Typography>
                   )}
-                  <Button
-                    variant="contained"
-                    className="dispatch-btn"
-                    onClick={handleDispatchTeam}
-                    fullWidth
-                    disabled={isLoadingInsight || !aiInsight || aiInsight.action_type === 'MONITOR'}
-                  >
-                    {aiInsight?.action_type
-                      ? aiInsight.action_type.replace('_', ' ')
-                      : 'Dispatch Team'}
-                  </Button>
+
                 </Box>
 
                 {/* Critical Alerts Section */}
