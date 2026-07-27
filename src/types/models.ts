@@ -3,7 +3,7 @@ export type Report = {
   categoryId: number;
   cityId: number;
   description: string;
-  status: 'Open' | 'InProgress' | 'Closed';
+  status: 'Open' | 'Assigned' | 'Closed';
   latitude: number;
   longitude: number;
   beforeImageUrl?: string;
@@ -21,7 +21,7 @@ export type Task = {
   incidentId: number;
   categoryId: number;
   assignedWorkerId: number | null;
-  status: 'Open' | 'InProgress' | 'Closed';
+  status: 'Open' | 'Assigned' | 'Closed';
   workerNotes?: string;
   afterImageUrl?: string;
   createdAt: string;
@@ -36,6 +36,7 @@ export type Incident = {
   latitude: number;
   longitude: number;
   priorityScore: number;
+  status: 'Open' | 'InProgress' | 'Closed';
   createdAt: string;
   reports: Report[];
   tasks: Task[];

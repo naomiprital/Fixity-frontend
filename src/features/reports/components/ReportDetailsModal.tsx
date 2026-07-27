@@ -92,9 +92,9 @@ export const ReportDetailsModal: React.FC<ReportDetailsModalProps> = ({ open, on
 
   const getStatusClass = (status: string) => {
     switch (status) {
-      case 'Open': return 'status-open';
-      case 'InProgress': return 'status-inprogress';
-      case 'Closed': return 'status-closed';
+      case 'Open': return 'report-status-open';
+      case 'Assigned': return 'report-status-inprogress';
+      case 'Closed': return 'report-status-closed';
       default: return '';
     }
   };
@@ -102,7 +102,7 @@ export const ReportDetailsModal: React.FC<ReportDetailsModalProps> = ({ open, on
   const getStatusLabel = (status: string) => {
     switch (status) {
       case 'Open': return 'Received';
-      case 'InProgress': return 'In Progress';
+      case 'Assigned': return 'In Progress';
       case 'Closed': return 'Completed';
       default: return status;
     }

@@ -117,17 +117,17 @@
     margin-top: 0.25rem;
 }
 
-.status-open {
+.report-status-open {
     background-color: #fff1f0;
     color: #ff4d4f;
 }
 
-.status-inprogress {
+.report-status-inprogress {
     background-color: #e6f7ff;
     color: #1890ff;
 }
 
-.status-closed {
+.report-status-closed {
     background-color: #f6ffed;
     color: #52c41a;
 }
