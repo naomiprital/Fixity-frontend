@@ -4,15 +4,11 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import { useMyReports } from '../../hooks/useReports';
 import './MyReportsPage.css';
 import { ReportCard } from '../../components/ReportCard';
-import { useAuthUser } from '@/features/auth/hooks/useAuth';
 
 const MyReportsPage = () => {
     const { data: reports, isLoading, isError } = useMyReports();
     const [activeTab, setActiveTab] = useState<'ongoing' | 'completed'>('ongoing');
-    const { data: user } = useAuthUser();
-
-    const isManager = user?.role === 'Manager';
-    const pageTitle = isManager ? 'Reports' : 'My Reports';
+    const pageTitle = 'My Reports';
 
     if (isLoading) {
         return (
