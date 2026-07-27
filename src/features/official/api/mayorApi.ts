@@ -120,3 +120,21 @@ export const useMayorPulse = () => {
     staleTime: 30000,
   });
 };
+
+export interface MayorRecommendation {
+  title: string;
+  description: string;
+  category: 'Infrastructure' | 'Service Delivery' | 'Public Safety' | 'Citizen Engagement' | 'Environment';
+  impact: 'High' | 'Medium' | 'Low';
+}
+
+export const useMayorRecommendations = () => {
+  return useQuery<MayorRecommendation[]>({
+    queryKey: ['mayor-recommendations'],
+    queryFn: async () => {
+      const { data } = await authApi.get('/mayor/recommendations');
+      return data;
+    },
+    staleTime: 120000, // Cache for 2 minutes
+  });
+};
