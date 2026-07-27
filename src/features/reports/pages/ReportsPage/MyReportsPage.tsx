@@ -8,7 +8,6 @@ import { ReportCard } from '../../components/ReportCard';
 const MyReportsPage = () => {
     const { data: reports, isLoading, isError } = useMyReports();
     const [activeTab, setActiveTab] = useState<'ongoing' | 'completed'>('ongoing');
-    const pageTitle = 'My Reports';
 
     if (isLoading) {
         return (
@@ -35,7 +34,7 @@ const MyReportsPage = () => {
         <Box className="my-reports-page">
             <Box className="my-reports-header">
                 <Box className="my-reports-header-top">
-                    <Typography variant="h1">{pageTitle}</Typography>
+                    <Typography variant="h1">My Reports</Typography>
                 </Box>
                 <Box className="tabs-container">
                     <button
