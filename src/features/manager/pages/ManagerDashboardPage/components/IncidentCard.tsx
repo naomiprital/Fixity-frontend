@@ -21,9 +21,9 @@ const getPriorityInfo = (score: number) => {
   return { label: 'NORMAL', color: WORKER_COLORS.normalPriority };
 };
 
-const statusColor = (status: string) => {
+const taskStatusColor = (status: string) => {
   if (status === 'Open') return { bg: '#e8f5e9', text: '#2e7d32' };
-  if (status === 'Assigned' || status === 'InProgress') return { bg: '#fff8e1', text: '#f57f17' };
+  if (status === 'Assigned') return { bg: '#fff8e1', text: '#f57f17' };
   return { bg: '#fce4ec', text: '#b71c1c' };
 };
 
@@ -159,7 +159,7 @@ export function IncidentCard({
             <Typography variant="body2" sx={{ color: 'text.disabled', py: 1 }}>No tasks yet.</Typography>
           )}
           {incident.tasks.map(t => {
-            const sc = statusColor(t.status);
+            const sc = taskStatusColor(t.status);
             return (
               <Box key={t.taskId} className="mgr-task-card">
                 <Box sx={{ flex: 1, minWidth: 0 }}>
