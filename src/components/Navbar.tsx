@@ -67,7 +67,6 @@ const Navbar = () => {
     Manager: [
       { page: PagesEnum.MANAGER_HOME, filledIcon: Map, outlinedIcon: MapOutlined, label: 'Map' },
       { page: PagesEnum.MANAGER_DASHBOARD, filledIcon: Dashboard, outlinedIcon: DashboardOutlined, label: 'Manager' },
-      { page: PagesEnum.MANAGER_REPORTS, filledIcon: Assignment, outlinedIcon: AssignmentOutlined, label: 'Reports' },
       { page: PagesEnum.MANAGER_STAFF, filledIcon: Groups, outlinedIcon: GroupsOutlined, label: 'Staff' },
       { page: PagesEnum.PROFILE, filledIcon: Person, outlinedIcon: PersonOutlined, label: 'Profile' },
     ],

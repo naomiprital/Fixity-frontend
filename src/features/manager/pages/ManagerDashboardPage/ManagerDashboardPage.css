@@ -158,6 +158,29 @@
   background: #f7f9fc;
 }
 
+/* ── Status chips for Incidents ───────────────────────────────────────── */
+.status-chip {
+  padding: 2px 6px;
+  font-size: 0.7rem;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+.incident-status-open {
+  background-color: #e8f5e9 !important;
+  color: #2e7d32 !important;
+}
+
+.incident-status-inprogress {
+  background-color: #fff8e1 !important;
+  color: #f57f17 !important;
+}
+
+.incident-status-closed {
+  background-color: #fce4ec !important;
+  color: #b71c1c !important;
+}
+
 /* ── Responsive tweaks ───────────────────────────────────────────────── */
 @media (max-width: 600px) {
   .mgr-content {

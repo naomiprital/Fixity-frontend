@@ -25,7 +25,7 @@ const MyReportsPage = () => {
         );
     }
 
-    const ongoingReports = reports?.filter(r => r.status === 'Open' || r.status === 'InProgress') || [];
+    const ongoingReports = reports?.filter(r => r.status === 'Open' || r.status === 'Assigned') || [];
     const completedReports = reports?.filter(r => r.status === 'Closed') || [];
 
     const displayedReports = activeTab === 'ongoing' ? ongoingReports : completedReports;
@@ -37,13 +37,13 @@ const MyReportsPage = () => {
                     <Typography variant="h1">My Reports</Typography>
                 </Box>
                 <Box className="tabs-container">
-                    <button 
+                    <button
                         className={`tab-button ${activeTab === 'ongoing' ? 'active' : ''}`}
                         onClick={() => setActiveTab('ongoing')}
                     >
                         Open Reports
                     </button>
-                    <button 
+                    <button
                         className={`tab-button ${activeTab === 'completed' ? 'active' : ''}`}
                         onClick={() => setActiveTab('completed')}
                     >
@@ -60,8 +60,8 @@ const MyReportsPage = () => {
                             {activeTab === 'ongoing' ? "No open reports" : "No completed reports"}
                         </Typography>
                         <Typography variant="body2">
-                            {activeTab === 'ongoing' 
-                                ? "You haven't submitted any reports yet or all your reports are completed." 
+                            {activeTab === 'ongoing'
+                                ? "You haven't submitted any reports yet or all your reports are completed."
                                 : "You don't have any past reports yet."}
                         </Typography>
                     </Box>
