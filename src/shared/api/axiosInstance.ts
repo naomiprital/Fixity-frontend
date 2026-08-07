@@ -1,9 +1,6 @@
 import axios, { type AxiosError, AxiosHeaders, type InternalAxiosRequestConfig } from 'axios';
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ??
-  import.meta.env.VITE_SERVER_BASE_URL ??
-  'http://localhost:3000/api';
+const API_BASE_URL = window.location.origin + '/api';
 const AUTH_STORAGE_KEY = 'fixity.auth';
 
 export enum Paths {
