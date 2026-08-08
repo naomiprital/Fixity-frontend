@@ -1,9 +1,9 @@
 import { authApi, Paths } from '@/shared/api/axiosInstance';
 
-export const uploadAndAnalyze = async (file: File): Promise<{ imageUrl: string; aiDraft: any }> => {
+export const uploadAndAnalyze = async (file: File, analyzeOnly: boolean = false, skipAi: boolean = false): Promise<{ imageUrl: string | null; aiDraft: any }> => {
   const formData = new FormData();
   formData.append('image', file);
-  const { data } = await authApi.post(`${Paths.REPORTS}/upload-analyze`, formData);
+  const { data } = await authApi.post(`${Paths.REPORTS}/upload-analyze?analyzeOnly=${analyzeOnly}&skipAi=${skipAi}`, formData);
   return data;
 };
 
