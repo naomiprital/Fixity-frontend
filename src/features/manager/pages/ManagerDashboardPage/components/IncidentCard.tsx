@@ -6,6 +6,7 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import AddTaskIcon from '@mui/icons-material/AddTask';
 import type { Incident, Task, TaskCategory } from '@/types/models';
 import { WORKER_COLORS } from '../../../../worker/types';
@@ -37,6 +38,7 @@ interface Props {
   onCreateTask: () => void;
   onEditIncident: (inc: Incident) => void;
   onDeleteIncident: (id: number) => void;
+  onCloseIncident?: (inc: Incident) => void;
   onEditTask: (task: Task) => void;
   onDeleteTask: (id: number) => void;
   onRemoveReport?: (incidentId: number, reportId: number) => void;
@@ -46,10 +48,12 @@ export function IncidentCard({
   incident, taskCategories,
   taskNote, taskCatId,
   onTaskNoteChange, onTaskCatChange, onCreateTask,
-  onEditIncident, onDeleteIncident,
+  onEditIncident, onDeleteIncident, onCloseIncident,
   onEditTask, onDeleteTask,
   onRemoveReport,
 }: Props) {
+  const isClosed = incident.status === 'Closed';
+
   return (
     <Accordion className="mgr-accordion" disableGutters>
       <AccordionSummary expandIcon={<ExpandMoreIcon />} className="mgr-accordion__summary">
@@ -89,10 +93,24 @@ export function IncidentCard({
             />
           </Box>
           <Box sx={{ display: 'flex', gap: 0.5, flexShrink: 0 }}>
-            <Tooltip title="Edit incident">
-              <IconButton size="small" color="primary" onClick={e => { e.stopPropagation(); onEditIncident(incident); }}>
-                <EditOutlinedIcon fontSize="small" />
-              </IconButton>
+            {!isClosed && onCloseIncident && (
+              <Tooltip title="Close incident">
+                <IconButton size="small" color="success" onClick={e => { e.stopPropagation(); onCloseIncident(incident); }}>
+                  <CheckCircleOutlinedIcon fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            )}
+            <Tooltip title={isClosed ? "Cannot edit closed incident" : "Edit incident"}>
+              <span>
+                <IconButton
+                  size="small"
+                  color="primary"
+                  disabled={isClosed}
+                  onClick={e => { e.stopPropagation(); onEditIncident(incident); }}
+                >
+                  <EditOutlinedIcon fontSize="small" />
+                </IconButton>
+              </span>
             </Tooltip>
             <Tooltip title="Delete incident">
               <IconButton size="small" color="error" onClick={e => { e.stopPropagation(); onDeleteIncident(incident.incidentId); }}>
@@ -141,11 +159,13 @@ export function IncidentCard({
                   />
                 </Box>
               </Box>
-              <Tooltip title="Remove from incident">
-                <IconButton size="small" color="error" onClick={() => onRemoveReport?.(incident.incidentId, r.reportId)}>
-                  <DeleteOutlineIcon fontSize="small" />
-                </IconButton>
-              </Tooltip>
+              {!isClosed && (
+                <Tooltip title="Remove from incident">
+                  <IconButton size="small" color="error" onClick={() => onRemoveReport?.(incident.incidentId, r.reportId)}>
+                    <DeleteOutlineIcon fontSize="small" />
+                  </IconButton>
+                </Tooltip>
+              )}
             </Box>
           ))}
         </Box>
@@ -183,16 +203,20 @@ export function IncidentCard({
                   )}
                 </Box>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, flexShrink: 0 }}>
-                  <Tooltip title="Edit task">
-                    <IconButton size="small" color="primary" onClick={() => onEditTask(t)}>
-                      <EditOutlinedIcon fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title="Delete task">
-                    <IconButton size="small" color="error" onClick={() => onDeleteTask(t.taskId)}>
-                      <DeleteOutlineIcon fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
+                  {!isClosed && (
+                    <>
+                      <Tooltip title="Edit task">
+                        <IconButton size="small" color="primary" onClick={() => onEditTask(t)}>
+                          <EditOutlinedIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Delete task">
+                        <IconButton size="small" color="error" onClick={() => onDeleteTask(t.taskId)}>
+                          <DeleteOutlineIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                    </>
+                  )}
                 </Box>
               </Box>
             );
@@ -200,40 +224,46 @@ export function IncidentCard({
         </Box>
 
         {/* Create Task form */}
-        <Box className="mgr-create-task">
-          <Typography variant="overline" sx={{ color: 'text.secondary', fontWeight: 700, letterSpacing: '0.08em', mb: 1, display: 'block' }}>
-            New Task
+        {isClosed ? (
+          <Typography variant="body2" sx={{ color: 'text.secondary', fontStyle: 'italic', bgcolor: 'action.hover', p: 1.5, borderRadius: '0.5rem', mt: 2 }}>
+            This incident is closed. New tasks cannot be added.
           </Typography>
-          <FormControl fullWidth size="small" sx={{ mb: 1 }}>
-            <InputLabel>Category</InputLabel>
-            <Select
-              label="Category"
-              value={taskCatId || ''}
-              onChange={e => onTaskCatChange(Number(e.target.value))}
-              sx={{ bgcolor: 'background.paper', borderRadius: '0.5rem' }}
+        ) : (
+          <Box className="mgr-create-task">
+            <Typography variant="overline" sx={{ color: 'text.secondary', fontWeight: 700, letterSpacing: '0.08em', mb: 1, display: 'block' }}>
+              New Task
+            </Typography>
+            <FormControl fullWidth size="small" sx={{ mb: 1 }}>
+              <InputLabel>Category</InputLabel>
+              <Select
+                label="Category"
+                value={taskCatId || ''}
+                onChange={e => onTaskCatChange(Number(e.target.value))}
+                sx={{ bgcolor: 'background.paper', borderRadius: '0.5rem' }}
+              >
+                {taskCategories.map(cat => (
+                  <MenuItem key={cat.categoryId} value={cat.categoryId}>{cat.name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <TextField
+              size="small" label="Worker Notes" fullWidth multiline rows={2}
+              value={taskNote}
+              onChange={e => onTaskNoteChange(e.target.value)}
+              sx={{ mb: 1, '& .MuiOutlinedInput-root': { bgcolor: 'background.paper', borderRadius: '0.5rem' } }}
+            />
+            <Button
+              variant="contained" startIcon={<AddTaskIcon />} size="small"
+              onClick={onCreateTask}
+              sx={{
+                bgcolor: 'primary.main', color: '#fff', borderRadius: '0.75rem', fontWeight: 700,
+                '&:hover': { bgcolor: (t) => darken(t.palette.primary.main, 0.2) },
+              }}
             >
-              {taskCategories.map(cat => (
-                <MenuItem key={cat.categoryId} value={cat.categoryId}>{cat.name}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <TextField
-            size="small" label="Worker Notes" fullWidth multiline rows={2}
-            value={taskNote}
-            onChange={e => onTaskNoteChange(e.target.value)}
-            sx={{ mb: 1, '& .MuiOutlinedInput-root': { bgcolor: 'background.paper', borderRadius: '0.5rem' } }}
-          />
-          <Button
-            variant="contained" startIcon={<AddTaskIcon />} size="small"
-            onClick={onCreateTask}
-            sx={{
-              bgcolor: 'primary.main', color: '#fff', borderRadius: '0.75rem', fontWeight: 700,
-              '&:hover': { bgcolor: (t) => darken(t.palette.primary.main, 0.2) },
-            }}
-          >
-            Add Task
-          </Button>
-        </Box>
+              Add Task
+            </Button>
+          </Box>
+        )}
       </AccordionDetails>
     </Accordion>
   );
