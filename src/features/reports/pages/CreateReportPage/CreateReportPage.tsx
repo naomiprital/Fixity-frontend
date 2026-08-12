@@ -47,7 +47,7 @@ const CreateReportPage = () => {
     const handleAutoFill = async () => {
         if (!selectedFile) { toast.error('Please select an image first.'); return; }
         try {
-            const result = await uploadAndAnalyze(selectedFile);
+            const result = await uploadAndAnalyze({ file: selectedFile, analyzeOnly: true });
             setUploadedImageUrl(result.imageUrl);
             if (result.aiDraft?.categoryId) setCategory(String(result.aiDraft.categoryId));
             if (result.aiDraft?.description) setDescription(result.aiDraft.description);
@@ -66,7 +66,7 @@ const CreateReportPage = () => {
 
             let imageUrl = uploadedImageUrl;
             if (selectedFile && !imageUrl) {
-                const result = await uploadAndAnalyze(selectedFile);
+                const result = await uploadAndAnalyze({ file: selectedFile, skipAi: true });
                 imageUrl = result.imageUrl;
                 setUploadedImageUrl(result.imageUrl);
             }
