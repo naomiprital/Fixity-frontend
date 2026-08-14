@@ -3,14 +3,14 @@ import { Box, Typography } from '@mui/material';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import {
   fetchManagerReports, fetchIncidents, createIncident, createTask,
-  fetchTaskCategories, updateIncident, deleteIncident, updateTask, deleteTask,
+  fetchTaskCategories, updateIncident, deleteIncident, closeIncident, updateTask, deleteTask,
   addReportsToIncident, removeReportFromIncident
 } from '../../api/managerApi';
 import type { Report, Incident, Task, TaskCategory } from '@/types/models';
 import { toast } from 'react-toastify';
 import { ReportsSection } from './components/ReportsSection';
 import { IncidentsSection } from './components/IncidentsSection';
-import { CreateIncidentDialog, EditIncidentDialog, DeleteIncidentDialog } from './components/IncidentDialogs';
+import { CreateIncidentDialog, EditIncidentDialog, DeleteIncidentDialog, CloseIncidentDialog } from './components/IncidentDialogs';
 import { EditTaskDialog, DeleteTaskDialog } from './components/TaskDialogs';
 import { AddToIncidentDialog } from './components/AddToIncidentDialog';
 import './ManagerDashboardPage.css';
@@ -26,6 +26,8 @@ export default function ManagerDashboardPage() {
   const [editIncident, setEditIncident] = useState<Incident | null>(null);
   const [editIncidentDesc, setEditIncidentDesc] = useState('');
   const [deleteIncidentId, setDeleteIncidentId] = useState<number | null>(null);
+  const [closeIncidentTarget, setCloseIncidentTarget] = useState<Incident | null>(null);
+  const [isClosingIncident, setIsClosingIncident] = useState(false);
   const [taskNotes, setTaskNotes] = useState<Record<number, string>>({});
   const [taskCategoryIds, setTaskCategoryIds] = useState<Record<number, number>>({});
   const [editTask, setEditTask] = useState<Task | null>(null);
@@ -91,6 +93,21 @@ export default function ManagerDashboardPage() {
       setDeleteIncidentId(null);
       loadData();
     } catch (e: any) { toast.error(e.message); }
+  };
+
+  const handleCloseIncident = async () => {
+    if (!closeIncidentTarget) return;
+    try {
+      setIsClosingIncident(true);
+      await closeIncident(closeIncidentTarget.incidentId);
+      toast.success('Incident closed successfully!');
+      setCloseIncidentTarget(null);
+      loadData();
+    } catch (e: any) {
+      toast.error(e.message);
+    } finally {
+      setIsClosingIncident(false);
+    }
   };
 
   const handleCreateTask = async (incidentId: number) => {
@@ -178,6 +195,7 @@ export default function ManagerDashboardPage() {
           onCreateTask={handleCreateTask}
           onEditIncident={inc => { setEditIncident(inc); setEditIncidentDesc(inc.description); }}
           onDeleteIncident={setDeleteIncidentId}
+          onCloseIncident={setCloseIncidentTarget}
           onEditTask={openEditTask}
           onDeleteTask={setDeleteTaskId}
           onRemoveReport={handleRemoveReport}
@@ -205,6 +223,12 @@ export default function ManagerDashboardPage() {
         incidentId={deleteIncidentId}
         onConfirm={handleDeleteIncident}
         onClose={() => setDeleteIncidentId(null)}
+      />
+      <CloseIncidentDialog
+        incident={closeIncidentTarget}
+        onConfirm={handleCloseIncident}
+        onClose={() => setCloseIncidentTarget(null)}
+        loading={isClosingIncident}
       />
 
       <AddToIncidentDialog

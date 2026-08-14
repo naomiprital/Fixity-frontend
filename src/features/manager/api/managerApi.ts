@@ -45,6 +45,11 @@ export async function deleteIncident(id: number): Promise<void> {
   await authApi.delete(`${Paths.INCIDENTS}/${id}`);
 }
 
+export async function closeIncident(id: number): Promise<Incident> {
+  const { data } = await authApi.post(`${Paths.INCIDENTS}/${id}/close`);
+  return data.incident;
+}
+
 export async function updateTask(
   id: number,
   payload: { workerNotes?: string; categoryId?: number }
