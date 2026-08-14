@@ -10,7 +10,7 @@ export const useAllReports = () => {
 
 export const useUploadAndAnalyze = () => {
     return useMutation({
-        mutationFn: (file: File) => uploadAndAnalyze(file),
+        mutationFn: ({ file, analyzeOnly, skipAi }: { file: File; analyzeOnly?: boolean; skipAi?: boolean }) => uploadAndAnalyze(file, analyzeOnly, skipAi),
     });
 };
 

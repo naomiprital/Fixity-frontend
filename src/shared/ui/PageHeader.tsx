@@ -21,7 +21,7 @@ export const PageHeader = ({ title, backTo }: PageHeaderProps) => {
                 paddingLeft: backTo ? "0" : "1rem",
                 position: 'sticky',
                 top: 0,
-                zIndex: 100
+                zIndex: 1100
             }}
         >
             {backTo && <IconButton

@@ -110,3 +110,32 @@ export function DeleteIncidentDialog({ incidentId, onConfirm, onClose }: DeleteI
     </Dialog>
   );
 }
+
+interface CloseIncidentDialogProps {
+  incident: Incident | null;
+  onConfirm: () => void;
+  onClose: () => void;
+  loading?: boolean;
+}
+
+export function CloseIncidentDialog({ incident, onConfirm, onClose, loading }: CloseIncidentDialogProps) {
+  return (
+    <Dialog open={!!incident} onClose={onClose} maxWidth="xs" fullWidth>
+      <DialogTitle sx={{ fontFamily: '"Sora", sans-serif', fontWeight: 700 }}>Close Incident?</DialogTitle>
+      <DialogContent>
+        <Typography sx={{ color: 'text.secondary' }}>
+          Are you sure you want to manually close incident #{incident?.incidentId}? All linked reports and tasks will also be marked as Closed.
+        </Typography>
+      </DialogContent>
+      <DialogActions sx={{ px: 3, pb: 2, gap: 1 }}>
+        <Button onClick={onClose} disabled={loading} sx={{ borderRadius: '0.75rem' }}>Cancel</Button>
+        <Button
+          variant="contained" color="success" onClick={onConfirm} disabled={loading}
+          sx={{ borderRadius: '0.75rem', fontWeight: 700 }}
+        >
+          {loading ? <CircularProgress size={20} color="inherit" /> : 'Close Incident'}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}

@@ -251,6 +251,8 @@ export function LocationPicker({ showMap, setShowMap, onChange, onMapToggle }: L
             overflow: 'hidden',
             border: '1.5px solid',
             borderColor: 'surface.dark',
+            position: 'relative',
+            zIndex: 0,
           }}
         >
           <MapContainer

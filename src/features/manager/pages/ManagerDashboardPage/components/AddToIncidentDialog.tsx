@@ -14,12 +14,12 @@ export function AddToIncidentDialog({ open, onClose, incidents, onAdd }: Props) 
       <DialogTitle sx={{ fontWeight: 700 }}>Add to Existing Incident</DialogTitle>
       <DialogContent dividers>
         <List sx={{ pt: 0 }}>
-          {incidents.length === 0 ? (
+          {incidents.filter(i => i.status !== 'Closed').length === 0 ? (
             <ListItem>
               <ListItemText primary="No active incidents found." />
             </ListItem>
           ) : (
-            incidents.map((inc) => (
+            incidents.filter(i => i.status !== 'Closed').map((inc) => (
               <ListItem disablePadding key={inc.incidentId}>
                 <ListItemButton onClick={() => onAdd(inc.incidentId)}>
                   <ListItemText 
