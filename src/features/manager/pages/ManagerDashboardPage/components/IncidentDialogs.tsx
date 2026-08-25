@@ -124,7 +124,7 @@ export function CloseIncidentDialog({ incident, onConfirm, onClose, loading }: C
       <DialogTitle sx={{ fontFamily: '"Sora", sans-serif', fontWeight: 700 }}>Close Incident?</DialogTitle>
       <DialogContent>
         <Typography sx={{ color: 'text.secondary' }}>
-          Are you sure you want to manually close incident #{incident?.incidentId}? All linked reports and tasks will also be marked as Closed.
+          Are you sure you want to close incident "{incident?.description}"? All linked reports will be automatically closed.
         </Typography>
       </DialogContent>
       <DialogActions sx={{ px: 3, pb: 2, gap: 1 }}>
