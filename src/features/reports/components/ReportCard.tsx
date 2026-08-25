@@ -44,6 +44,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report, isOwner }) => {
 
   const isMyReport = currentUser?.userId === report.requesterId;
   const canViewId = isMyReport || isOwner || (currentUser?.role && currentUser.role !== 'Citizen');
+  const canDelete = report.status === 'Open' && (isMyReport || currentUser?.role === 'Manager');
 
   const handleSupport = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -177,7 +178,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report, isOwner }) => {
                   </IconButton>
                 </Box>
               )}
-              {isOwner && report.status === 'Open' && (
+              {canDelete && (
                 <IconButton
                   size="small"
                   className="delete-btn"
