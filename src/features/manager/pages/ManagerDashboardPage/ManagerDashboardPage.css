@@ -109,6 +109,10 @@
   min-height: 3.25rem !important;
 }
 
+.mgr-accordion__summary .MuiAccordionSummary-content {
+  min-width: 0 !important;
+}
+
 .mgr-accordion__details {
   padding: 0.25rem 0.85rem 1rem !important;
   border-top: 1px solid #e9ebef;

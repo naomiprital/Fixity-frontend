@@ -53,6 +53,9 @@ export function IncidentCard({
   onRemoveReport,
 }: Props) {
   const isClosed = incident.status === 'Closed';
+  const hasTasks = incident.tasks && incident.tasks.length > 0;
+  const hasOpenTasks = incident.tasks && incident.tasks.some(t => t.status !== 'Closed');
+  const showCloseButton = !isClosed && onCloseIncident && hasTasks && !hasOpenTasks;
 
   return (
     <Accordion className="mgr-accordion" disableGutters>
@@ -61,7 +64,7 @@ export function IncidentCard({
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <Typography
               variant="subtitle1"
-              sx={{ fontWeight: 700, color: 'text.primary', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+              sx={{ fontWeight: 700, color: 'text.primary' }}
             >
               {incident.description || `Incident #${incident.incidentId}`}
             </Typography>
@@ -93,7 +96,7 @@ export function IncidentCard({
             />
           </Box>
           <Box sx={{ display: 'flex', gap: 0.5, flexShrink: 0 }}>
-            {!isClosed && onCloseIncident && (
+            {showCloseButton && (
               <Tooltip title="Close incident">
                 <IconButton size="small" color="success" onClick={e => { e.stopPropagation(); onCloseIncident(incident); }}>
                   <CheckCircleOutlinedIcon fontSize="small" />
