@@ -86,8 +86,8 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report, isOwner }) => {
     });
   };
 
-  const handleDeleteCancel = (event?: React.MouseEvent) => {
-    if (event) event.stopPropagation();
+  const handleDeleteCancel = (event?: any) => {
+    if (event && event.stopPropagation) event.stopPropagation();
     setIsDeleteDialogOpen(false);
   };
 
