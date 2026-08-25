@@ -1,5 +1,5 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { createReport, uploadAndAnalyze, fetchMyReports, fetchAllReports } from "../api/reportApi";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { createReport, uploadAndAnalyze, fetchMyReports, fetchAllReports, deleteReport } from "../api/reportApi";
 
 export const useAllReports = () => {
     return useQuery({
@@ -24,5 +24,16 @@ export const useMyReports = () => {
 export const useCreateReport = () => {
     return useMutation({
         mutationFn: (report: any) => createReport(report),
+    });
+};
+
+export const useDeleteReport = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (reportId: number) => deleteReport(reportId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['my-reports'] });
+            queryClient.invalidateQueries({ queryKey: ['all-reports'] });
+        }
     });
 };
