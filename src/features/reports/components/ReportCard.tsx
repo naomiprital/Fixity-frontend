@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, IconButton, CircularProgress } from '@mui/material';
+import { Box, Typography, IconButton, CircularProgress, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import type { Report } from '@/types/models';
 import { useAuthUser } from '@/features/auth/hooks/useAuth';
 import { ReportDetailsModal } from './ReportDetailsModal';
+import { useDeleteReport } from '../hooks/useReports';
 
 interface ReportCardProps {
   report: Report;
@@ -24,6 +25,8 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report, isOwner }) => {
   );
   const [isSupporting, setIsSupporting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const deleteMutation = useDeleteReport();
 
   const handleCardClick = () => {
     setIsModalOpen(true);
@@ -41,6 +44,7 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report, isOwner }) => {
 
   const isMyReport = currentUser?.userId === report.requesterId;
   const canViewId = isMyReport || isOwner || (currentUser?.role && currentUser.role !== 'Citizen');
+  const canDelete = report.status === 'Open' && (isMyReport || currentUser?.role === 'Manager');
 
   const handleSupport = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -61,6 +65,30 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report, isOwner }) => {
     } finally {
       setIsSupporting(false);
     }
+  };
+
+  const handleDeleteClick = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    setIsDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    deleteMutation.mutate(report.reportId, {
+      onSuccess: () => {
+        toast.success("Report deleted successfully");
+        setIsDeleteDialogOpen(false);
+        if (isModalOpen) setIsModalOpen(false);
+      },
+      onError: (error: any) => {
+        toast.error(error.response?.data?.message || 'Failed to delete report.');
+        setIsDeleteDialogOpen(false);
+      }
+    });
+  };
+
+  const handleDeleteCancel = (event?: React.MouseEvent) => {
+    if (event) event.stopPropagation();
+    setIsDeleteDialogOpen(false);
   };
 
   const getStatusClass = (status: string) => {
@@ -150,16 +178,14 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report, isOwner }) => {
                   </IconButton>
                 </Box>
               )}
-              {isOwner && report.status === 'Open' && (
+              {canDelete && (
                 <IconButton
                   size="small"
                   className="delete-btn"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toast.info("Delete functionality coming soon!");
-                  }}
+                  onClick={handleDeleteClick}
+                  disabled={deleteMutation.isPending}
                 >
-                  <DeleteOutlineIcon fontSize="small" />
+                  {deleteMutation.isPending ? <CircularProgress size={16} color="inherit" /> : <DeleteOutlineIcon fontSize="small" />}
                 </IconButton>
               )}
             </Box>
@@ -200,6 +226,27 @@ export const ReportCard: React.FC<ReportCardProps> = ({ report, isOwner }) => {
         report={report}
         isOwner={isOwner}
       />
+
+      <Dialog
+        open={isDeleteDialogOpen}
+        onClose={handleDeleteCancel}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <DialogTitle>Delete Report</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this report? This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteCancel} color="inherit">
+            Cancel
+          </Button>
+          <Button onClick={handleDeleteConfirm} color="error" variant="contained" disabled={deleteMutation.isPending}>
+            {deleteMutation.isPending ? <CircularProgress size={20} color="inherit" /> : 'Delete'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

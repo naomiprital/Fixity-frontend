@@ -26,3 +26,8 @@ export const fetchAllReports = async (): Promise<any[]> => {
   const { data } = await authApi.get(Paths.REPORTS);
   return data;
 };
+
+export const deleteReport = async (reportId: number) => {
+  const { data } = await authApi.delete(`${Paths.REPORTS}/${reportId}`);
+  return data;
+};
