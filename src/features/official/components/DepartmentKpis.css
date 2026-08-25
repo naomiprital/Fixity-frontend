@@ -167,6 +167,12 @@
   padding-bottom: 0.5rem;
   border-bottom: 0.0625rem solid rgba(255, 255, 255, 0.12);
   box-sizing: border-box;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.bar-chart-canvas::-webkit-scrollbar {
+  display: none;
 }
 
 .bar-group-item {
@@ -174,7 +180,8 @@
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  width: 20%;
+  flex: 1;
+  min-width: 3.25rem;
   height: 100%;
   justify-content: flex-end;
 }
