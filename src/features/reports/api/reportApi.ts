@@ -22,7 +22,7 @@ export const supportReport = async (reportId: number) => {
   return data;
 };
 
-export const fetchAllReports = async (): Promise<any[]> => {
+export const fetchActiveReports = async (): Promise<any[]> => {
   const { data } = await authApi.get(Paths.REPORTS);
   return data;
 };

@@ -9,7 +9,7 @@ import { Box, Typography, Button, IconButton, CircularProgress } from '@mui/mate
 import CloseIcon from '@mui/icons-material/Close';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
-import { useAllReports } from '../../hooks/useReports';
+import { useActiveReports } from '../../hooks/useReports';
 import { ReportCard } from '../../components/ReportCard';
 import { ReportDetailsModal } from '../../components/ReportDetailsModal';
 import { supportReport } from '../../api/reportApi';
@@ -35,7 +35,7 @@ const HomePage = () => {
   const [selectedReport, setSelectedReport] = useState<any>(null);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
   const [userPosition, setUserPosition] = useState<LatLngTuple | null>(null);
-  const { data: reports, isLoading, refetch } = useAllReports();
+  const { data: reports, isLoading, refetch } = useActiveReports();
   const { data: currentUser } = useAuthUser();
   const { data: cityBounds, isLoading: isCityBoundsLoading } = useCityBounds(currentUser?.cityName);
   const [isSupporting, setIsSupporting] = useState(false);
